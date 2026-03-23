@@ -1,5 +1,12 @@
 @use "./styles/variables" as *;
 
+* {
+  margin: 0px;
+  padding: 0px;
+
+}
+
 body {
   background: $secondary;
+  font-family: $font-family;
 }
