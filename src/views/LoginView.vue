@@ -9,96 +9,44 @@ function login() {
 </script>
 
 <template>
-  <div class="login-container">
-    <div class="login-left">
-      <div class="login-box-stack">
-        <img class="logo" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+<div class="login">
+  <div class="login__left">
+    <div class="login__box">
+      <img class="login__logo" src="../assets/img/logo.webp" alt="Milton Huse logo" />
 
-        <form @submit.prevent="login">
-          <input type="email" id="email" placeholder="Email" required />
-          <input type="password" id="password" name="password" placeholder="Adgangskode" required
-          />
-          <button type="submit">Log ind</button>
-          <a href="#" class="forgot-password">Glemt adgangskode?</a>
-        </form>
-      </div>
-    </div>
+      <form class="login__form" @submit.prevent="login">
+        <input class="login__input" type="email" placeholder="Email" required />
+        <input class="login__input" type="password" placeholder="Adgangskode" required />
 
-    <div class="login-right">
-      <img src="../assets/img/image-1.webp" alt="Hus" />
+        <button class="login__button" type="submit">Log ind</button>
+
+        <a href="#" class="login__forgot-password">Glemt adgangskode?</a>
+      </form>
     </div>
   </div>
+
+  <div class="login__right">
+    <img src="../assets/img/image-1.webp" alt="Hus" />
+  </div>
+</div>
 </template>
 
 <style scoped lang="scss">
 @use "../assets/styles/variables" as *;
 
-.login-container {
+.login {
   display: flex;
   flex-direction: row;
 
-  .login-left {
+  &__left {
     width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: $secondary;
-
-    .login-box-stack {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .logo {
-        width: 100%;
-        margin-bottom: 3rem;
-      }
-
-      form {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 0.9rem;
-
-        input {
-          width: 100%;
-          padding: 0.9rem 1rem;
-          border-radius: 8px;
-          border: none;
-          font-size: $body-size;
-          outline: none;
-          box-sizing: border-box;
-
-          &::placeholder {
-            color: $secondary;
-          }
-        }
-
-        button {
-          width: 100%;
-          padding: 0.9rem 1rem;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          color: white;
-          background-color: $primary;
-          font-size: $body-size;
-          font-weight: 500;
-        }
-
-        .forgot-password {
-          text-align: center;
-          font-size: $body-size;
-          color: $primary;
-          text-decoration: underline;
-        }
-      }
-    }
   }
 
-  .login-right {
+  &__right {
     width: 50%;
     height: 100vh;
 
@@ -107,6 +55,59 @@ function login() {
       height: 100%;
       object-fit: cover;
     }
+  }
+
+  &__box {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-size: $body-size;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: $secondary;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background-color: $primary;
+    font-size: $body-size;
+    font-weight: 500;
+  }
+
+  &__forgot-password {
+    text-align: center;
+    font-size: $body-size;
+    color: $primary;
+    text-decoration: underline;
   }
 }
 </style>
