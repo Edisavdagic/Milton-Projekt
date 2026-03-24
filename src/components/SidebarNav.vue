@@ -3,21 +3,25 @@
     <!-- Logo -->
     <div class="sidebar__logo">
       <div>
-      <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+        <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
       </div>
     </div>
-    <!-- Navigation -->
- <nav class="sidebar__nav">
-  <div class="item active"><img src="@/assets/icons/home.svg" alt="Hus ikon">Dashboard</div>
-  <div class="item"><img src="@/assets/icons/calendar.svg" alt="Kalender ikon">Kalender</div>
-  <div class="item"><img src="@/assets/icons/file.svg" alt="Dokumenter ikon">Dokumenter</div>
-  <div class="item"><img src="@/assets/icons/clock.svg" alt="Historik ikon">Historik</div>
-  <div class="item"><img src="@/assets/icons/user.svg" alt="Profil ikon">Profil</div>
-  <div class="item"><img src="@/assets/icons/settings.svg" alt="Indstillinger ikon">Indstillinger</div>
-</nav>
+    <!-- Navigation layout -->
+    <nav class="sidebar__nav">
+      <div class="item active"><img src="@/assets/icons/home.svg" alt="Hus ikon" />Dashboard</div>
+      <div class="item"><img src="@/assets/icons/calendar.svg" alt="Kalender ikon" />Kalender</div>
+      <div class="item"><img src="@/assets/icons/file.svg" alt="Dokumenter ikon" />Dokumenter</div>
+      <div class="item"><img src="@/assets/icons/clock.svg" alt="Historik ikon" />Historik</div>
+      <div class="item"><img src="@/assets/icons/user.svg" alt="Profil ikon" />Profil</div>
+      <div class="item">
+        <img src="@/assets/icons/settings.svg" alt="Indstillinger ikon" />Indstillinger
+      </div>
+    </nav>
     <!-- Logout -->
     <div class="sidebar__bottom">
-      <div class="item"><img src="@/assets/icons/log out.svg" alt="Log ud ikon">Indstillinger</div>
+      <div class="item">
+        <img src="@/assets/icons/log out.svg" alt="Log ud ikon" />Indstillinger
+      </div>
     </div>
   </aside>
 </template>
@@ -109,6 +113,4 @@
     }
   }
 }
-
-
 </style>
