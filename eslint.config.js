@@ -5,6 +5,7 @@ import pluginVue from 'eslint-plugin-vue'
 import pluginCypress from 'eslint-plugin-cypress'
 import pluginVitest from '@vitest/eslint-plugin'
 import pluginOxlint from 'eslint-plugin-oxlint'
+import plugin from 'eslint-plugin-cypress'
 
 export default defineConfig([
   {
@@ -24,6 +25,7 @@ export default defineConfig([
 
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
+  ...plugin.configs["flat/strongly-recommended"],
 
   {
     ...pluginCypress.configs.recommended,
@@ -39,4 +41,33 @@ export default defineConfig([
   },
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
+  {
+    rules: {
+      'comma-dangle': ["error", "always-multiline"],
+      'eqeqeq': ["error", "always"],
+      'indent': ["error", 2],
+      'no-eval': ["error"],
+      'no-trailing-spaces': ["error"],
+      'no-unused-vars': ["error"],
+      'no-var': ["error"],
+      'prefer-const': ["error"],
+      'quotes': ["error", "single"],
+      'semi': ["error", "always"],
+      'no-undef': ["error"],
+      'no-console': ["warn"],
+      'consistent-return': ["error"],
+      'no-mixed-spaces-and-tabs': ["warning"],
+      'no-multiple-empty-lines': ["warning", { "max": 1 }],
+      'no-multi-spaces': ["warning"],
+      'no-lonely-if': ["warning"],
+      'camelcase': ["error", { "properties": "always" }],
+      'vue/no-unused-vars': ["warn"],
+      'vue/no-unused-components': ["warn"],
+      'vue/html-end-tags': ["error"],
+      'vue/no-lone-template': ["error"],
+      'vue/no-use-v-if-with-v-for ': ["error"],
+    },
+  }
+  
 ])
