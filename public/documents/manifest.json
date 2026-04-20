@@ -1,0 +1,30 @@
+[
+  {
+    "id": "kontrakt",
+    "file": "kontrakt.pdf",
+    "name": "Kontrakt",
+    "beskrivelse": "Kontrakt mellem byggherre og leverandør.",
+    "uploadedAt": "2026-02-07"
+  },
+  {
+    "id": "rapport",
+    "file": "maanedsrapport.pdf",
+    "name": "Månedsrapport",
+    "beskrivelse": "Opsummering af fremdrift og økonomi for februar.",
+    "uploadedAt": "2026-02-08"
+  },
+  {
+    "id": "render",
+    "file": "render.svg",
+    "name": "Render",
+    "beskrivelse": "Visualisering af facaden fra sydsiden.",
+    "uploadedAt": "2026-02-08"
+  },
+  {
+    "id": "grundfoto",
+    "file": "grundfoto.svg",
+    "name": "Grundfoto",
+    "beskrivelse": "Dronefoto af byggegrund med markering af skel.",
+    "uploadedAt": "2026-02-07"
+  }
+]

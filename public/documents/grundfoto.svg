@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#e7efe6"/>
+  <rect x="70" y="70" width="820" height="400" fill="#bfd9b9" stroke="#4b8f57" stroke-width="6"/>
+  <line x1="70" y1="70" x2="890" y2="470" stroke="#8f6f4a" stroke-width="4" stroke-dasharray="12 8"/>
+  <line x1="890" y1="70" x2="70" y2="470" stroke="#8f6f4a" stroke-width="4" stroke-dasharray="12 8"/>
+  <text x="90" y="45" fill="#1f2937" font-size="34" font-family="Arial, sans-serif">Grundfoto Demo</text>
+</svg>
