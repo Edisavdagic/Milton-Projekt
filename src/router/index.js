@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import DocumentsView from '../views/DocumentsView.vue'
+import NotificationsView from '@/views/NotificationsView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/dokumenter',
       name: 'documents',
       component: DocumentsView
+    },
+    {
+      path: '/notifikationer',
+      name: 'notifications',
+      component: NotificationsView
     }
   ]
 })
