@@ -51,7 +51,6 @@ const address = '123 Main St'
 /* Main page area */
 .content {
   flex: 1;
-  padding: 24px;
   box-sizing: border-box;
   width: 100%;
 }

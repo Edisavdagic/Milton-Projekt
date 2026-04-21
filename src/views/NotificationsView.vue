@@ -4,6 +4,7 @@
 <!-- TODO: Skal senere renderes dynamisk via notifications som "nice to have funktionalitet"-->
 <template>
   <section class="notifications-page">
+    <h1> Mine Notifikationer</h1>
     <section class="notifications-list">
       <article class="notification-item">
         <div class="notification-item__icon">
@@ -55,6 +56,13 @@
 <style scoped lang="scss">
 @use '@/assets/styles/variables' as *;
 
+h1 {
+  margin: 0 0 36px;
+  font-size: $h1-size;
+  font-weight: $h1-weight;
+  line-height: 1.15;
+  color: $primary;
+}
 .notifications-page {
   width: 100%;
   min-height: 100%;
