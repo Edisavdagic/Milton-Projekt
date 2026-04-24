@@ -53,7 +53,7 @@
 
     <!-- Logout -->
     <div class="sidebar__bottom">
-      <RouterLink to="/" class="item">
+      <RouterLink to="/" class="item" @click.prevent="logout">
         <img src="@/assets/icons/Log out.svg" alt="Log ud ikon" />
         Log ud
       </RouterLink>
@@ -62,7 +62,19 @@
 </template>
 
 <script setup>
-import { RouterLink } from "vue-router";
+import { useRouter, RouterLink } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+async function logout() {
+  try {
+    await authStore.signOutUser();
+  } finally {
+    router.push("/");
+  }
+}
 </script>
 
 <style scoped lang="scss">

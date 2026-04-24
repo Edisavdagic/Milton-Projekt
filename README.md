@@ -64,3 +64,45 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+## Firebase Setup
+
+1. Install dependencies:
+
+```sh
+npm install
+```
+
+2. Create a local env file from `.env.example`:
+
+```sh
+cp .env.example .env.local
+```
+
+On Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+3. In Firebase Console, open your web app settings and copy values into `.env.local`:
+
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`
+
+4. Enable Firebase products in console:
+
+- Authentication -> Sign-in method -> Email/Password
+- Firestore Database -> Create database
+- Storage -> Get started
+
+## Firebase Integration Notes
+
+- Firebase client is initialized in `src/services/firebase.js`.
+- Auth state is managed in `src/stores/auth.js`.
+- Routes `/dashboard`, `/dokumenter`, and `/notifikationer` require sign-in.
+- Login screen now signs in with Firebase Authentication.

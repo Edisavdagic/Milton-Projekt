@@ -1,14 +1,16 @@
 <script setup>
+import { computed } from 'vue'
 import { RouterView } from 'vue-router'
 import SidebarNav from '@/components/SidebarNav.vue'
 import TopbarNav from '@/components/TopbarNav.vue'
+import { useAuthStore } from '@/stores/auth'
 
-// Temporary mock user data for UI development
-// TODO: Replace with Firebase authentication and Pinia store
-const user = {
-  name: 'user',
-  email: 'email@example.com'
-}
+const authStore = useAuthStore()
+
+const user = computed(() => ({
+  name: authStore.user?.displayName || authStore.user?.email || 'Guest',
+  email: authStore.user?.email || 'Not signed in'
+}))
 
 const address = '123 Main St'
 </script>

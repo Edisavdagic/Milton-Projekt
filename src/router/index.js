@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import DocumentsView from '../views/DocumentsView.vue'
 import NotificationsView from '@/views/NotificationsView.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,24 +11,43 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+      meta: { guestOnly: true }
     },
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: DashboardView
+      component: DashboardView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/dokumenter',
       name: 'documents',
-      component: DocumentsView
+      component: DocumentsView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/notifikationer',
       name: 'notifications',
-      component: NotificationsView
+      component: NotificationsView,
+      meta: { requiresAuth: true }
     }
   ]
+})
+
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore()
+  await authStore.initAuth()
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return { name: 'login' }
+  }
+
+  if (to.meta.guestOnly && authStore.isAuthenticated) {
+    return { name: 'dashboard' }
+  }
+
+  return true
 })
 
 export default router

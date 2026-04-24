@@ -1,10 +1,24 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
-function login() {
-  router.push('/dashboard')
+const email = ref('')
+const password = ref('')
+const localError = ref('')
+
+async function login() {
+  localError.value = ''
+
+  try {
+    await authStore.signIn(email.value, password.value)
+    router.push('/dashboard')
+  } catch {
+    localError.value = authStore.error || 'Login mislykkedes. Prøv igen.'
+  }
 }
 </script>
 
@@ -15,10 +29,20 @@ function login() {
       <img class="login__logo" src="../assets/img/logo.webp" alt="Milton Huse logo" />
 
       <form class="login__form" @submit.prevent="login">
-        <input class="login__input" type="email" placeholder="Email" required />
-        <input class="login__input" type="password" placeholder="Adgangskode" required />
+        <input class="login__input" v-model="email" type="email" placeholder="Email" required />
+        <input
+          class="login__input"
+          v-model="password"
+          type="password"
+          placeholder="Adgangskode"
+          required
+        />
 
-        <button class="login__button" type="submit">Log ind</button>
+        <p v-if="localError" class="login__error">{{ localError }}</p>
+
+        <button class="login__button" type="submit" :disabled="authStore.loading">
+          {{ authStore.loading ? 'Logger ind...' : 'Log ind' }}
+        </button>
 
         <a href="#" class="login__forgot-password">Glemt adgangskode?</a>
       </form>
@@ -101,6 +125,17 @@ function login() {
     background-color: $primary;
     font-size: $body-size;
     font-weight: 500;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+  }
+
+  &__error {
+    margin: 0;
+    color: #b30000;
+    font-size: 0.9rem;
   }
 
   &__forgot-password {
