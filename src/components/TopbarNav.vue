@@ -8,7 +8,7 @@ defineProps({
     type: Object,
     required: true,
   },
-})
+});
 </script>
 
 <template>
@@ -16,10 +16,10 @@ defineProps({
     <div class="address-pill">{{ projectAddress }}</div>
 
     <div class="topbar-actions">
-       <!-- Fix chat(1) and notification(2) and color icons later -->
-      <img src="@/assets/icons/user.svg" alt="Profil ikon" />
-      <img src="@/assets/icons/user.svg" alt="Profil ikon" />
-      <img src="@/assets/icons/user.svg" alt="Profil ikon" />
+      <!-- Fix chat(1) and notification(2) and color icons later -->
+      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
+      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
+      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
 
       <div class="user-meta">
         <span class="user-name">{{ currentUser.name }}</span>
@@ -35,5 +35,5 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/topbarNav';
+@use "@/assets/styles/topbarNav";
 </style>
