@@ -3,35 +3,38 @@ import { defineStore } from "pinia";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "@/services/firebase";
 
-/** @typedef {import("firebase/auth").User} FirebaseUser */
-/** @typedef {import("firebase/auth").Unsubscribe} FirebaseUnsubscribe */
+/** @typedef {Object} FirebaseUser */
+/** @typedef {Function} FirebaseUnsubscribe */
+
+/**
+ * @typedef {Object} AuthStore
+ * @property {*} user
+ * @property {*} authReady
+ * @property {*} loading
+ * @property {*} error
+ * @property {*} isAuthenticated
+ * @property {Function} clearError
+ * @property {Function} initAuth
+ * @property {Function} signIn
+ * @property {Function} signOutUser
+ */
 
 /**
  * Pinia store for Firebase authentication state and actions.
  *
- * @returns {{
- *   user: import("vue").Ref<FirebaseUser | null>,
- *   authReady: import("vue").Ref<boolean>,
- *   loading: import("vue").Ref<boolean>,
- *   error: import("vue").Ref<string | null>,
- *   isAuthenticated: import("vue").ComputedRef<boolean>,
- *   clearError: () => void,
- *   initAuth: () => Promise<FirebaseUser | null>,
- *   signIn: (email: string, password: string) => Promise<FirebaseUser>,
- *   signOutUser: () => Promise<void>
- * }}
+ * @returns {AuthStore}
  */
 export const useAuthStore = defineStore("auth", () => {
-  /** @type {import("vue").Ref<FirebaseUser | null>} */
+  /** @type {*} */
   const user = ref(null);
   const authReady = ref(false);
   const loading = ref(false);
-  /** @type {import("vue").Ref<string | null>} */
+  /** @type {*} */
   const error = ref(null);
 
   /** @type {FirebaseUnsubscribe | null} */
   let unsubscribeAuth = null;
-  /** @type {Promise<FirebaseUser | null> | null} */
+  /** @type {Promise<(FirebaseUser|null)> | null} */
   let initPromise = null;
 
   const isAuthenticated = computed(() => Boolean(user.value));
