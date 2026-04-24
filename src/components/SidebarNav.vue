@@ -3,41 +3,27 @@
     <!-- Logo -->
     <div class="sidebar__logo">
       <div>
-        <img
-          class="sidebar__logo-img"
-          src="../assets/img/logo.webp"
-          alt="Milton Huse logo"
-        />
+        <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
       </div>
     </div>
 
     <!-- Navigation -->
     <nav class="sidebar__nav">
       <!-- Dashboard -->
-      <RouterLink
-        to="/dashboard"
-        class="item"
-        active-class="active"
-        exact-active-class="active"
-      >
-        <img src="@/assets/icons/home.svg" alt="Hus ikon" />
+      <RouterLink to="/dashboard" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
         Dashboard
       </RouterLink>
 
       <!-- Ikke lavet endnu -->
       <div class="item">
-        <img src="@/assets/icons/calendar.svg" alt="Kalender ikon" />
+        <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
         Kalender
       </div>
 
       <!-- Dokumenter -->
-      <RouterLink
-        to="/dokumenter"
-        class="item"
-        active-class="active"
-        exact-active-class="active"
-      >
-        <img src="@/assets/icons/file.svg" alt="Dokumenter ikon" />
+      <RouterLink to="/dokumenter" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
         Dokumenter
       </RouterLink>
 
@@ -48,19 +34,19 @@
         active-class="active"
         exact-active-class="active"
       >
-        <img src="@/assets/icons/clock.svg" alt="Historik ikon" />
+        <img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
         Historik
       </RouterLink>
 
       <!-- Ikke lavet endnu -->
       <div class="item">
-        <img src="@/assets/icons/user.svg" alt="Profil ikon" />
+        <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
       <!-- Ikke lavet endnu -->
       <div class="item">
-        <img src="@/assets/icons/settings.svg" alt="Indstillinger ikon" />
+        <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger
       </div>
     </nav>
@@ -68,7 +54,7 @@
     <!-- Logout -->
     <div class="sidebar__bottom">
       <RouterLink to="/" class="item">
-        <img src="@/assets/icons/log out.svg" alt="Log ud ikon" />
+        <img src="@/assets/icons/Log out.svg" alt="Log ud ikon" />
         Log ud
       </RouterLink>
     </div>
@@ -76,7 +62,7 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from "vue-router";
 </script>
 
 <style scoped lang="scss">
