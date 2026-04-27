@@ -2,8 +2,6 @@
 import DashboardGallery from '@/components/DashboardGallery.vue';
 import DashboardMilestone from '@/components/DashboardMilestone.vue';
 import DashboardTaskList from '@/components/DashboardTaskList.vue';
-
-
 </script>
 
 <template>

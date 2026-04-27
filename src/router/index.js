@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import DocumentsView from '../views/DocumentsView.vue'
+import ProjectoverviewView from '../views/ProjectoverviewView.vue'
 import NotificationsView from '@/views/NotificationsView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -13,6 +14,12 @@ const router = createRouter({
       name: 'login',
       component: LoginView,
       meta: { guestOnly: true }
+    },
+    {
+      path: '/projectoverview',
+      name: 'projectoverview',
+      component: ProjectoverviewView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/dashboard',
