@@ -57,7 +57,7 @@ router.beforeEach(async (to) => {
   }
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {
-    return { name: 'dashboard' }
+    return { name: authStore.isAdmin ? 'projectoverview' : 'dashboard' }
   }
 
   return true
