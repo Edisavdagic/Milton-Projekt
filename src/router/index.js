@@ -38,6 +38,12 @@ const router = createRouter({
       name: 'notifications',
       component: NotificationsView,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/projektoversigt',
+      name: 'projectoverview',
+      component: ProjectoverviewView,
+      meta: { requiresAuth: true }
     }
   ]
 })

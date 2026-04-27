@@ -1,10 +1,17 @@
 <script setup>
+import ProjectCard from '@/components/ProjectCard.vue';
 
 
 
 </script>
 
 <template>
-        <h1>Projektoversigt</h1>
-        <p>Få et overblik over processen</p>
+<ProjectCard />
 </template>
+
+<style scoped lang="scss">
+@use '@/assets/styles/variables' as *;
+
+
+</style>
+
