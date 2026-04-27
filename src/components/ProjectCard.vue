@@ -3,8 +3,12 @@
 </script>
 
 <template>
-<article class="project-card">
-    <img class="project-card__image" :src="project.imageUrl" :alt="project.title" />
+  <article class="project-card">
+    <img
+      class="project-card__image"
+      :src="project.imageUrl"
+      :alt="project.title"
+    />
 
     <section class="project-card__content">
       <div class="project-card__header">
@@ -17,10 +21,9 @@
 
       <p>{{ project.description }}</p>
     </section>
+  </article>
 </template>
 
 <style scoped lang="scss">
 @use '@/assets/styles/variables' as *;
-
-
 </style>
