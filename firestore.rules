@@ -1,18 +1,48 @@
-rules_version='2'
-
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function myRole() {
+      return signedIn()
+        ? get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role
+        : null;
+    }
+
+    function isAdmin() {
+      return myRole() == "admin";
+    }
+
+    // User profile + role docs: Users/{uid}
+    match /Users/{uid} {
+      // User can read own doc, admin can read all
+      allow read: if isOwner(uid) || isAdmin();
+
+      // User can create only own doc and only as normal user
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(["email", "role"])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == "user";
+
+      // Admin can change roles; users cannot change their own role/email
+      allow update: if isAdmin()
+        || (isOwner(uid)
+            && request.resource.data.role == resource.data.role
+            && request.resource.data.email == resource.data.email);
+
+      allow delete: if isAdmin();
+    }
+
+    // Default deny for everything else until explicitly allowed
     match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2026, 5, 24);
+      allow read, write: if false;
     }
   }
 }
