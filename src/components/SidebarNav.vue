@@ -1,11 +1,13 @@
 <template>
   <aside class="sidebar">
     <!-- Logo -->
-    <div class="sidebar__logo">
-      <div>
-        <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+    <routerLink to="/dashboard">
+      <div class="sidebar__logo">
+        <div>
+          <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+        </div>
       </div>
-    </div>
+    </routerLink>
 
     <!-- Navigation -->
     <nav class="sidebar__nav">
