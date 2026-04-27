@@ -15,7 +15,7 @@ async function login() {
 
   try {
     await authStore.signIn(email.value, password.value);
-    router.push("/dashboard");
+    router.push(authStore.isAdmin ? "/projectoverview" : "/dashboard");
   } catch {
     localError.value = authStore.error || "Login mislykkedes. Prøv igen.";
   }
