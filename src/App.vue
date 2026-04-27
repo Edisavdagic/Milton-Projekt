@@ -18,12 +18,13 @@ const address = '123 Main St'
 <template>
   <div class="app">
     <!-- Fixed sidebar -->
-    <SidebarNav />
+    <SidebarNav v-if="authStore.authReady && authStore.isAuthenticated" />
 
     <!-- Main area -->
     <div class="app__main">
       <!-- Topbar -->
       <TopbarNav
+        v-if="authStore.authReady && authStore.isAuthenticated"
         :projectAddress="address"
         :currentUser="user"
       />

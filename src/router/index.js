@@ -5,6 +5,7 @@ import DocumentsView from '../views/DocumentsView.vue'
 import ProjectoverviewView from '../views/ProjectoverviewView.vue'
 import NotificationsView from '@/views/NotificationsView.vue'
 import { useAuthStore } from '@/stores/auth'
+import CalenderView from '@/views/CalenderView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,6 +44,12 @@ const router = createRouter({
       path: '/projektoversigt',
       name: 'projectoverview',
       component: ProjectoverviewView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/kalender',
+      name: 'calendar',
+      component: CalenderView,
       meta: { requiresAuth: true }
     }
   ]
