@@ -1,11 +1,11 @@
-  import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../views/LoginView.vue'
-import DashboardView from '../views/DashboardView.vue'
-import DocumentsView from '../views/DocumentsView.vue'
-import ProjectoverviewView from '../views/ProjectoverView.vue'
-import NotificationsView from '@/views/NotificationsView.vue'
-import { useAuthStore } from '@/stores/auth'
-import CalenderView from '@/views/CalenderView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import LoginView from "../views/LoginView.vue";
+import DashboardView from "../views/DashboardView.vue";
+import DocumentsView from "../views/DocumentsView.vue";
+import ProjectoverviewView from "../views/ProjectoverView.vue";
+import NotificationsView from "@/views/NotificationsView.vue";
+import { useAuthStore } from "@/stores/auth";
+import CalenderView from "@/views/CalenderView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
