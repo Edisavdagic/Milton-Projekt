@@ -28,7 +28,7 @@ export const useProjectsStore = defineStore('projects', {
       } catch (error) {
         console.error(error)
       } finally {
-        this.loading = false
+        this.loading = false // Always set loading to false when done
       }
     }
   }
