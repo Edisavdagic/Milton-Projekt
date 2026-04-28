@@ -1,3 +1,16 @@
+<script setup>
+import { useRouter, RouterLink } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+async function logout() {
+  await authStore.signOutUser();
+  router.replace({ name: "login" });
+}
+</script>
+
 <template>
   <aside class="sidebar">
     <!-- Logo -->
@@ -17,11 +30,11 @@
         Dashboard
       </RouterLink>
 
-      <!-- Ikke lavet endnu -->
-      <div class="item">
+      <!-- Kalender -->
+      <RouterLink to="/kalender" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
         Kalender
-      </div>
+      </RouterLink>
 
       <!-- Dokumenter -->
       <RouterLink to="/dokumenter" class="item" active-class="active" exact-active-class="active">
@@ -40,13 +53,13 @@
         Historik
       </RouterLink>
 
-      <!-- Ikke lavet endnu -->
+      <!-- Ikke lavet -->
       <div class="item">
         <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
-      <!-- Ikke lavet endnu -->
+      <!-- Ikke lavet -->
       <div class="item">
         <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger
@@ -55,29 +68,13 @@
 
     <!-- Logout -->
     <div class="sidebar__bottom">
-      <RouterLink to="/" class="item" @click.prevent="logout">
+      <button to="/" type="button" class="item" @click="logout">
         <img src="@/assets/icons/Log out.svg" alt="Log ud ikon" />
         Log ud
-      </RouterLink>
+      </button>
     </div>
   </aside>
 </template>
-
-<script setup>
-import { useRouter, RouterLink } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
-const authStore = useAuthStore();
-
-async function logout() {
-  try {
-    await authStore.signOutUser();
-  } finally {
-    router.push("/");
-  }
-}
-</script>
 
 <style scoped lang="scss">
 @use "../assets/styles/variables" as *;
@@ -162,6 +159,9 @@ async function logout() {
       align-items: center;
       gap: 14px;
       padding: 16px 24px;
+      background: transparent;
+      border: none;
+      width: 100%;
 
       font-size: $body-size;
       font-weight: $h2-weight;
