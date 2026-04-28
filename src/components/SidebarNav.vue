@@ -17,11 +17,11 @@
         Dashboard
       </RouterLink>
 
-      <!-- Ikke lavet endnu -->
-      <div class="item">
+      <!-- Kalender -->
+      <RouterLink to="/kalender" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
         Kalender
-      </div>
+      </RouterLink>
 
       <!-- Dokumenter -->
       <RouterLink to="/dokumenter" class="item" active-class="active" exact-active-class="active">
@@ -40,13 +40,13 @@
         Historik
       </RouterLink>
 
-      <!-- Ikke lavet endnu -->
+      <!-- Ikke lavet -->
       <div class="item">
         <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
-      <!-- Ikke lavet endnu -->
+      <!-- Ikke lavet -->
       <div class="item">
         <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger
