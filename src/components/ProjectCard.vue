@@ -2,56 +2,42 @@
 defineProps({
   project: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const emit = defineEmits(['edit-project', 'show-history'])
+const emit = defineEmits(["edit-project", "show-history"]);
 </script>
 
 <template>
   <article class="project-item">
-    <img
-      class="project-item__img"
-      :src="project.image"
-      :alt="project.address"
-    />
+    <img class="project-item__img" :src="project.imageUrl" :alt="project.name" />
 
     <div class="project-item__info">
       <div class="project-item__title">
-        <h3>{{ project.address }}</h3>
+        <h3>{{ project.name }}</h3>
 
-        <span v-if="project.notifications" class="notice">
-          {{ project.notifications }} ny notifikation
+        <span v-if="project.notificationsCount" class="notice">
+          {{ project.notificationsCount }} ny notifikation
         </span>
       </div>
 
       <div class="project-item__tags">
-        <span>{{ project.type }}</span>
-        <span>Byggeleder: {{ project.buildManager }}</span>
+        <span>{{ project.projectType }}</span>
+        <span>Byggeleder: {{ project.siteManagerName }}</span>
       </div>
 
       <p>{{ project.description }}</p>
 
-      <span class="status">
-        Status: {{ project.status }}
-      </span>
+      <span class="status"> Status: {{ project.statusText }} </span>
     </div>
 
     <div class="project-item__buttons">
-      <button
-        v-if="project.isActive"
-        type="button"
-        @click="emit('edit-project', project)"
-      >
+      <button v-if="project.isActive" type="button" @click="emit('edit-project', project)">
         Rediger
       </button>
 
-      <button
-        type="button"
-        class="history-btn"
-        @click="emit('show-history', project)"
-      >
+      <button type="button" class="history-btn" @click="emit('show-history', project)">
         Historik
       </button>
     </div>
@@ -59,7 +45,7 @@ const emit = defineEmits(['edit-project', 'show-history'])
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/variables' as *;
+@use "@/assets/styles/variables" as *;
 
 .project-item {
   display: grid;
