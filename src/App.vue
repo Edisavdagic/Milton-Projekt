@@ -8,8 +8,8 @@ import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 
 const user = computed(() => ({
-  name: authStore.user?.displayName || authStore.user?.email || "Guest",
-  email: authStore.user?.email || "Not signed in",
+  name: authStore.profile?.name || "Gæst",
+  email: authStore.user?.email || "Ikke logget ind",
 }));
 
 const address = "123 Main St";

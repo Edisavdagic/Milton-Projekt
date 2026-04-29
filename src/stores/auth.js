@@ -34,6 +34,7 @@ export const useAuthStore = defineStore("auth", () => {
   const user = ref(null);
   /** @type {*} */
   const role = ref(null);
+  const profile = ref(null);
   const authReady = ref(false);
   const loading = ref(false);
   /** @type {*} */
@@ -67,12 +68,25 @@ export const useAuthStore = defineStore("auth", () => {
     const userRef = doc(db, "Users", uid);
     const userSnap = await getDoc(userRef);
 
-    role.value = userSnap.exists() ? userSnap.data().role || null : null;
+    role.value = userSnap.exists() ? userSnap.data().role : null;
     return role.value;
   }
 
+  async function fetchProfile(uid) {
+    if (!uid) {
+      profile.value = null;
+      return null;
+    }
+
+    const userRef = doc(db, "Users", uid);
+    const userSnap = await getDoc(userRef);
+
+    profile.value = userSnap.exists() ? userSnap.data() : null;
+    return profile.value;
+  }
+
   /**
-   * Starts listening to Firebase auth state and resolves once the first user value is received.
+   * Fetches the role for a user from Firestore Users/{uid}.
    *
    * @returns {Promise<FirebaseUser | null>}
    */
@@ -91,13 +105,14 @@ export const useAuthStore = defineStore("auth", () => {
 
         if (firebaseUser) {
           try {
-            await fetchRole(firebaseUser.uid);
+            await Promise.all([fetchRole(firebaseUser.uid), fetchProfile(firebaseUser.uid)]);
           } catch (err) {
             role.value = null;
             error.value = err.message || "Role lookup failed.";
           }
         } else {
           role.value = null;
+          profile.value = null;
         }
 
         authReady.value = true;
@@ -122,7 +137,8 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const credential = await signInWithEmailAndPassword(auth, email, password);
       user.value = credential.user;
-      await fetchRole(credential.user.uid);
+
+      await Promise.all([fetchRole(credential.user.uid), fetchProfile(credential.user.uid)]);
       return credential.user;
     } catch (err) {
       error.value = err.message || "Login failed.";
@@ -145,6 +161,7 @@ export const useAuthStore = defineStore("auth", () => {
       await signOut(auth);
       user.value = null;
       role.value = null;
+      profile.value = null;
     } catch (err) {
       error.value = err.message || "Sign out failed.";
       throw err;
@@ -156,6 +173,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     user,
     role,
+    profile,
     isAdmin,
     authReady,
     loading,
