@@ -17,9 +17,9 @@ defineProps({
 
     <div class="topbar-actions">
       <!-- Fix chat(1) and notification(2) and color icons later -->
-      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
-      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
-      <img src="@/assets/icons/User.svg" alt="Profil ikon" />
+      <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
+      <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
+      <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
 
       <div class="user-meta">
         <span class="user-name">{{ currentUser.name }}</span>
@@ -27,7 +27,7 @@ defineProps({
       </div>
 
       <div class="language-switch">
-        <span aria-hidden="true">◍</span>
+        <img src="@/assets/icons/Globe.svg" alt="Notifikation ikon" />
         <span>Sprog</span>
       </div>
     </div>
