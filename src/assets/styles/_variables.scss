@@ -1,24 +1,24 @@
 // Font
-$font-family: 'Work Sans', sans-serif;
+$font-family: "Work Sans", sans-serif;
 
 // Typography sizes
-$h1-size: 52px;
-$h2-size: 44px;
-$h3-size: 36px;
-$body-size: 18px;
+$h1-size: 44px; // 44px
+$h2-size: 36px; // 36px
+$h3-size: 28px; // 28px
+$body-size: 16px; // 16px
 
 // Font weights
-$h1-weight: 700; // Bold
+$h1-weight: 700; // Bold $bold-weight
 $h2-weight: 600; // Semibold
 $h3-weight: 500; // Medium
 $body-weight: 400; // Regular
 
 // Colors (samlet og konsistent)
 $primary: #004552;
-$secondary: #EAE8E7;
-$tertiary: #8FB5BF;
-$accent-1: #F9DD8F;
-$accent-2: #005E6E;
+$secondary: #eae8e7;
+$tertiary: #8fb5bf;
+$accent-1: #f9dd8f;
+$accent-2: #005e6e;
 
 // Ekstra aliases (så dine komponenter ikke fejler)
 $primary-color: $primary;
