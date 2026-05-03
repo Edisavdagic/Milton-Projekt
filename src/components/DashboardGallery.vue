@@ -20,7 +20,7 @@
 
     <div class="gallery">
       <div
-        v-for="image in store.images"
+        v-for="image in images"
         :key="image.id"
         class="card"
       >
@@ -29,7 +29,7 @@
         <button
           v-if="editing"
           class="delete-btn"
-          @click="store.removeImage(image.id)"
+          @click="removeImage(image.id)"
         >
           ✕
         </button>
@@ -38,59 +38,52 @@
   </div>
 </template>
 
-<script>
-import { useImageStore } from "@/stores/imageStore";
+<script setup>
+import { ref } from "vue";
+import { useImages } from "@/composables/useImages";
 import { useAuthStore } from "@/stores/auth";
 
-export default {
-  name: "ImageUploader",
+const { images, addImage, removeImage } = useImages();
+const authStore = useAuthStore();
 
-  data() {
-    return {
-      store: useImageStore(),
-      authStore: useAuthStore(),
-      editing: false,
-      maxSize: 5 * 1024 * 1024 // 5MB
-    };
-  },
+const editing = ref(false);
+const fileInput = ref(null);
+const maxSize = 5 * 1024 * 1024;
 
-  methods: {
-    toggleEdit() {
-      this.editing = !this.editing;
-    },
+// toggle edit
+const toggleEdit = () => {
+  editing.value = !editing.value;
+};
 
-    handleFiles(event) {
-      const files = Array.from(event.target.files);
+// upload handler
+const handleFiles = (event) => {
+  const files = Array.from(event.target.files);
 
-      files.forEach(file => {
-        // type check
-        if (!file.type.startsWith("image/")) return;
+  files.forEach(file => {
+    // check if it's an image
+    if (!file.type.startsWith("image/")) return;
 
-        // size check
-        if (file.size > this.maxSize) {
-          alert(`"${file.name}" er for stort (max 5MB)`);
-          return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = e => {
-        this.store.addImage({
-          id: crypto.randomUUID(),
-          src: e.target.result
-        });
-      };
-      reader.readAsDataURL(file);
-      });
-
-      // reset input (så samme fil kan uploades igen)
-      this.$refs.fileInput.value = "";
-    },
-
-    removeImage(id) {
-    this.store.removeImage(id);
+    // check file size
+    if (file.size > maxSize) {
+      alert(`"${file.name}" er for stort (max 5MB)`);
+      return;
     }
-  },
+
+    const reader = new FileReader();
+
+    // when file is loaded, add to gallery
+    reader.onload = (e) => {
+      addImage({
+        id: crypto.randomUUID(),
+        src: e.target.result
+      });
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+  // reset input
+  fileInput.value.value = "";
 };
 </script>
 
