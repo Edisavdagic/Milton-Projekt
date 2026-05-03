@@ -1,12 +1,14 @@
 <template>
   <div class="top-header">
     <h2>Milepæle</h2>
-    <button class="edit-all" @click="toggleAll">
+    <button v-if="authStore.isAdmin" class="edit-all" @click="toggleAll">
       {{ editing ? "Færdig" : "Rediger" }}
     </button>
   </div>
 
-  <div class="milestones-wrapper">
+  <p v-if="store.loading">Indlæser milepæle...</p>
+
+  <div v-else class="milestones-wrapper">
     <div
       v-for="(column, colIndex) in store.milestones"
       :key="column.id"
@@ -21,18 +23,19 @@
         :key="item.id"
         class="milestone-item"
       >
-        <!-- TEXT -->
+        <!-- TITLE -->
         <input
           v-if="editMode[colIndex]"
-          v-model="item.text"
+          v-model="item.title"
         />
 
-        <span v-else>{{ item.text }}</span>
+        <span v-else>{{ item.title }}</span>
 
         <!-- STATUS -->
         <select
           v-if="editMode[colIndex]"
-          v-model="item.status"
+          :value="item.status"
+          @change="store.updateTask(item.id, { status: $event.target.value })"
         >
           <option value="ikke">Ikke begyndt</option>
           <option value="igang">I gang</option>
@@ -73,10 +76,18 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useMilestoneStore } from "@/stores/milestones";
+import { useAuthStore } from "@/stores/auth";
 
 const store = useMilestoneStore();
+const route = useRoute();
+const authStore = useAuthStore();
+
+onMounted(() => {
+  store.fetchMilestones(route.params.projectId);
+});
 
 /**
  * Dynamisk editMode baseret på antal kolonner

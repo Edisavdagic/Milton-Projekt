@@ -5,6 +5,7 @@ import DocumentsView from "../views/DocumentsView.vue";
 import ProjectoverviewView from "../views/ProjectoverView.vue";
 import NotificationsView from "@/views/NotificationsView.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useProjectsStore } from "@/stores/project";
 import CalenderView from "@/views/CalenderView.vue";
 
 const router = createRouter({
@@ -23,42 +24,51 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/dashboard",
-      name: "dashboard",
-      component: DashboardView,
+      path: "/project/:projectId",
       meta: { requiresAuth: true },
-    },
-    {
-      path: "/dokumenter",
-      name: "documents",
-      component: DocumentsView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/notifikationer",
-      name: "notifications",
-      component: NotificationsView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/kalender",
-      name: "calendar",
-      component: CalenderView,
-      meta: { requiresAuth: true },
+      children: [
+        {
+          path: "dashboard",
+          name: "dashboard",
+          component: DashboardView,
+        },
+        {
+          path: "dokumenter",
+          name: "documents",
+          component: DocumentsView,
+        },
+        {
+          path: "notifikationer",
+          name: "notifications",
+          component: NotificationsView,
+        },
+        {
+          path: "kalender",
+          name: "calendar",
+          component: CalenderView,
+        },
+      ],
     },
   ],
 });
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
+  const projectsStore = useProjectsStore();
+
   await authStore.initAuth();
+
+  if (authStore.isAuthenticated && !authStore.isAdmin && !projectsStore.currentProjectId) {
+    await projectsStore.fetchUserProject(authStore.user.uid);
+  }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return { name: "login" };
   }
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {
-    return { name: authStore.isAdmin ? "projectoverview" : "dashboard" };
+    if (authStore.isAdmin) return { name: "projectoverview" };
+    return { name: "dashboard", params: { projectId: projectsStore.currentProjectId } };
   }
 
   return true;

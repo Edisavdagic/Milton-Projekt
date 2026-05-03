@@ -1,26 +1,23 @@
 import { defineStore } from 'pinia'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 
-// Pinia store for managing project data
 export const useProjectsStore = defineStore('projects', {
-  // State definition
   state: () => ({
     projects: [],
-    loading: false
+    currentProject: null,
+    loading: false,
   }),
 
-  // Actions for state mutations
+  getters: {
+    currentProjectId: (state) => state.currentProject?.id ?? null,
+  },
+
   actions: {
-    // Async action to fetch projects from Firestore
     async fetchProjects() {
       this.loading = true
-
       try {
-        // Get reference to 'projects' collection in Firestore
         const snapshot = await getDocs(collection(db, 'projects'))
-
-
         this.projects = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -28,8 +25,21 @@ export const useProjectsStore = defineStore('projects', {
       } catch (error) {
         console.error(error)
       } finally {
-        this.loading = false // Always set loading to false when done
+        this.loading = false
       }
-    }
-  }
+    },
+
+    async fetchUserProject(uid) {
+      try {
+        const q = query(collection(db, 'projects'), where('memberUid', 'array-contains', uid))
+        const snapshot = await getDocs(q)
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0]
+          this.currentProject = { id: doc.id, ...doc.data() }
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    },
+  },
 })

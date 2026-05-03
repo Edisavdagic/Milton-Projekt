@@ -2,9 +2,11 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useProjectsStore } from "@/stores/project";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
 
 const email = ref("");
 const password = ref("");
@@ -15,7 +17,13 @@ async function login() {
 
   try {
     await authStore.signIn(email.value, password.value);
-    router.push(authStore.isAdmin ? "/projektoversigt" : "/dashboard");
+
+    if (authStore.isAdmin) {
+      router.push({ name: "projectoverview" });
+    } else {
+      await projectsStore.fetchUserProject(authStore.user.uid);
+      router.push({ name: "dashboard", params: { projectId: projectsStore.currentProjectId } });
+    }
   } catch {
     localError.value = authStore.error || "Login mislykkedes. Prøv igen.";
   }

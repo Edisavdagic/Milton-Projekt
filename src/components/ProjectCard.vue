@@ -1,4 +1,6 @@
 <script setup>
+import { useRouter } from "vue-router";
+
 defineProps({
   project: {
     type: Object,
@@ -7,10 +9,15 @@ defineProps({
 });
 
 const emit = defineEmits(["edit-project", "show-history"]);
+const router = useRouter();
+
+function openDashboard(project) {
+  router.push({ name: "dashboard", params: { projectId: project.id } });
+}
 </script>
 
 <template>
-  <article class="project-item">
+  <article class="project-item" @click="openDashboard(project)">
     <img class="project-item__img" :src="project.imageUrl" :alt="project.name" />
 
     <div class="project-item__info">
@@ -33,11 +40,11 @@ const emit = defineEmits(["edit-project", "show-history"]);
     </div>
 
     <div class="project-item__buttons">
-      <button v-if="project.isActive" type="button" @click="emit('edit-project', project)">
+      <button v-if="project.isActive" type="button" @click.stop="emit('edit-project', project)">
         Rediger
       </button>
 
-      <button type="button" class="history-btn" @click="emit('show-history', project)">
+      <button type="button" class="history-btn" @click.stop="emit('show-history', project)">
         Historik
       </button>
     </div>
@@ -57,6 +64,7 @@ const emit = defineEmits(["edit-project", "show-history"]);
   background: $accent-2;
   color: #fff;
   font-family: $font-family;
+  cursor: pointer;
 
   &__img {
     width: 100%;

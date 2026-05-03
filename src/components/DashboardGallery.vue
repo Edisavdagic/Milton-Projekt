@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header">
       <h2>Seneste billeder</h2>
-      <button class="edit-btn" @click="toggleEdit">
+      <button class="edit-btn" v-if="authStore.isAdmin" @click="toggleEdit">
         {{ editing ? "Færdig" : "Rediger" }}
       </button>
     </div>
@@ -40,6 +40,7 @@
 
 <script>
 import { useImageStore } from "@/stores/imageStore";
+import { useAuthStore } from "@/stores/auth";
 
 export default {
   name: "ImageUploader",
@@ -47,6 +48,7 @@ export default {
   data() {
     return {
       store: useImageStore(),
+      authStore: useAuthStore(),
       editing: false,
       maxSize: 5 * 1024 * 1024 // 5MB
     };

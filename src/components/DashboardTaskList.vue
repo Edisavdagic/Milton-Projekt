@@ -14,7 +14,7 @@
         <option value="færdig">Færdig</option>
       </select>
 
-      <button @click="editDetails = !editDetails">
+      <button v-if="authStore.isAdmin" @click="editDetails = !editDetails">
         {{ editDetails ? "Færdig" : "Rediger" }}
       </button>
     </div>
@@ -28,8 +28,8 @@
       >
         <div class="left">
 
-          <!-- TEXT -->
-          <div class="text">{{ task.text }}</div>
+          <!-- TITLE -->
+          <div class="text">{{ task.title }}</div>
           <div class="column">{{ task.column }}</div>
 
           <!-- DETAILS -->
@@ -43,7 +43,7 @@
               @input="store.updateStartDate(task.id, $event.target.value)"
             />
             <span v-else-if="task.startDate">
-              Start: {{ task.startDate }}
+              Startet: {{ task.startDate }}
             </span>
 
             <!-- END DATE -->
@@ -54,18 +54,18 @@
               @input="store.updateEndDate(task.id, $event.target.value)"
             />
             <span v-else-if="task.endDate">
-              Slut: {{ task.endDate }}
+              Afsluttet: {{ task.endDate }}
             </span>
 
             <!-- ACTORS -->
             <input
               v-if="editDetails"
               :value="task.actors?.join(', ')"
-              @input="store.updateActors(task.id, $event.target.value)"
-              placeholder="Aktører"
+              @change="store.updateActors(task.id, $event.target.value)"
+              placeholder="Aktører (kommasepareret)"
             />
             <span v-else-if="task.actors?.length">
-              👥 {{ task.actors.join(", ") }}
+              {{ task.actors.join(", ") }}
             </span>
 
           </div>
@@ -87,8 +87,10 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useMilestoneStore } from "@/stores/milestones";
+import { useAuthStore } from "@/stores/auth";
 
 const store = useMilestoneStore();
+const authStore = useAuthStore();
 
 /* STATE (UI only) */
 const search = ref("");
@@ -104,7 +106,7 @@ const filteredTasks = computed(() => {
     const matchesFilter =
       !filter.value || t.status === filter.value;
 
-    const matchesSearch = t.text
+    const matchesSearch = t.title
       .toLowerCase()
       .includes(search.value.toLowerCase());
 

@@ -4,15 +4,17 @@ import { RouterView } from "vue-router";
 import SidebarNav from "@/components/SidebarNav.vue";
 import TopbarNav from "@/components/TopbarNav.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useProjectsStore } from "@/stores/project";
 
 const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
 
 const user = computed(() => ({
   name: authStore.profile?.name || "Gæst",
   email: authStore.user?.email || "Ikke logget ind",
 }));
 
-const address = "123 Main St";
+const projectName = computed(() => projectsStore.currentProject?.name || "");
 </script>
 
 <template>
@@ -30,7 +32,7 @@ const address = "123 Main St";
       <!-- Topbar -->
       <TopbarNav
         v-if="authStore.authReady && authStore.isAuthenticated"
-        :projectAddress="address"
+        :projectAddress="projectName"
         :currentUser="user"
       />
 

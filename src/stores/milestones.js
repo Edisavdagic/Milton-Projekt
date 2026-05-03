@@ -1,125 +1,129 @@
-// stores/milestones.js
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
+import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { db } from '@/services/firebase'
 
-let nextColumnId = 1;
-let nextItemId = 1;
+const GROUP_IDS = ['construction', 'framing', 'interior']
 
-export const useMilestoneStore = defineStore("milestones", {
+function toDateString(value) {
+  if (!value) return ''
+  if (value?.toDate) return value.toDate().toISOString().split('T')[0]
+  return value
+}
+
+export const useMilestoneStore = defineStore('milestones', {
   state: () => ({
-    milestones: [
-      {
-        id: nextColumnId++,
-        title: "Konstruktion begynder",
-        items: [
-          {
-            id: nextItemId++,
-            text: "Fundament",
-            status: "færdig",
-            startDate: "",
-            endDate: "",
-            actors: [],
-          },
-          {
-            id: nextItemId++,
-            text: "Vinduer",
-            status: "igang",
-            startDate: "",
-            endDate: "",
-            actors: [],
-          },
-        ],
-      },
-      {
-        id: nextColumnId++,
-        title: "Opmuring & isolering",
-        items: [
-          {
-            id: nextItemId++,
-            text: "Strøm",
-            status: "igang",
-            startDate: "",
-            endDate: "",
-            actors: [],
-          },
-        ],
-      },
-      {
-        id: nextColumnId++,
-        title: "Interiør",
-        items: [],
-      },
-    ],
+    milestones: [],
+    projectId: null,
+    loading: false,
+    error: null,
   }),
 
   getters: {
-    // collection of all tasks 
     flatTasks: (state) =>
       state.milestones.flatMap((col) =>
-        col.items.map((item) => ({
-          ...item,
-          column: col.title,
-        }))
+        col.items.map((item) => ({ ...item, column: col.title }))
       ),
 
-    // progress for a given list of items
-    progress: (state) => (items) => {
-      if (!items.length) return 0;
-      const done = items.filter((i) => i.status === "færdig").length;
-      return Math.round((done / items.length) * 100);
+    progress: () => (items) => {
+      if (!items.length) return 0
+      const done = items.filter((i) => i.status === 'færdig').length
+      return Math.round((done / items.length) * 100)
     },
   },
 
   actions: {
-    // update a task with new values
-    updateTask(taskId, updates) {
+    async fetchMilestones(projectId) {
+      this.loading = true
+      this.error = null
+      this.projectId = projectId
+      try {
+        this.milestones = await Promise.all(
+          GROUP_IDS.map(async (groupId, idx) => {
+            const groupRef = doc(db, 'projects', projectId, 'milestoneGroups', groupId)
+            const milestonesRef = collection(db, 'projects', projectId, 'milestoneGroups', groupId, 'milestones')
+
+            const [groupSnap, milestonesSnap] = await Promise.all([
+              getDoc(groupRef),
+              getDocs(milestonesRef),
+            ])
+
+            const groupData = groupSnap.data() ?? {}
+
+            return {
+              id: idx + 1,
+              title: groupData.title ?? groupId,
+              subtitle: groupData.subtitle ?? '',
+              icon: groupData.icon ?? '',
+              order: groupData.order ?? idx,
+              groupId,
+              items: milestonesSnap.docs.map((d) => ({
+                id: d.id,
+                ...d.data(),
+                startDate: toDateString(d.data().startDate),
+                endDate: toDateString(d.data().endDate),
+              })),
+            }
+          })
+        )
+        this.milestones.sort((a, b) => a.order - b.order)
+      } catch (err) {
+        this.error = err.message
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updateTask(taskId, updates) {
       for (const col of this.milestones) {
-        const task = col.items.find((t) => t.id === taskId);
+        const task = col.items.find((t) => t.id === taskId)
         if (task) {
-          Object.assign(task, updates);
-          return;
+          Object.assign(task, updates)
+          if (this.projectId && !taskId.startsWith('local-')) {
+            const taskRef = doc(
+              db, 'projects', this.projectId,
+              'milestoneGroups', col.groupId,
+              'milestones', taskId
+            )
+            await updateDoc(taskRef, updates)
+          }
+          return
         }
       }
     },
 
-    // helpers for updating specific fields
-    updateActors(taskId, value) {
-      const actors = value
-        .split(",")
-        .map((a) => a.trim())
-        .filter(Boolean);
-
-      this.updateTask(taskId, { actors });
+    async updateActors(taskId, value) {
+      const actors = value.split(',').map((a) => a.trim()).filter(Boolean)
+      await this.updateTask(taskId, { actors })
     },
 
-    updateStartDate(taskId, date) {
-      this.updateTask(taskId, { startDate: date });
+    async updateStartDate(taskId, date) {
+      await this.updateTask(taskId, { startDate: date })
     },
 
-    updateEndDate(taskId, date) {
-      this.updateTask(taskId, { endDate: date });
+    async updateEndDate(taskId, date) {
+      await this.updateTask(taskId, { endDate: date })
     },
 
-    // column actions
     addItem(colIndex) {
       this.milestones[colIndex].items.push({
-        id: nextItemId++,
-        text: "Ny milepæl",
-        status: "ikke",
-        startDate: "",
-        endDate: "",
+        id: `local-${Date.now()}`,
+        title: 'Ny milepæl',
+        status: 'ikke',
+        startDate: '',
+        endDate: '',
         actors: [],
-      });
+      })
     },
 
     removeItem(colIndex, itemIndex) {
-      this.milestones[colIndex].items.splice(itemIndex, 1);
+      this.milestones[colIndex].items.splice(itemIndex, 1)
     },
 
     updateItem(colIndex, itemIndex, data) {
       this.milestones[colIndex].items[itemIndex] = {
         ...this.milestones[colIndex].items[itemIndex],
         ...data,
-      };
+      }
     },
   },
-});
+})

@@ -1,8 +1,9 @@
 <script setup>
-import { useRouter, RouterLink } from "vue-router";
+import { useRouter, RouterLink, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 
 async function logout() {
@@ -14,37 +15,43 @@ async function logout() {
 <template>
   <aside class="sidebar">
     <!-- Logo -->
-    <routerLink to="/dashboard">
+    <routerLink
+      v-if="route.params.projectId"
+      :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }"
+    >
       <div class="sidebar__logo">
         <div>
           <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
         </div>
       </div>
     </routerLink>
+    <div v-else class="sidebar__logo">
+      <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+    </div>
 
     <!-- Navigation -->
-    <nav class="sidebar__nav">
+    <nav v-if="route.params.projectId" class="sidebar__nav">
       <!-- Dashboard -->
-      <RouterLink to="/dashboard" class="item" active-class="active" exact-active-class="active">
+      <RouterLink :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
         Dashboard
       </RouterLink>
 
       <!-- Kalender -->
-      <RouterLink to="/kalender" class="item" active-class="active" exact-active-class="active">
+      <RouterLink :to="{ name: 'calendar', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
         Kalender
       </RouterLink>
 
       <!-- Dokumenter -->
-      <RouterLink to="/dokumenter" class="item" active-class="active" exact-active-class="active">
+      <RouterLink :to="{ name: 'documents', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
         Dokumenter
       </RouterLink>
 
       <!-- Notifikationer -->
       <RouterLink
-        to="/notifikationer"
+        :to="{ name: 'notifications', params: { projectId: route.params.projectId } }"
         class="item"
         active-class="active"
         exact-active-class="active"

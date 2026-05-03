@@ -40,6 +40,27 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // Projects: readable by members and admins
+    match /projects/{projectId} {
+      allow read: if signedIn()
+        && (isAdmin() || request.auth.uid in resource.data.memberUid);
+
+      function isMember() {
+        return request.auth.uid in get(/databases/$(database)/documents/projects/$(projectId)).data.memberUid;
+      }
+
+      // MilestoneGroup documents (title, subtitle, icon, order)
+      match /milestoneGroups/{group} {
+        allow read: if signedIn() && (isAdmin() || isMember());
+      }
+
+      // Milestone task documents inside each group
+      match /milestoneGroups/{group}/milestones/{milestone} {
+        allow read: if signedIn() && (isAdmin() || isMember());
+        allow update: if isAdmin();
+      }
+    }
+
     // Default deny for everything else until explicitly allowed
     match /{document=**} {
       allow read, write: if false;
