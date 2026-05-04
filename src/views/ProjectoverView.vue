@@ -10,6 +10,7 @@ const sortOrder = ref('newest')
 
 onMounted(() => {
   projectsStore.fetchProjects()
+  projectsStore.setCurrentProject(null)
 })
 
 const filterProjects = computed(() => {

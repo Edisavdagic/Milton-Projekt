@@ -13,7 +13,11 @@ defineProps({
 
 <template>
   <header class="topbarNav">
-    <div class="address-pill">{{ projectAddress }}</div>
+    <div class="address-pill">
+      <p>
+        {{ projectAddress }}
+      </p>
+    </div>
 
     <div class="topbar-actions">
       <!-- Fix chat(1) and notification(2) and color icons later -->

@@ -41,5 +41,9 @@ export const useProjectsStore = defineStore('projects', {
         console.error(error)
       }
     },
+
+    setCurrentProject(project) {
+      this.currentProject = project
+    },
   },
 })
