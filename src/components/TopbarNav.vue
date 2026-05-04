@@ -1,4 +1,7 @@
 <script setup>
+import { ref } from "vue";
+import ChatWidget from "@/components/ChatWidget.vue";
+
 defineProps({
   projectAddress: {
     type: String,
@@ -9,19 +12,21 @@ defineProps({
     required: true,
   },
 });
+
+const isChatOpen = ref(false);
 </script>
 
 <template>
   <header class="topbarNav">
     <div class="address-pill">
-      <p>
-        {{ projectAddress }}
-      </p>
+      <p>{{ projectAddress }}</p>
     </div>
 
     <div class="topbar-actions">
-      <!-- Fix chat(1) and notification(2) and color icons later -->
-      <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
+      <button class="icon-button" @click="isChatOpen = !isChatOpen">
+        <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
+      </button>
+
       <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
       <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
 
@@ -31,13 +36,16 @@ defineProps({
       </div>
 
       <div class="language-switch">
-        <img src="@/assets/icons/Globe.svg" alt="Notifikation ikon" />
+        <img src="@/assets/icons/Globe.svg" alt="Sprog ikon" />
         <span>Sprog</span>
       </div>
     </div>
+
+    <ChatWidget
+      :is-open="isChatOpen"
+      @close="isChatOpen = false"
+    />
   </header>
 </template>
 
-<style scoped lang="scss">
-@use "@/assets/styles/topbarNav";
-</style>
+<style lang="scss" src="@/assets/styles/_topbarNav.scss"></style>

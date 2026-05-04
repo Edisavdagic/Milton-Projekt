@@ -1,6 +1,7 @@
 @use './variables' as *;
 
 .topbarNav {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,6 +26,14 @@
   align-items: center;
   gap: $spacing-sm;
   margin-left: auto;
+}
+
+.icon-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
 }
 
 .topbar-icon {
