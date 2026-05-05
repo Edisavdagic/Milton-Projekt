@@ -1,15 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import ChatWidget from "@/components/ChatWidget.vue";
 
 defineProps({
   projectAddress: {
-    type: String,
-    required: true,
-  },
-  projectId: {
     type: String,
     required: true,
   },
@@ -19,20 +13,12 @@ defineProps({
   },
 });
 
-const authStore = useAuthStore();
-const router = useRouter();
-const route = useRoute();
 const isChatOpen = ref(false);
-
-const goToProjectOverview = () => {
-  router.push({ name: "projectoverview" });
-};
 </script>
 
 <template>
   <header class="topbarNav">
-    <div v-if="authStore.isAdmin && route.name !== 'projectoverview'" class="address-pill" @click="goToProjectOverview">
-      <img src="@/assets/icons/Arrow.svg" alt="Arrow ikon" />
+    <div class="address-pill">
       <p>{{ projectAddress }}</p>
     </div>
 
@@ -57,8 +43,6 @@ const goToProjectOverview = () => {
 
     <ChatWidget
       :is-open="isChatOpen"
-      :project-id="projectId"
-      :current-user="currentUser"
       @close="isChatOpen = false"
     />
   </header>

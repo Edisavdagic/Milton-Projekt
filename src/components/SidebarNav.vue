@@ -14,7 +14,6 @@ async function logout() {
 
 <template>
   <aside class="sidebar">
-    <!-- Logo -->
     <routerLink
       v-if="route.params.projectId"
       :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }"
@@ -29,8 +28,29 @@ async function logout() {
       <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
     </div>
 
-    <!-- Navigation -->
-    <nav v-if="route.params.projectId" class="sidebar__nav">
+    <!-- Admin Navigation -->
+    <nav v-if="authStore.isAdmin" class="sidebar__nav">
+      <!-- Projektoversigt -->
+      <RouterLink :to="{ name: 'projectoverview' }" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/Home.svg" alt="Projektoversigt ikon" />
+        Projektoversigt
+      </RouterLink>
+
+      <!-- Profil -->
+      <div class="item">
+        <img src="@/assets/icons/User.svg" alt="Profil ikon" />
+        Profil
+      </div>
+
+      <!-- Indstillinger -->
+      <div class="item">
+        <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
+        Indstillinger
+      </div>
+    </nav>
+
+    <!-- Regular User Navigation (Project) -->
+    <nav v-else-if="route.params.projectId" class="sidebar__nav">
       <!-- Dashboard -->
       <RouterLink :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
@@ -60,13 +80,13 @@ async function logout() {
         Historik
       </RouterLink>
 
-      <!-- Ikke lavet -->
+      <!-- Profil -->
       <div class="item">
         <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
-      <!-- Ikke lavet -->
+      <!-- Indstillinger -->
       <div class="item">
         <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger

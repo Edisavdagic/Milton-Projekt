@@ -44,10 +44,12 @@ function openDashboard(project) {
 
     <div class="project-item__buttons">
       <button v-if="project.isActive" type="button" @click.stop="emit('edit-project', project)">
+        <img src="@/assets/icons/Edit.svg" alt="Edit icon" />
         Rediger
       </button>
 
       <button type="button" class="history-btn" @click.stop="emit('show-history', project)">
+        <img src="@/assets/icons/Eye.svg" alt="Eye icon" />
         Historik
       </button>
     </div>
@@ -130,6 +132,9 @@ function openDashboard(project) {
     gap: $spacing-sm;
 
     button {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-xs;
       border: none;
       border-radius: 8px;
       padding: $spacing-xs $spacing-sm;
@@ -139,6 +144,12 @@ function openDashboard(project) {
       font-size: 15px;
       font-weight: $h2-weight;
       cursor: pointer;
+
+      img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
     }
   }
 }
