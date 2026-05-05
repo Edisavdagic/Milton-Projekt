@@ -97,10 +97,10 @@ const   handleSend = async () => {
 
           <div class="chat-widget__person-info">
             <h3>{{ chat.otherName }}</h3>
-            <p>{{ chat.otherRole }}</p>
+            <p>{{ chat.lastMessage }}</p>
           </div>
 
-          <span>{{ chat.lastMessage ?? "Start en samtale" }}</span>
+          <span>{{ chat.lastMessageAt?.toDate()?.toLocaleDateString('da-DK') ?? "Start en samtale" }}</span>
         </button>
       </div>
 
