@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { db } from '@/services/firebase'
 import { useAuthStore } from '@/stores/auth'
 import {
-  collection, doc, getDoc, addDoc, setDoc,
+  collection, collectionGroup, doc, getDoc, addDoc, setDoc,
   query, where, orderBy, onSnapshot, serverTimestamp,
 } from 'firebase/firestore'
 
@@ -81,6 +81,42 @@ export function useChat() {
     )
   }
 
+  function loadAllChats() {
+    loadingChats.value = true
+    const myUid = authStore.user.uid
+    if (unsubChats) unsubChats()
+
+    const q = query(
+      collectionGroup(db, 'chats'),
+      where('participants', 'array-contains', myUid)
+    )
+
+    unsubChats = onSnapshot(
+      q,
+      snapshot => {
+        const result = []
+        snapshot.forEach(d => {
+          const data = d.data()
+          const otherUid = data.participants?.find(p => p !== myUid)
+          if (!otherUid) return
+          result.push({
+            chatId: d.id,
+            projectId: d.ref.parent.parent.id,
+            otherUid,
+            otherName: data.participantNames?.[otherUid] ?? otherUid,
+            otherRole: data.participantRoles?.[otherUid] ?? '',
+            lastMessage: data.lastMessage ?? '',
+            lastMessageAt: data.lastMessageAt,
+          })
+        })
+        result.sort((a, b) => (b.lastMessageAt?.toMillis?.() ?? 0) - (a.lastMessageAt?.toMillis?.() ?? 0))
+        chats.value = result
+        loadingChats.value = false
+      },
+      err => console.error('[useChat] All chats snapshot error:', err)
+    )
+  }
+
   function loadMessages(projectId, chatId) {
     if (unsubMessages) unsubMessages()
     activeChatId.value = chatId
@@ -145,6 +181,7 @@ export function useChat() {
     loadingMessages,
     activeChatId,
     loadChats,
+    loadAllChats,
     loadMessages,
     sendMessage,
     cleanup,
