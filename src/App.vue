@@ -15,6 +15,7 @@ const user = computed(() => ({
 }));
 
 const projectName = computed(() => projectsStore.currentProject?.name || "");
+const projectId = computed(() => projectsStore.currentProject?.id || "");
 </script>
 
 <template>
@@ -33,7 +34,8 @@ const projectName = computed(() => projectsStore.currentProject?.name || "");
       <TopbarNav
         v-if="authStore.authReady && authStore.isAuthenticated"
         :projectAddress="projectName"
-        :currentUser="user"
+        :project-id="projectId"
+        :current-user="user"
       />
 
       <!-- Page content -->

@@ -1,75 +1,52 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
+import { useProjectChat } from "@/composables/useProjectChat";
 
 const emit = defineEmits(["close"]);
 
-defineProps({
+const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
   },
+  projectId: {
+    type: String,
+    required: true,
+  },
+  currentUser: {
+    type: Object,
+    required: true,
+  },
 });
 
-const selectedChatId = ref(null);
+const selectedChat = ref(null);
+const newMessage = ref("");
 
-const chats = [
-  {
-    id: 1,
-    name: "Henrik Nielsen",
-    role: "Byggeleder",
-    time: "I dag",
-  },
-  {
-    id: 2,
-    name: "Henriette Jensen",
-    role: "Bygningsrådgiver",
-    time: "I går",
-  },
-];
+const {
+  chats,
+  messages,
+  listenToMessages,
+  sendMessage,
+} = useProjectChat(props.projectId, props.currentUser);
 
-const selectedChat = computed(() =>
-  chats.find((chat) => chat.id === selectedChatId.value)
-);
-
-const messages = [
-  {
-    id: 1,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur dignissim mi, eget faucibus ex luctus",
-    sender: "me",
-  },
-  {
-    id: 2,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur dignissim mi, eget faucibus ex luctus cursus. Fusce magna mi, dapibus ut odio eu, auctor ultricies tortor.",
-    sender: "me",
-  },
-  {
-    id: 3,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur dignissim mi, eget faucibus ex luctus cursus.",
-    sender: "them",
-  },
-  {
-    id: 4,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    sender: "me",
-  },
-  {
-    id: 5,
-    type: "date",
-    text: "tirsdag d. 10 feb",
-  },
-  {
-    id: 6,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur dignissim mi, eget faucibus ex luctus cursus.",
-    sender: "them",
-  },
-];
-
-const openChat = (chatId) => {
-  selectedChatId.value = chatId;
+const openChat = (chat) => {
+  selectedChat.value = chat;
+  listenToMessages(chat.chatId);
 };
 
 const backToList = () => {
-  selectedChatId.value = null;
+  selectedChat.value = null;
+};
+
+const handleSend = async () => {
+  if (!newMessage.value.trim() || !selectedChat.value) return;
+
+  await sendMessage({
+    chatId: selectedChat.value.chatId,
+    text: newMessage.value,
+  });
+
+  newMessage.value = "";
 };
 </script>
 
@@ -87,25 +64,26 @@ const backToList = () => {
         </div>
 
         <div class="chat-widget__tabs">
-          <button class="chat-widget__tab chat-widget__tab--active">Alle</button>
+          <button class="chat-widget__tab chat-widget__tab--active">
+            Alle
+          </button>
           <button class="chat-widget__tab">Ulæste</button>
         </div>
 
         <button
           v-for="chat in chats"
-          :key="chat.id"
+          :key="chat.chatId"
           class="chat-widget__person"
-          :class="{ 'chat-widget__person--active': chat.id === 1 }"
-          @click="openChat(chat.id)"
+          @click="openChat(chat)"
         >
           <div class="chat-widget__avatar"></div>
 
           <div class="chat-widget__person-info">
-            <h3>{{ chat.name }}</h3>
-            <p>{{ chat.role }}</p>
+            <h3>{{ chat.otherName }}</h3>
+            <p>{{ chat.otherRole }}</p>
           </div>
 
-          <span>{{ chat.time }}</span>
+          <span>{{ chat.lastMessage ?? "Start en samtale" }}</span>
         </button>
       </div>
 
@@ -116,8 +94,8 @@ const backToList = () => {
           <div class="chat-widget__avatar chat-widget__avatar--large"></div>
 
           <div>
-            <h2>{{ selectedChat.name }}</h2>
-            <p>{{ selectedChat.role }}</p>
+            <h2>{{ selectedChat.otherName }}</h2>
+            <p>{{ selectedChat.otherRole }}</p>
           </div>
         </header>
 
@@ -140,19 +118,27 @@ const backToList = () => {
           </template>
         </div>
 
-        <form class="chat-widget__composer">
-          <input type="text" placeholder="Aa" />
+        <form class="chat-widget__composer" @submit.prevent="handleSend">
+          <input
+            v-model="newMessage"
+            type="text"
+            placeholder="Aa"
+            @keyup.enter="handleSend"
+          />
 
           <div class="chat-widget__composer-actions">
             <button type="button">
               <img src="@/assets/icons/Image.svg" alt="Billede ikon" />
             </button>
+
             <button type="button">
               <img src="@/assets/icons/Mic.svg" alt="Mikrofon ikon" />
             </button>
+
             <button type="button">
               <img src="@/assets/icons/Paperclip.svg" alt="Vedhæft ikon" />
             </button>
+
             <button type="submit" class="chat-widget__send">
               <img src="@/assets/icons/Send.svg" alt="Send ikon" />
             </button>
@@ -268,10 +254,6 @@ const backToList = () => {
     background: #fff;
     cursor: pointer;
     text-align: left;
-
-    &--active {
-      border-color: $primary;
-    }
 
     h3 {
       margin: 0;
@@ -439,14 +421,10 @@ const backToList = () => {
     border: 2px solid $primary !important;
     border-radius: 50%;
     background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     img {
       width: 20px;
       height: 20px;
-      filter: invert(0%) sepia(100%) saturate(10000%) hue-rotate(180deg) brightness(0%);
     }
   }
 }

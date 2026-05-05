@@ -7,6 +7,10 @@ defineProps({
     type: String,
     required: true,
   },
+  projectId: {
+    type: String,
+    required: true,
+  },
   currentUser: {
     type: Object,
     required: true,
@@ -43,6 +47,8 @@ const isChatOpen = ref(false);
 
     <ChatWidget
       :is-open="isChatOpen"
+      :project-id="projectId"
+      :current-user="currentUser"
       @close="isChatOpen = false"
     />
   </header>
