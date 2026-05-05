@@ -21,7 +21,7 @@ const props = defineProps({
 });
 
 const projectsStore = useProjectsStore();
-const { chats, messages, loadChats, loadMessages, sendMessage, cleanup } = useChat();
+const { chats, messages, loadChats, loadAllChats, loadMessages, sendMessage, cleanup } = useChat();
 
 const selectedChatId = ref(null);
 const newMessage = ref("");
@@ -30,13 +30,16 @@ const selectedChat = computed(() =>
   chats.value.find((c) => c.chatId === selectedChatId.value) ?? null
 );
 
-// Load chats whenever the widget opens or the project becomes available
 watch(
-  [() => props.isOpen, () => projectsStore.currentProjectId],
+  [() => props.isOpen, () => props.projectId],
   ([isOpen, projectId]) => {
-    if (!isOpen || !projectId) return;
-    const memberUids = projectsStore.currentProject?.memberUid ?? [];
-    loadChats(projectId, memberUids);
+    if (!isOpen) return;
+    if (projectId) {
+      const memberUids = projectsStore.currentProject?.memberUid ?? [];
+      loadChats(projectId, memberUids);
+    } else {
+      loadAllChats();
+    }
   },
   { immediate: true }
 );
@@ -45,17 +48,18 @@ onUnmounted(() => cleanup());
 
 const openChat = (chat) => {
   selectedChatId.value = chat.chatId;
-  loadMessages(projectsStore.currentProjectId, chat.chatId);
+  loadMessages(chat.projectId ?? props.projectId, chat.chatId);
 };
 
 const backToList = () => {
-  selectedChat.value = null;
+  selectedChatId.value = null;
 };
 
-const   handleSend = async () => {
+const handleSend = async () => {
   if (!selectedChat.value || !newMessage.value.trim()) return;
+  const projectId = selectedChat.value.projectId ?? props.projectId;
   await sendMessage(
-    projectsStore.currentProjectId,
+    projectId,
     selectedChat.value.chatId,
     newMessage.value,
     selectedChat.value.otherUid,

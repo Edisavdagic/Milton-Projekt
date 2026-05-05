@@ -90,6 +90,11 @@ service cloud.firestore {
       }
     }
 
+    // Allow collectionGroup queries on 'chats' for participants
+    match /{path=**}/chats/{chatId} {
+      allow read: if signedIn() && request.auth.uid in resource.data.participants;
+    }
+
     // Default deny for everything else until explicitly allowed
     match /{document=**} {
       allow read, write: if false;

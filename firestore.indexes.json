@@ -47,5 +47,14 @@
   //   },
   // ]
   "indexes": [],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    {
+      "collectionGroup": "chats",
+      "fieldPath": "participants",
+      "indexes": [
+        { "arrayConfig": "CONTAINS", "queryScope": "COLLECTION" },
+        { "arrayConfig": "CONTAINS", "queryScope": "COLLECTION_GROUP" }
+      ]
+    }
+  ]
 }
