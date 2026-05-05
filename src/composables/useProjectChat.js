@@ -1,138 +1,168 @@
-import { ref, watch } from "vue";
+import { ref } from 'vue'
+import { db } from '@/services/firebase'
+import { useAuthStore } from '@/stores/auth'
 import {
-  collection,
-  doc,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp,
-} from "firebase/firestore";
-import { db } from "@/services/firebase";
+  collection, doc, getDoc, addDoc, setDoc,
+  query, where, orderBy, onSnapshot, serverTimestamp,
+} from 'firebase/firestore'
 
-export function useProjectChat(projectId, currentUser) {
-  const chats = ref([]);
-  const messages = ref([]);
+export function useChat() {
+  const authStore = useAuthStore()
 
-  let unsubscribeMessages = null;
+  const chats = ref([])
+  const messages = ref([])
+  const loadingChats = ref(false)
+  const loadingMessages = ref(false)
+  const activeChatId = ref(null)
 
-  const isProjectReady = () => Boolean(projectId && projectId !== "");
+  let unsubChats = null
+  let unsubMessages = null
 
-  const cleanupMessages = () => {
-    if (unsubscribeMessages) {
-      unsubscribeMessages();
-      unsubscribeMessages = null;
-    }
-    messages.value = [];
-  };
+  async function loadChats(projectId, memberUids) {
+    if (!projectId || !memberUids?.length) return
+    loadingChats.value = true
 
-  // FETCH CHATS (1 per user in project)
-  const loadChats = () => {
-    if (!isProjectReady()) {
-      chats.value = [];
-      return;
+    const myUid = authStore.user.uid
+    const otherUids = memberUids.filter(uid => uid !== myUid)
+
+    if (!otherUids.length) {
+      loadingChats.value = false
+      return
     }
 
-    const chatsRef = collection(db, "projects", projectId, "chats");
-
-    onSnapshot(chatsRef, (snapshot) => {
-      chats.value = snapshot.docs.map((docSnap) => {
-        const data = docSnap.data();
-
-        // find "the other user"
-        const otherUser = data.members.find(
-          (m) => m.id !== currentUser?.id
-        );
-
-        return {
-          chatId: docSnap.id,
-          otherName: otherUser?.name || "Ukendt",
-          otherRole: otherUser?.role || "",
-          lastMessage: data.lastMessage || "",
-        };
-      });
-    });
-  };
-
-  // LISTEN TO MESSAGES
-  const listenToMessages = (chatId) => {
-    if (!isProjectReady() || !chatId) {
-      cleanupMessages();
-      return;
+    let memberProfiles
+    try {
+      memberProfiles = await Promise.all(
+        otherUids.map(async uid => {
+          const snap = await getDoc(doc(db, 'Users', uid))
+          const data = snap.exists() ? snap.data() : {}
+          return { uid, name: data.name ?? data.email ?? uid, role: data.role ?? '' }
+        })
+      )
+    } catch (err) {
+      console.error('[useChat] Failed to fetch member profiles — check Firestore rules:', err)
+      loadingChats.value = false
+      return
     }
 
-    if (unsubscribeMessages) unsubscribeMessages();
+    if (unsubChats) unsubChats()
 
-    const messagesRef = collection(
-      db,
-      "projects",
-      projectId,
-      "chats",
-      chatId,
-      "messages"
-    );
+    const chatsRef = query(
+      collection(db, 'projects', projectId, 'chats'),
+      where('participants', 'array-contains', myUid)
+    )
+    unsubChats = onSnapshot(
+      chatsRef,
+      snapshot => {
+        const existingChats = {}
+        snapshot.forEach(d => {
+          const data = d.data()
+          if (data.participants?.includes(myUid)) {
+            const otherUid = data.participants.find(p => p !== myUid)
+            existingChats[otherUid] = {
+              lastMessage: data.lastMessage ?? '',
+              lastMessageAt: data.lastMessageAt,
+            }
+          }
+        })
 
-    const q = query(messagesRef, orderBy("createdAt", "asc"));
+        chats.value = memberProfiles.map(member => ({
+          chatId: [myUid, member.uid].sort().join('_'),
+          otherUid: member.uid,
+          otherName: member.name,
+          otherRole: member.role,
+          lastMessage: existingChats[member.uid]?.lastMessage ?? null,
+          lastMessageAt: existingChats[member.uid]?.lastMessageAt ?? null,
+        }))
 
-    unsubscribeMessages = onSnapshot(q, (snapshot) => {
-      messages.value = snapshot.docs.map((docSnap) => {
-        const data = docSnap.data();
+        loadingChats.value = false
+      },
+      err => console.error('[useChat] Chats snapshot error:', err)
+    )
+  }
 
-        return {
-          id: docSnap.id,
-          text: data.text,
-          sender: data.senderId === currentUser?.id ? "me" : "them",
-        };
-      });
-    });
-  };
+  function loadMessages(projectId, chatId) {
+    if (unsubMessages) unsubMessages()
+    activeChatId.value = chatId
+    loadingMessages.value = true
 
-  // SEND MESSAGE
-  const sendMessage = async ({ chatId, text }) => {
-    if (!isProjectReady() || !chatId) return;
+    const q = query(
+      collection(db, 'projects', projectId, 'chats', chatId, 'messages'),
+      orderBy('createdAt', 'asc')
+    )
 
-    const messagesRef = collection(
-      db,
-      "projects",
-      projectId,
-      "chats",
-      chatId,
-      "messages"
-    );
+    unsubMessages = onSnapshot(q, snapshot => {
+      const raw = snapshot.docs.map(d => ({
+        id: d.id,
+        text: d.data().text,
+        sender: d.data().senderId === authStore.user.uid ? 'me' : 'them',
+        createdAt: d.data().createdAt?.toDate() ?? new Date(),
+      }))
+      messages.value = injectDateSeparators(raw)
+      loadingMessages.value = false
+    })
+  }
 
-    await addDoc(messagesRef, {
-      text,
-      senderId: currentUser?.id,
+  async function sendMessage(projectId, chatId, text, otherUid, otherName, otherRole) {
+    const trimmed = text.trim()
+    if (!trimmed) return
+
+    const myUid = authStore.user.uid
+    const myName = authStore.profile?.name ?? authStore.user.email
+    const myRole = authStore.profile?.role ?? ''
+    const participants = [myUid, otherUid].sort()
+
+    const chatRef = doc(db, 'projects', projectId, 'chats', chatId)
+    await setDoc(chatRef, {
+      participants,
+      participantNames: { [myUid]: myName, [otherUid]: otherName },
+      participantRoles: { [myUid]: myRole, [otherUid]: otherRole },
+      lastMessage: trimmed,
+      lastMessageAt: serverTimestamp(),
       createdAt: serverTimestamp(),
-    });
+    }, { merge: true })
 
-    // update lastMessage
-    const chatRef = doc(db, "projects", projectId, "chats", chatId);
-
-    await addDoc(collection(chatRef, "meta"), {
-      lastMessage: text,
-      updatedAt: serverTimestamp(),
-    });
-  };
-
-  // WATCH PROJECT ID
-  watch(
-    () => projectId,
-    (newId) => {
-      if (newId) {
-        loadChats();
-      } else {
-        chats.value = [];
-        cleanupMessages();
+    await addDoc(
+      collection(db, 'projects', projectId, 'chats', chatId, 'messages'),
+      {
+        text: trimmed,
+        senderId: myUid,
+        senderName: myName,
+        createdAt: serverTimestamp(),
       }
-    },
-    { immediate: true }
-  );
+    )
+  }
+
+  function cleanup() {
+    if (unsubChats) { unsubChats(); unsubChats = null }
+    if (unsubMessages) { unsubMessages(); unsubMessages = null }
+  }
 
   return {
     chats,
     messages,
-    listenToMessages,
+    loadingChats,
+    loadingMessages,
+    activeChatId,
+    loadChats,
+    loadMessages,
     sendMessage,
-  };
+    cleanup,
+  }
+}
+
+function injectDateSeparators(msgs) {
+  const result = []
+  let lastDate = null
+  for (const msg of msgs) {
+    const dateStr = msg.createdAt.toLocaleDateString('da-DK', {
+      weekday: 'long', day: 'numeric', month: 'short',
+    })
+    if (dateStr !== lastDate) {
+      result.push({ id: `date-${dateStr}-${msg.id}`, type: 'date', text: dateStr })
+      lastDate = dateStr
+    }
+    result.push(msg)
+  }
+  return result
 }

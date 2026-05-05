@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref, watch, onUnmounted } from "vue";
 import { useProjectChat } from "@/composables/useProjectChat";
+import { useProjectsStore } from "@/stores/project";
 
 const emit = defineEmits(["close"]);
 
@@ -19,33 +20,48 @@ const props = defineProps({
   },
 });
 
-const selectedChat = ref(null);
+const projectsStore = useProjectsStore();
+const { chats, messages, loadChats, loadMessages, sendMessage, cleanup } = useProjectChat();
+
+const selectedChatId = ref(null);
 const newMessage = ref("");
 
-const {
-  chats,
-  messages,
-  listenToMessages,
-  sendMessage,
-} = useProjectChat(props.projectId, props.currentUser);
+const selectedChat = computed(() =>
+  chats.value.find((c) => c.chatId === selectedChatId.value) ?? null
+);
+
+// Load chats whenever the widget opens or the project becomes available
+watch(
+  [() => props.isOpen, () => projectsStore.currentProjectId],
+  ([isOpen, projectId]) => {
+    if (!isOpen || !projectId) return;
+    const memberUids = projectsStore.currentProject?.memberUid ?? [];
+    loadChats(projectId, memberUids);
+  },
+  { immediate: true }
+);
+
+onUnmounted(() => cleanup());
 
 const openChat = (chat) => {
-  selectedChat.value = chat;
-  listenToMessages(chat.chatId);
+  selectedChatId.value = chat.chatId;
+  loadMessages(projectsStore.currentProjectId, chat.chatId);
 };
 
 const backToList = () => {
   selectedChat.value = null;
 };
 
-const handleSend = async () => {
-  if (!newMessage.value.trim() || !selectedChat.value) return;
-
-  await sendMessage({
-    chatId: selectedChat.value.chatId,
-    text: newMessage.value,
-  });
-
+const   handleSend = async () => {
+  if (!selectedChat.value || !newMessage.value.trim()) return;
+  await sendMessage(
+    projectsStore.currentProjectId,
+    selectedChat.value.chatId,
+    newMessage.value,
+    selectedChat.value.otherUid,
+    selectedChat.value.otherName,
+    selectedChat.value.otherRole,
+  );
   newMessage.value = "";
 };
 </script>
@@ -74,6 +90,7 @@ const handleSend = async () => {
           v-for="chat in chats"
           :key="chat.chatId"
           class="chat-widget__person"
+          :class="{ 'chat-widget__person--active': chat.chatId === selectedChatId }"
           @click="openChat(chat)"
         >
           <div class="chat-widget__avatar"></div>
@@ -119,12 +136,7 @@ const handleSend = async () => {
         </div>
 
         <form class="chat-widget__composer" @submit.prevent="handleSend">
-          <input
-            v-model="newMessage"
-            type="text"
-            placeholder="Aa"
-            @keyup.enter="handleSend"
-          />
+          <input type="text" placeholder="Aa" v-model="newMessage" @keyup.enter="handleSend" />
 
           <div class="chat-widget__composer-actions">
             <button type="button">

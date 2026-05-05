@@ -22,8 +22,8 @@ service cloud.firestore {
 
     // User profile + role docs: Users/{uid}
     match /Users/{uid} {
-      // User can read own doc, admin can read all
-      allow read: if isOwner(uid) || isAdmin();
+      // User can read own doc, admin can read all, or any signed-in user (needed for chat member names)
+      allow read: if isOwner(uid) || isAdmin() || signedIn();
 
       // User can create only own doc and only as normal user
       allow create: if isOwner(uid)
@@ -58,6 +58,35 @@ service cloud.firestore {
       match /milestoneGroups/{group}/milestones/{milestone} {
         allow read: if signedIn() && (isAdmin() || isMember());
         allow update: if isAdmin();
+      }
+
+      // Chat conversations between project members
+      match /chats/{chatId} {
+        allow read: if signedIn()
+                    && request.auth.uid in resource.data.participants;
+
+        allow create: if signedIn()
+                      && request.auth.uid in request.resource.data.participants
+                      && request.resource.data.participants.size() == 2;
+
+        allow update: if signedIn()
+                      && request.auth.uid in resource.data.participants
+                      && request.resource.data.participants == resource.data.participants;
+
+        match /messages/{messageId} {
+          allow read: if signedIn()
+                      && request.auth.uid in
+                         get(/databases/$(database)/documents/projects/$(projectId)/chats/$(chatId)).data.participants;
+
+          allow create: if signedIn()
+                        && request.auth.uid in
+                           get(/databases/$(database)/documents/projects/$(projectId)/chats/$(chatId)).data.participants
+                        && request.resource.data.senderId == request.auth.uid
+                        && request.resource.data.text is string
+                        && request.resource.data.text.size() > 0;
+
+          allow update, delete: if false;
+        }
       }
     }
 
