@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch, onUnmounted } from "vue";
-import { useProjectChat } from "@/composables/useProjectChat";
+import { useChat } from "@/composables/useProjectChat";
 import { useProjectsStore } from "@/stores/project";
 
 const emit = defineEmits(["close"]);
@@ -21,7 +21,7 @@ const props = defineProps({
 });
 
 const projectsStore = useProjectsStore();
-const { chats, messages, loadChats, loadMessages, sendMessage, cleanup } = useProjectChat();
+const { chats, messages, loadChats, loadMessages, sendMessage, cleanup } = useChat();
 
 const selectedChatId = ref(null);
 const newMessage = ref("");
