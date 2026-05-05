@@ -10,6 +10,18 @@ function toDateString(value) {
   return value
 }
 
+function toActorList(value) {
+  if (Array.isArray(value)) {
+    return value.map((actor) => String(actor).trim()).filter(Boolean)
+  }
+
+  if (typeof value === 'string') {
+    return value.split(',').map((actor) => actor.trim()).filter(Boolean)
+  }
+
+  return []
+}
+
 export const useMilestoneStore = defineStore('milestones', {
   state: () => ({
     milestones: [],
@@ -61,6 +73,7 @@ export const useMilestoneStore = defineStore('milestones', {
                 ...d.data(),
                 startDate: toDateString(d.data().startDate),
                 endDate: toDateString(d.data().endDate),
+                actors: toActorList(d.data().actors),
               })),
             }
           })
@@ -92,8 +105,7 @@ export const useMilestoneStore = defineStore('milestones', {
     },
 
     async updateActors(taskId, value) {
-      const actors = value.split(',').map((a) => a.trim()).filter(Boolean)
-      await this.updateTask(taskId, { actors })
+      await this.updateTask(taskId, { actors: toActorList(value) })
     },
 
     async updateStartDate(taskId, date) {
