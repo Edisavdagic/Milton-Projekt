@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import ChatWidget from "@/components/ChatWidget.vue";
 
 defineProps({
@@ -13,7 +14,12 @@ defineProps({
   },
 });
 
+const router = useRouter();
 const isChatOpen = ref(false);
+
+const goToNotifications = () => {
+  router.push({ name: "notifications" });
+};
 </script>
 
 <template>
@@ -27,7 +33,9 @@ const isChatOpen = ref(false);
         <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
       </button>
 
-      <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
+      <button class="icon-button" @click="goToNotifications">
+        <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
+      </button>
       <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
 
       <div class="user-meta">

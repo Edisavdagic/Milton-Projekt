@@ -1,10 +1,17 @@
 <script setup>
+import { computed } from "vue";
 import { useRouter, RouterLink, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useProjectsStore } from "@/stores/project";
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
+
+const currentProjectId = computed(
+  () => route.params.projectId || projectsStore.currentProjectId || ""
+);
 
 async function logout() {
   await authStore.signOutUser();
@@ -15,8 +22,8 @@ async function logout() {
 <template>
   <aside class="sidebar">
     <routerLink
-      v-if="route.params.projectId"
-      :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }"
+      v-if="currentProjectId"
+      :to="{ name: 'dashboard', params: { projectId: currentProjectId } }"
     >
       <div class="sidebar__logo">
         <div>
@@ -30,19 +37,19 @@ async function logout() {
 
     <!-- Admin Navigation -->
     <nav v-if="authStore.isAdmin" class="sidebar__nav">
-      <!-- Projektoversigt -->
+      <!-- Project Overview -->
       <RouterLink :to="{ name: 'projectoverview' }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Projektoversigt ikon" />
         Projektoversigt
       </RouterLink>
 
-      <!-- Profil -->
+      <!-- Profile -->
       <div class="item">
         <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
-      <!-- Indstillinger -->
+      <!-- Settings -->
       <div class="item">
         <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger
@@ -50,43 +57,38 @@ async function logout() {
     </nav>
 
     <!-- Regular User Navigation (Project) -->
-    <nav v-else-if="route.params.projectId" class="sidebar__nav">
+    <nav v-else class="sidebar__nav">
       <!-- Dashboard -->
-      <RouterLink :to="{ name: 'dashboard', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
+      <RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
         Dashboard
       </RouterLink>
 
-      <!-- Kalender -->
-      <RouterLink :to="{ name: 'calendar', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
+      <!-- Calendar -->
+      <RouterLink :to="{ name: 'calendar', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
         Kalender
       </RouterLink>
 
-      <!-- Dokumenter -->
-      <RouterLink :to="{ name: 'documents', params: { projectId: route.params.projectId } }" class="item" active-class="active" exact-active-class="active">
+      <!-- Documents -->
+      <RouterLink :to="{ name: 'documents', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
         Dokumenter
       </RouterLink>
 
-      <!-- Notifikationer -->
-      <RouterLink
-        :to="{ name: 'notifications', params: { projectId: route.params.projectId } }"
-        class="item"
-        active-class="active"
-        exact-active-class="active"
-      >
+      <!-- History -->
+      <div class="item">
         <img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
         Historik
-      </RouterLink>
+      </div>
 
-      <!-- Profil -->
+      <!-- Profile -->
       <div class="item">
         <img src="@/assets/icons/User.svg" alt="Profil ikon" />
         Profil
       </div>
 
-      <!-- Indstillinger -->
+      <!-- Settings -->
       <div class="item">
         <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
         Indstillinger

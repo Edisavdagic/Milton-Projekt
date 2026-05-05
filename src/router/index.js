@@ -24,6 +24,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/notifikationer",
+      name: "notifications",
+      component: NotificationsView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/project/:projectId",
       meta: { requiresAuth: true },
       children: [
@@ -36,11 +42,6 @@ const router = createRouter({
           path: "dokumenter",
           name: "documents",
           component: DocumentsView,
-        },
-        {
-          path: "notifikationer",
-          name: "notifications",
-          component: NotificationsView,
         },
         {
           path: "kalender",
