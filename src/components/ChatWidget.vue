@@ -25,6 +25,7 @@ const { chats, messages, loadChats, loadAllChats, loadMessages, sendMessage, cle
 
 const selectedChatId = ref(null);
 const newMessage = ref("");
+const isSending = ref(false);
 
 const selectedChat = computed(() =>
   chats.value.find((c) => c.chatId === selectedChatId.value) ?? null
@@ -56,17 +57,23 @@ const backToList = () => {
 };
 
 const handleSend = async () => {
-  if (!selectedChat.value || !newMessage.value.trim()) return;
-  const projectId = selectedChat.value.projectId ?? props.projectId;
-  await sendMessage(
-    projectId,
-    selectedChat.value.chatId,
-    newMessage.value,
-    selectedChat.value.otherUid,
-    selectedChat.value.otherName,
-    selectedChat.value.otherRole,
-  );
+  if (isSending.value || !selectedChat.value || !newMessage.value.trim()) return;
+  isSending.value = true;
+  const text = newMessage.value;
   newMessage.value = "";
+  try {
+    const projectId = selectedChat.value.projectId ?? props.projectId;
+    await sendMessage(
+      projectId,
+      selectedChat.value.chatId,
+      text,
+      selectedChat.value.otherUid,
+      selectedChat.value.otherName,
+      selectedChat.value.otherRole,
+    );
+  } finally {
+    isSending.value = false;
+  }
 };
 </script>
 
@@ -139,8 +146,8 @@ const handleSend = async () => {
           </template>
         </div>
 
-        <form class="chat-widget__composer" @submit.prevent="handleSend">
-          <input type="text" placeholder="Aa" v-model="newMessage" @keyup.enter="handleSend" />
+        <div class="chat-widget__composer">
+          <input type="text" placeholder="Aa" v-model="newMessage" @keydown.enter.prevent="handleSend" />
 
           <div class="chat-widget__composer-actions">
             <button type="button">
@@ -155,11 +162,11 @@ const handleSend = async () => {
               <img src="@/assets/icons/Paperclip.svg" alt="Vedhæft ikon" />
             </button>
 
-            <button type="submit" class="chat-widget__send">
+            <button type="button" class="chat-widget__send" @click="handleSend">
               <img src="@/assets/icons/Send.svg" alt="Send ikon" />
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   </Transition>
