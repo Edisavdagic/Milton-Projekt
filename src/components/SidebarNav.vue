@@ -14,7 +14,13 @@ const currentProjectId = computed(
 );
 
 const isProjectRoute = computed(
-  () => ["dashboard", "calendar", "documents"].includes(route.name)
+  () =>
+    (currentProjectId.value && ["dashboard", "calendar", "documents"].includes(route.name)) ||
+    (!authStore.isAdmin && currentProjectId.value && route.name === "notifications")
+);
+
+const isAdminProjectOverview = computed(
+  () => authStore.isAdmin && route.name === "projectoverview"
 );
 
 async function logout() {
@@ -39,7 +45,7 @@ async function logout() {
       <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
     </div>
 
-    <!-- Project Navigation (for users and admins inside a project) -->
+    <!-- Project Navigation (for users inside a project, including notifications) -->
     <nav v-if="isProjectRoute" class="sidebar__nav">
       <!-- Dashboard -->
       <RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
@@ -78,9 +84,9 @@ async function logout() {
       </div>
     </nav>
 
-    <!-- Admin Navigation -->
-    <nav v-else-if="authStore.isAdmin" class="sidebar__nav">
-      <!-- roject Overview -->
+    <!-- Admin Navigation on project overview only -->
+    <nav v-else-if="isAdminProjectOverview" class="sidebar__nav">
+      <!-- Project Overview -->
       <RouterLink :to="{ name: 'projectoverview' }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Projektoversigt ikon" />
         Projektoversigt
