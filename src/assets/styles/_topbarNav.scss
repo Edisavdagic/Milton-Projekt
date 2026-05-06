@@ -22,6 +22,10 @@
   cursor: pointer;
 }
 
+.topbar-back {
+  margin-right: $spacing-xs;
+}
+
 .topbar-actions {
   display: flex;
   align-items: center;

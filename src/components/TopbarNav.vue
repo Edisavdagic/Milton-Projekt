@@ -1,7 +1,25 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import ChatWidget from "@/components/ChatWidget.vue";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const route = useRoute();
+const isChatOpen = ref(false);
+
+const showBackToProjectOverview = computed(
+  () => authStore.isAdmin && ["dashboard", "calendar", "documents"].includes(route.name)
+);
+
+const goToProjectOverview = () => {
+  router.push({ name: "projectoverview" });
+};
+
+const goToNotifications = () => {
+  router.push({ name: "notifications" });
+};
 
 defineProps({
   projectAddress: {
@@ -13,18 +31,19 @@ defineProps({
     required: true,
   },
 });
-
-const router = useRouter();
-const isChatOpen = ref(false);
-
-const goToNotifications = () => {
-  router.push({ name: "notifications" });
-};
 </script>
 
 <template>
   <header class="topbarNav">
     <div class="address-pill">
+      <button
+        v-if="showBackToProjectOverview"
+        class="icon-button topbar-back"
+        @click="goToProjectOverview"
+        type="button"
+      >
+        <img src="@/assets/icons/Arrow.svg" alt="Tilbage til projektoverview" />
+      </button>
       <p>{{ projectAddress }}</p>
     </div>
 

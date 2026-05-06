@@ -13,6 +13,10 @@ const currentProjectId = computed(
   () => route.params.projectId || projectsStore.currentProjectId || ""
 );
 
+const isProjectRoute = computed(
+  () => ["dashboard", "calendar", "documents"].includes(route.name)
+);
+
 async function logout() {
   await authStore.signOutUser();
   router.replace({ name: "login" });
@@ -35,9 +39,48 @@ async function logout() {
       <img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
     </div>
 
+    <!-- Project Navigation (for users and admins inside a project) -->
+    <nav v-if="isProjectRoute" class="sidebar__nav">
+      <!-- Dashboard -->
+      <RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
+        Dashboard
+      </RouterLink>
+
+      <!-- Calendar -->
+      <RouterLink :to="{ name: 'calendar', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
+        Kalender
+      </RouterLink>
+
+      <!-- Documents -->
+      <RouterLink :to="{ name: 'documents', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        <img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
+        Dokumenter
+      </RouterLink>
+
+      <!-- History -->
+      <div class="item">
+        <img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
+        Historik
+      </div>
+
+      <!-- Profile -->
+      <div class="item">
+        <img src="@/assets/icons/User.svg" alt="Profil ikon" />
+        Profil
+      </div>
+
+      <!-- Settings -->
+      <div class="item">
+        <img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
+        Indstillinger
+      </div>
+    </nav>
+
     <!-- Admin Navigation -->
-    <nav v-if="authStore.isAdmin" class="sidebar__nav">
-      <!-- Project Overview -->
+    <nav v-else-if="authStore.isAdmin" class="sidebar__nav">
+      <!-- roject Overview -->
       <RouterLink :to="{ name: 'projectoverview' }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Projektoversigt ikon" />
         Projektoversigt
