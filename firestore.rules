@@ -57,7 +57,7 @@ service cloud.firestore {
       // Milestone task documents inside each group
       match /milestoneGroups/{group}/milestones/{milestone} {
         allow read: if signedIn() && (isAdmin() || isMember());
-        allow update: if isAdmin();
+        allow update, create, delete: if isAdmin();
       }
 
       // Chat conversations between project members

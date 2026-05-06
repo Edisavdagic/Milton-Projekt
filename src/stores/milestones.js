@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
 import { db } from '@/services/firebase'
 
 const GROUP_IDS = ['construction', 'framing', 'interior']
@@ -116,25 +116,66 @@ export const useMilestoneStore = defineStore('milestones', {
       await this.updateTask(taskId, { endDate: date })
     },
 
-    addItem(colIndex) {
-      this.milestones[colIndex].items.push({
-        id: `local-${Date.now()}`,
+    async addItem(colIndex) {
+      const col = this.milestones[colIndex]
+      const item = {
         title: 'Ny milepæl',
         status: 'ikke',
         startDate: '',
         endDate: '',
         actors: [],
+      }
+
+      if (this.projectId) {
+        const milestonesRef = collection(
+          db, 'projects', this.projectId,
+          'milestoneGroups', col.groupId,
+          'milestones'
+        )
+        const itemRef = await addDoc(milestonesRef, item)
+        col.items.push({ id: itemRef.id, ...item })
+        return
+      }
+
+      col.items.push({
+        id: `local-${Date.now()}`,
+        ...item,
       })
     },
 
-    removeItem(colIndex, itemIndex) {
-      this.milestones[colIndex].items.splice(itemIndex, 1)
+    async removeItem(colIndex, itemIndex) {
+      const col = this.milestones[colIndex]
+      const item = col.items[itemIndex]
+
+      if (!item) return
+
+      if (this.projectId && !item.id.startsWith('local-')) {
+        const itemRef = doc(
+          db, 'projects', this.projectId,
+          'milestoneGroups', col.groupId,
+          'milestones', item.id
+        )
+        await deleteDoc(itemRef)
+      }
+
+      col.items.splice(itemIndex, 1)
     },
 
-    updateItem(colIndex, itemIndex, data) {
-      this.milestones[colIndex].items[itemIndex] = {
-        ...this.milestones[colIndex].items[itemIndex],
-        ...data,
+    async updateItem(colIndex, itemIndex, data) {
+      const col = this.milestones[colIndex]
+      const item = col?.items[itemIndex]
+
+      if (!item) return
+
+      Object.assign(item, data)
+
+      if (this.projectId && !item.id.startsWith('local-')) {
+        const itemRef = doc(
+          db, 'projects', this.projectId,
+          'milestoneGroups', col.groupId,
+          'milestones', item.id
+        )
+        await updateDoc(itemRef, data)
       }
     },
   },

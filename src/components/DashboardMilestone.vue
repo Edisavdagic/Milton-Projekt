@@ -27,6 +27,7 @@
         <input
           v-if="editMode[colIndex]"
           v-model="item.title"
+          @blur="store.updateTask(item.id, { title: item.title })"
         />
 
         <span v-else>{{ item.title }}</span>
