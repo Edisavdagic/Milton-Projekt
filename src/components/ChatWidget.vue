@@ -27,8 +27,8 @@ const selectedChatId = ref(null);
 const newMessage = ref("");
 const isSending = ref(false);
 
-const selectedChat = computed(() =>
-  chats.value.find((c) => c.chatId === selectedChatId.value) ?? null
+const selectedChat = computed(
+  () => chats.value.find((c) => c.chatId === selectedChatId.value) ?? null,
 );
 
 watch(
@@ -42,7 +42,7 @@ watch(
       loadAllChats();
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 onUnmounted(() => cleanup());
@@ -91,9 +91,7 @@ const handleSend = async () => {
         </div>
 
         <div class="chat-widget__tabs">
-          <button class="chat-widget__tab chat-widget__tab--active">
-            Alle
-          </button>
+          <button class="chat-widget__tab chat-widget__tab--active">Alle</button>
           <button class="chat-widget__tab">Ulæste</button>
         </div>
 
@@ -111,7 +109,9 @@ const handleSend = async () => {
             <p>{{ chat.lastMessage }}</p>
           </div>
 
-          <span>{{ chat.lastMessageAt?.toDate()?.toLocaleDateString('da-DK') ?? "Start en samtale" }}</span>
+          <span>{{
+            chat.lastMessageAt?.toDate()?.toLocaleDateString("da-DK") ?? "Start en samtale"
+          }}</span>
         </button>
       </div>
 
@@ -123,7 +123,7 @@ const handleSend = async () => {
 
           <div>
             <h2>{{ selectedChat.otherName }}</h2>
-            <p>{{ selectedChat.otherRole }}</p>
+            <p>{{ selectedChat.otherRole === 'admin' ? 'Byggeleder' : 'Bygherre' }}</p>
           </div>
         </header>
 
@@ -147,7 +147,12 @@ const handleSend = async () => {
         </div>
 
         <div class="chat-widget__composer">
-          <input type="text" placeholder="Aa" v-model="newMessage" @keydown.enter.prevent="handleSend" />
+          <input
+            type="text"
+            placeholder="Aa"
+            v-model="newMessage"
+            @keydown.enter.prevent="handleSend"
+          />
 
           <div class="chat-widget__composer-actions">
             <button type="button">
@@ -173,13 +178,13 @@ const handleSend = async () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/variables' as *;
+@use "@/assets/styles/variables" as *;
 
 .chat-widget {
   position: absolute;
   top: 225px;
   right: 0;
-  width: 375px;
+  width: 410px;
   height: 680px;
   background: $secondary;
   border: 1px solid #000;
@@ -210,7 +215,7 @@ const handleSend = async () => {
 
   &__title {
     font-size: $h2-size;
-    font-weight: $h1-weight;
+    font-weight: $h2-weight;
     margin-bottom: $spacing-xs;
     color: #000;
   }
