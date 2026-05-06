@@ -25,9 +25,10 @@ const { chats, messages, loadChats, loadAllChats, loadMessages, sendMessage, cle
 
 const selectedChatId = ref(null);
 const newMessage = ref("");
+const isSending = ref(false);
 
-const selectedChat = computed(() =>
-  chats.value.find((c) => c.chatId === selectedChatId.value) ?? null
+const selectedChat = computed(
+  () => chats.value.find((c) => c.chatId === selectedChatId.value) ?? null,
 );
 
 watch(
@@ -41,7 +42,7 @@ watch(
       loadAllChats();
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 onUnmounted(() => cleanup());
@@ -56,17 +57,23 @@ const backToList = () => {
 };
 
 const handleSend = async () => {
-  if (!selectedChat.value || !newMessage.value.trim()) return;
-  const projectId = selectedChat.value.projectId ?? props.projectId;
-  await sendMessage(
-    projectId,
-    selectedChat.value.chatId,
-    newMessage.value,
-    selectedChat.value.otherUid,
-    selectedChat.value.otherName,
-    selectedChat.value.otherRole,
-  );
+  if (isSending.value || !selectedChat.value || !newMessage.value.trim()) return;
+  isSending.value = true;
+  const text = newMessage.value;
   newMessage.value = "";
+  try {
+    const projectId = selectedChat.value.projectId ?? props.projectId;
+    await sendMessage(
+      projectId,
+      selectedChat.value.chatId,
+      text,
+      selectedChat.value.otherUid,
+      selectedChat.value.otherName,
+      selectedChat.value.otherRole,
+    );
+  } finally {
+    isSending.value = false;
+  }
 };
 </script>
 
@@ -84,9 +91,7 @@ const handleSend = async () => {
         </div>
 
         <div class="chat-widget__tabs">
-          <button class="chat-widget__tab chat-widget__tab--active">
-            Alle
-          </button>
+          <button class="chat-widget__tab chat-widget__tab--active">Alle</button>
           <button class="chat-widget__tab">Ulæste</button>
         </div>
 
@@ -104,7 +109,9 @@ const handleSend = async () => {
             <p>{{ chat.lastMessage }}</p>
           </div>
 
-          <span>{{ chat.lastMessageAt?.toDate()?.toLocaleDateString('da-DK') ?? "Start en samtale" }}</span>
+          <span>{{
+            chat.lastMessageAt?.toDate()?.toLocaleDateString("da-DK") ?? "Start en samtale"
+          }}</span>
         </button>
       </div>
 
@@ -116,7 +123,7 @@ const handleSend = async () => {
 
           <div>
             <h2>{{ selectedChat.otherName }}</h2>
-            <p>{{ selectedChat.otherRole }}</p>
+            <p>{{ selectedChat.otherRole === 'admin' ? 'Byggeleder' : 'Bygherre' }}</p>
           </div>
         </header>
 
@@ -139,8 +146,13 @@ const handleSend = async () => {
           </template>
         </div>
 
-        <form class="chat-widget__composer" @submit.prevent="handleSend">
-          <input type="text" placeholder="Aa" v-model="newMessage" @keyup.enter="handleSend" />
+        <div class="chat-widget__composer">
+          <input
+            type="text"
+            placeholder="Aa"
+            v-model="newMessage"
+            @keydown.enter.prevent="handleSend"
+          />
 
           <div class="chat-widget__composer-actions">
             <button type="button">
@@ -155,24 +167,24 @@ const handleSend = async () => {
               <img src="@/assets/icons/Paperclip.svg" alt="Vedhæft ikon" />
             </button>
 
-            <button type="submit" class="chat-widget__send">
+            <button type="button" class="chat-widget__send" @click="handleSend">
               <img src="@/assets/icons/Send.svg" alt="Send ikon" />
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   </Transition>
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/variables' as *;
+@use "@/assets/styles/variables" as *;
 
 .chat-widget {
   position: absolute;
   top: 225px;
   right: 0;
-  width: 375px;
+  width: 410px;
   height: 680px;
   background: $secondary;
   border: 1px solid #000;
@@ -203,7 +215,7 @@ const handleSend = async () => {
 
   &__title {
     font-size: $h2-size;
-    font-weight: $h1-weight;
+    font-weight: $h2-weight;
     margin-bottom: $spacing-xs;
     color: #000;
   }
