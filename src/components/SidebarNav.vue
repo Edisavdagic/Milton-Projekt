@@ -106,7 +106,7 @@ async function logout() {
     </nav>
 
     <!-- Regular User Navigation (Project) -->
-    <nav v-else class="sidebar__nav">
+    <nav v-else-if="currentProjectId" class="sidebar__nav">
       <!-- Dashboard -->
       <RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
         <img src="@/assets/icons/Home.svg" alt="Hus ikon" />
