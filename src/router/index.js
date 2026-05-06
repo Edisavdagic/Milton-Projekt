@@ -7,7 +7,7 @@ import NotificationsView from "@/views/NotificationsView.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useProjectsStore } from "@/stores/project";
 import CalenderView from "@/views/CalenderView.vue";
-
+import HistoryView from "@/views/HistoryView.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -30,6 +30,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/historik",
+      name: "history",
+      component: HistoryView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/project/:projectId",
       meta: { requiresAuth: true },
       children: [
@@ -48,6 +54,11 @@ const router = createRouter({
           name: "calendar",
           component: CalenderView,
         },
+        //{
+         // path: "historik",
+         // name: "history",
+         // component: HistoryView,
+        //},
       ],
     },
   ],

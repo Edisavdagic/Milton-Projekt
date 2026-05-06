@@ -1,4 +1,4 @@
-@use "./styles/variables" as *;
+@use "./styles/_variables" as *;
 
 * {
   margin: 0px;
@@ -7,6 +7,6 @@
 }
 
 body {
-  background: $tertiary;
+  background: $secondary;
   font-family: $font-family;
 }

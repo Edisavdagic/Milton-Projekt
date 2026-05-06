@@ -15,7 +15,7 @@ const currentProjectId = computed(
 
 const isProjectRoute = computed(
   () =>
-    (currentProjectId.value && ["dashboard", "calendar", "documents"].includes(route.name)) ||
+    (currentProjectId.value && ["dashboard", "calendar", "documents", "history"].includes(route.name)) ||
     (!authStore.isAdmin && currentProjectId.value && route.name === "notifications")
 );
 
@@ -66,10 +66,15 @@ async function logout() {
       </RouterLink>
 
       <!-- History -->
-      <div class="item">
-        <img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
-        Historik
-      </div>
+      <RouterLink
+        :to="{ name: 'history' }"
+        class="item"
+        active-class="active"
+        exact-active-class="active"
+      >
+          <img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
+          Historik
+      </RouterLink>
 
       <!-- Profile -->
       <div class="item">

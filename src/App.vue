@@ -49,7 +49,6 @@ const projectId = computed(() => projectsStore.currentProject?.id || "");
 <style scoped lang="scss">
 .app {
   min-height: 100vh;
-  background: #f8f8f8;
 }
 
 /* Everything except sidebar */

@@ -8,7 +8,7 @@
     <section class="notifications-list">
       <article class="notification-item">
         <div class="notification-item__icon">
-          <img src="@/assets/icons/File.svg" alt="Besked ikon" />
+          <img src="@/assets/icons/MessageSecond.svg" alt="Besked ikon" />
         </div>
 
         <div class="notification-item__text">
@@ -19,7 +19,7 @@
 
       <article class="notification-item">
         <div class="notification-item__icon">
-          <img src="@/assets/icons/File.svg" alt="Besked ikon" />
+          <img src="@/assets/icons/MessageSecond.svg" alt="Besked ikon" />
         </div>
 
         <div class="notification-item__text">
@@ -61,14 +61,13 @@ h1 {
   font-size: $h1-size;
   font-weight: $h1-weight;
   line-height: 1.15;
-  color: $primary;
+  color: #000;
 }
 .notifications-page {
   width: 100%;
   min-height: 100%;
   padding: $spacing-sm $spacing-xl $spacing-xl;
   font-family: $font-family;
-  background-color: $secondary;
 }
 
 .notifications-list {
@@ -81,7 +80,6 @@ h1 {
   align-items: flex-start;
   gap: 28px;
   padding: 36px 0 28px;
-  border-bottom: 2px solid #d8d0dc;
 
   &__icon {
     width: 44px;
@@ -90,14 +88,18 @@ h1 {
     margin-top: 2px;
 
     img {
-      width: 100%;
-      height: 100%;
+      width: 30px;
+      height: 30px;
       object-fit: contain;
       display: block;
     }
   }
 
   &__text {
+    border-bottom: 2px solid #d8d0dc;
+    padding-bottom: 10px;
+    width: 55%;
+
     h2 {
       margin: 0 0 2px;
       font-size: 32px;
@@ -111,7 +113,7 @@ h1 {
       font-size: 22px;
       font-weight: 500;
       line-height: 1.2;
-      color: #8d8992;
+      color: $tertiary;
     }
   }
 }

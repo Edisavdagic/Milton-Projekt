@@ -186,8 +186,7 @@ function showHistory(project) {
   &__title {
     margin: 0;
     font-size: $h1-size;
-    font-weight: $h1-weight;
-    color: $primary;
+    color: #000;
   }
 
   &__controls {
@@ -276,7 +275,7 @@ function showHistory(project) {
   &__section-title {
     margin: 0 0 $spacing-sm 0;
     font-size: $h2-size;
-    color: $primary;
+    color: #000;
   }
 
   &__list {
