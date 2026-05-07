@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>composables/useDocumentUpload.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,57 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">composables/useDocumentUpload.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { storage, db } from "@/services/firebase";
 
-<header>
-    
+/**
+ * Composable for uploading documents to Firebase Storage and saving metadata to Firestore.
+ *
+ * @returns {{ uploadFile: Function }}
+ */
+export function useDocumentUpload() {
+  /**
+   * Uploads a file to Firebase Storage and saves its metadata to the "documents" Firestore collection.
+   *
+   * @param {File} file - The file to upload.
+   * @param {string} [beskrivelse=""] - An optional description of the document.
+   * @returns {Promise&lt;void>}
+   */
+  async function uploadFile(file, beskrivelse = "") {
+    const path = `documents/${Date.now()}_${file.name}`;
+    const fileRef = storageRef(storage, path);
 
-    <h2>Architecture</h2>
-</header>
+    const snapshot = await uploadBytesResumable(fileRef, file);
+    const url = await getDownloadURL(snapshot.ref);
 
-<article>
-    
-</article>
+    await addDoc(collection(db, "documents"), {
+      name: file.name,
+      file: file.name,
+      beskrivelse,
+      url,           // direct download URL from Storage
+      storagePath: path,
+      uploadedAt: serverTimestamp(),
+    });
+  }
 
-</section>
+  return { uploadFile };
+}</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     
