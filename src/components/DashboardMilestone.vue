@@ -1,6 +1,9 @@
 <template>
   <div class="top-header">
-    <h2>Milepæle</h2>
+    <div>
+      <h2>Milepæle</h2>
+      <p>Få et overblik over processen</p>
+    </div>
     <button v-if="authStore.isAdmin" class="edit-all" @click="toggleAll">
       {{ editing ? "Færdig" : "Rediger" }}
     </button>
@@ -14,14 +17,19 @@
       :key="column.id"
       class="milestone-column"
     >
-      <div class="header">
-        <h3>{{ column.title }}</h3>
+      <div class="header" :class="{ 'header--with-icon': column.icon }">
+        <span v-if="column.icon" class="milestone-icon">{{ column.icon }}</span>
+        <div>
+          <h3>{{ column.title }}</h3>
+          <p v-if="column.subtitle">{{ column.subtitle }}</p>
+        </div>
       </div>
 
       <div
         v-for="(item, index) in column.items"
         :key="item.id"
         class="milestone-item"
+        :class="{ 'milestone-item--editing': editMode[colIndex] }"
       >
         <!-- TITLE -->
         <input
@@ -69,8 +77,12 @@
         + Tilføj milepæl
       </button>
 
-      <div class="progress">
-        {{ store.progress(column.items) }}% færdig
+      <div
+        class="progress"
+        :style="{ '--progress': `${store.progress(column.items)}%` }"
+      >
+        <span>{{ store.progress(column.items) }}% færdig</span>
+        <div class="progress-bar"></div>
       </div>
     </div>
   </div>
@@ -151,77 +163,255 @@ const statusClass = (status) => `status ${status}`;
 .top-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  h2 {
+    margin: 0 0 $spacing-xxs;
+    color: $textcolor-4;
+    font-size: $h2-size;
+    font-weight: $h2-weight;
+    line-height: 1;
+  }
+
+  p {
+    margin: 0;
+    color: $textcolor-5;
+    font-size: $dashboard-subtitle-size;
+    font-weight: $h3-weight;
+    line-height: 1;
+  }
 }
 
 .edit-all {
-  background: $primary;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: $accent-2;
+  color: $textcolor-2;
+  border: $border-width solid $accent-2;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-sm;
+  border-radius: $radius-sm;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
   cursor: pointer;
 }
 
 .milestones-wrapper {
   display: flex;
-  gap: 20px;
+  gap: $dashboard-milestone-gap;
+  margin-bottom: $dashboard-section-gap;
 }
 
 .milestone-column {
-  flex: 1;
-  padding: 16px;
-  border-radius: 12px;
-  background: #f4f4f4;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: $dashboard-milestone-card-min-height;
+  padding: $spacing-sm;
+  border: $border-width solid $accent-2;
+  border-radius: $radius-xl;
+  background: $secondary;
+  color: $textcolor-3;
+  box-sizing: border-box;
+
+  &:nth-child(1) {
+    border-color: $tertiary;
+    background: $tertiary;
+  }
+
+  &:nth-child(3) {
+    border-color: $accent-2;
+    background: $accent-2;
+    color: $textcolor-2;
+  }
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+  padding-top: 0;
+
+  h3 {
+    margin: 0;
+    color: inherit;
+    font-size: $h3-size;
+    font-weight: $h1-weight;
+    line-height: 1.05;
+  }
+
+  p {
+    margin: $spacing-xxs 0 0;
+    color: inherit;
+    font-size: $dashboard-small-font-size;
+    font-weight: $body-weight;
+    line-height: 1.2;
+  }
+}
+
+.header--with-icon {
+  padding-top: $spacing-xl;
+}
+
+.milestone-icon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: $dashboard-milestone-icon-size;
+  height: $dashboard-milestone-icon-size;
+  transform: translateX(-50%);
+  border: $border-width solid $accent-2;
+  border-radius: $radius-pill;
+  background: $accent-1;
+  color: $textcolor-3;
+  font-size: $body-size;
+  line-height: 1;
 }
 
 .milestone-item {
-  display: flex;
-  gap: $spacing-xs;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: $spacing-sm;
   align-items: center;
-  margin: 10px 0;
+  min-height: $spacing-xl;
+  margin: 0;
+
+  > span:first-child {
+    color: inherit;
+    font-size: $body-size;
+    font-weight: $h1-weight;
+    line-height: 1.18;
+  }
+
+  input,
+  select {
+    min-height: $dashboard-control-height;
+    border: $border-width solid $accent-2;
+    border-radius: $radius-sm;
+    font-family: $font-family;
+    font-size: $dashboard-small-font-size;
+  }
+
+  input {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.milestone-item--editing {
+  grid-template-columns: minmax(0, 1fr) auto auto;
 }
 
 .status {
-  padding: $spacing-xxs $spacing-xs;
-  border-radius: $spacing-xs;
-  font-size: $small-size;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $dashboard-status-min-width;
+  min-height: $dashboard-chip-height;
+  padding: $dashboard-status-padding-y $spacing-xs;
+  border: $border-width solid transparent;
+  border-radius: $radius-sm;
+  color: $textcolor-3;
+  font-size: $dashboard-status-font-size;
+  font-weight: $h2-weight;
+  line-height: 1;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .status.færdig {
-  background: #ffe08a;
+  border-color: $accent-1;
+  background: $accent-1;
 }
 
 .status.igang {
-  background: #cce5ff;
+  border-color: $accent-1;
+  background: $accent-1;
 }
 
 .status.ikke {
-  background: #e0e0e0;
+  border-color: $tertiary;
+  background: $secondary;
+  color: $textcolor-5;
 }
 
 button {
   cursor: pointer;
+  font-family: $font-family;
 }
 
 .delete {
-  color: red;
+  color: $primary;
 }
 
 .add {
-  margin-top: 10px;
+  margin-top: $spacing-sm;
+  min-height: $dashboard-control-height;
+  border: $border-width solid $accent-2;
+  border-radius: $radius-sm;
+  background: $accent-1;
+  color: $textcolor-3;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
 }
 
 .progress {
-  margin-top: $spacing-s;
-  font-size: $small-size;
-  opacity: 0.7;
+  margin-top: auto;
+  color: inherit;
+  font-size: $dashboard-status-font-size;
+  font-weight: $body-weight;
+  line-height: 1;
+  text-align: center;
+  opacity: 0.72;
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: $dashboard-milestone-progress-height;
+  margin-top: $spacing-xs;
+  overflow: hidden;
+  border-radius: $radius-pill;
+  background: rgba($textcolor-1, 0.16);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--progress);
+    border-radius: inherit;
+    background: $accent-2;
+  }
+}
+
+.milestone-column:nth-child(3) .progress-bar {
+  background: rgba($textcolor-2, 0.28);
+
+  &::after {
+    background: $tertiary;
+  }
+}
+
+@media (max-width: $breakpoint-lg) {
+  .milestones-wrapper {
+    flex-direction: column;
+  }
+
+  .milestone-column {
+    min-height: auto;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .top-header {
+    flex-direction: column;
+  }
 }
 </style>

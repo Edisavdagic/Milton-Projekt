@@ -14,7 +14,12 @@
         <option value="færdig">Færdig</option>
       </select>
 
-      <button v-if="authStore.isAdmin" @click="editDetails = !editDetails">
+      <button
+        v-if="authStore.isAdmin"
+        class="controls__edit"
+        type="button"
+        @click="editDetails = !editDetails"
+      >
         {{ editDetails ? "Færdig" : "Rediger" }}
       </button>
     </div>
@@ -97,9 +102,15 @@
             </div>
             <span
               v-else-if="actorList(task).length"
-              class="actor-summary"
+              class="actor-summaries"
             >
-              {{ actorList(task).join(", ") }}
+              <span
+                v-for="actor in actorList(task)"
+                :key="`${task.id}-${actor}`"
+                class="actor-summary"
+              >
+                {{ actor }}
+              </span>
             </span>
 
           </div>
@@ -205,49 +216,97 @@ const statusLabel = (status) => statusMap[status] ?? status;
 .task-list {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  margin: 0;
+  color: $textcolor-4;
+  font-family: $font-family;
+
+  h2 {
+    margin: 0 0 $spacing-xxs;
+    color: $textcolor-4;
+    font-size: $h2-size;
+    font-weight: $h2-weight;
+    line-height: 1;
+  }
+
+  > p {
+    margin: 0 0 $spacing-md;
+    color: $textcolor-5;
+    font-size: $dashboard-subtitle-size;
+    font-weight: $h3-weight;
+    line-height: 1;
+  }
 }
 
 /* CONTROLS */
 .controls {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
 }
 
 .controls input,
 .controls select {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  min-height: $dashboard-control-height;
+  border: $border-width solid $border-color;
+  border-radius: $radius-pill;
+  background: $textcolor-2;
+  color: $textcolor-5;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.controls input {
+  width: min(100%, $dashboard-search-width);
+  padding: 0 $spacing-sm;
+}
+
+.controls select {
+  padding: 0 $spacing-md 0 $spacing-sm;
+  cursor: pointer;
 }
 
 .controls button {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: none;
-  background: $primary;
-  color: white;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-sm;
+  border: $border-width solid $accent-2;
+  border-radius: $radius-md;
+  background: $accent-2;
+  color: $textcolor-2;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
   cursor: pointer;
+}
+
+.controls__edit {
+  margin-left: auto;
 }
 
 /* LIST */
 .list {
-  overflow-y: auto;
-  max-height: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $dashboard-task-grid-gap;
+  overflow: visible;
+  max-height: none;
 }
 
 /* TASK */
 .task {
+  position: relative;
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  background: #f4f4f4;
+  gap: $spacing-sm;
+  min-height: $dashboard-task-card-min-height;
+  padding: $spacing-sm $spacing-md $spacing-sm $spacing-sm;
+  border-radius: $radius-md;
+  background: $accent-2;
+  color: $textcolor-2;
+  box-sizing: border-box;
 }
 
 .left {
@@ -258,27 +317,43 @@ const statusLabel = (status) => statusMap[status] ?? status;
 }
 
 .column {
-  font-size: $small-size;
-  opacity: 0.6;
+  margin-top: $spacing-xs;
+  color: $secondary;
+  font-size: $dashboard-small-font-size;
+  font-weight: $body-weight;
+  line-height: 1.4;
+}
+
+.text {
+  max-width: calc(100% - #{$dashboard-status-min-width} - #{$spacing-md});
+  color: $textcolor-2;
+  font-size: $dashboard-task-title-size;
+  font-weight: $h1-weight;
+  line-height: 1.05;
 }
 
 /* DETAILS */
 .details {
   display: flex;
-  gap: 6px;
-  margin-top: 6px;
+  gap: $spacing-xs;
+  margin-top: auto;
   flex-wrap: wrap;
+  padding-top: $spacing-sm;
 }
 
 .details input {
-  padding: $spacing-xxs;
-  font-size: $small-size;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-xs;
+  border: $border-width solid $border-color;
+  border-radius: $radius-sm;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
 }
 
 .actor-editor {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: $spacing-xs;
   flex-wrap: wrap;
 }
 
@@ -292,19 +367,23 @@ const statusLabel = (status) => statusMap[status] ?? status;
   display: inline-flex;
   align-items: center;
   gap: $spacing-xxs;
-  padding: $spacing-xxs $spacing-xs;
-  border-radius: $spacing-xs;
-  background: #fff;
-  border: 1px solid #ccc;
-  font-size: $small-size;
+  min-height: $dashboard-chip-height;
+  padding: 0 $spacing-xs;
+  border: $border-width solid $border-color;
+  border-radius: $radius-sm;
+  background: $secondary;
+  color: $textcolor-4;
+  font-size: $dashboard-status-font-size;
+  font-weight: $h2-weight;
+  line-height: 1;
 }
 
 .actor-remove {
-  width: 18px;
-  height: 18px;
+  width: $dashboard-chip-height;
+  height: $dashboard-chip-height;
   padding: 0;
   border: none;
-  border-radius: 50%;
+  border-radius: $radius-pill;
   background: $secondary;
   color: $primary;
   line-height: 1;
@@ -317,43 +396,95 @@ const statusLabel = (status) => statusMap[status] ?? status;
 }
 
 .actor-add button {
-  padding: $spacing-xxs $spacing-xs;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-xs;
   border: none;
-  border-radius: $spacing-xs;
+  border-radius: $radius-sm;
   background: $accent-2;
-  color: white;
-  font-size: $small-size;
+  color: $textcolor-2;
+  font-size: $dashboard-small-font-size;
   cursor: pointer;
 }
 
+.actor-summaries {
+  display: flex;
+  gap: $spacing-xxs;
+  flex-wrap: wrap;
+}
+
 .actor-summary {
-  font-size: $small-size;
-  color: $primary;
+  display: inline-flex;
+  align-items: center;
+  min-height: $dashboard-chip-height;
+  padding: 0 $spacing-xs;
+  border-radius: $radius-sm;
+  background: $secondary;
+  color: $textcolor-4;
+  font-size: $dashboard-status-font-size;
+  font-weight: $h2-weight;
+  line-height: 1;
 }
 
 /* STATUS */
 .status {
-  padding: $spacing-xxs $spacing-xs;
-  border-radius: $spacing-xs;
-  font-size: $small-size;
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $dashboard-status-min-width;
+  min-height: $dashboard-chip-height;
+  padding: $dashboard-status-padding-y $spacing-xs;
+  border: $border-width solid transparent;
+  border-radius: $radius-sm;
+  color: $textcolor-3;
+  font-size: $dashboard-status-font-size;
+  font-weight: $h2-weight;
+  line-height: 1;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .status.færdig {
-  background: #ffe08a;
+  border-color: $accent-1;
+  background: $accent-1;
 }
 
 .status.igang {
-  background: #cce5ff;
+  border-color: $accent-1;
+  background: $accent-1;
 }
 
 .status.ikke {
-  background: #e0e0e0;
+  border-color: $border-color;
+  background: $secondary;
+  color: $textcolor-5;
 }
 
 /* EMPTY */
 .empty {
+  grid-column: 1 / -1;
   text-align: center;
-  opacity: 0.6;
-  padding: 20px;
+  color: $textcolor-5;
+  padding: $spacing-md;
+}
+
+@media (max-width: $breakpoint-md) {
+  .list {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .task {
+    padding-right: $spacing-sm;
+  }
+
+  .text {
+    max-width: 100%;
+    padding-right: $dashboard-status-min-width;
+  }
 }
 </style>

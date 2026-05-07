@@ -40,3 +40,79 @@ $spacing-md: 24px;
 $spacing-lg: 31px;
 $spacing-xl: 48px;
 $spacing-xxl: 64px;
+
+// Radius and borders
+$border-width: 1px;
+$radius-xs: 4px;
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 10px;
+$radius-xl: 12px;
+$radius-pill: 999px;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 900px;
+$breakpoint-lg: 1100px;
+
+// Dashboard sizes
+$dashboard-section-gap: 58px;
+$dashboard-section-title-gap: $spacing-xs;
+$dashboard-status-font-size: 11px;
+$dashboard-status-min-width: 58px;
+$dashboard-status-padding-y: 3px;
+$dashboard-subtitle-size: 28px;
+$dashboard-small-font-size: 12px;
+$dashboard-chip-font-size: 11px;
+$dashboard-chip-height: 22px;
+$dashboard-control-height: 28px;
+$dashboard-gallery-card-height: 152px;
+$dashboard-gallery-card-min-width: 220px;
+$dashboard-milestone-gap: 20px;
+$dashboard-milestone-card-min-height: 508px;
+$dashboard-milestone-icon-size: 42px;
+$dashboard-milestone-progress-height: 5px;
+$dashboard-search-width: 300px;
+$dashboard-task-grid-gap: 40px;
+$dashboard-task-card-min-height: 112px;
+$dashboard-task-title-size: 28px;
+
+// Calendar sizes
+$calendar-page-padding: $spacing-xs;
+$calendar-border-width: 2px;
+$calendar-header-padding: $spacing-sm $spacing-sm 0;
+$calendar-view-switch-gap: $spacing-xs;
+$calendar-nav-gap: 36px;
+$calendar-nav-padding: $spacing-sm;
+$calendar-nav-font-size: 32px;
+$calendar-nav-button-size: 50px;
+$calendar-nav-button-font-size: 46px;
+$calendar-day-padding-y: 6px;
+$calendar-day-padding-x: $spacing-xs;
+$calendar-grid-row-height: 76px;
+$calendar-grid-min-height: 560px;
+$calendar-empty-margin-top: $spacing-sm;
+$calendar-empty-padding-y: $spacing-xs;
+$calendar-empty-padding-x: $spacing-sm;
+$calendar-panel-gap: $spacing-xs;
+$calendar-panel-padding: $spacing-sm;
+$calendar-month-day-min-height: 106px;
+$calendar-month-day-padding: $spacing-xs;
+$calendar-month-box-padding: 20px;
+$calendar-event-gap: $spacing-sm;
+$calendar-event-margin-y: $spacing-xs;
+$calendar-event-padding: $spacing-sm;
+$calendar-event-title-size: 22px;
+$calendar-event-actor-min-width: 90px;
+$calendar-event-actor-max-width: 180px;
+$calendar-event-small-margin-top: 3px;
+$calendar-event-small-padding-y: 3px;
+$calendar-event-small-padding-x: 5px;
+$calendar-mobile-nav-gap: $spacing-sm;
+$calendar-mobile-nav-font-size: 22px;
+$calendar-mobile-nav-button-size: 42px;
+$calendar-mobile-nav-button-font-size: 34px;
+$calendar-mobile-grid-row-height: 90px;
+$calendar-mobile-grid-min-height: 620px;
+$calendar-mobile-event-title-size: $body-size;
+$calendar-mobile-event-desc-size: 13px;

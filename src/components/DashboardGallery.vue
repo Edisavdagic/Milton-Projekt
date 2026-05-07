@@ -111,46 +111,62 @@ const handleRemoveImage = async (id) => {
 @use "../assets/styles/variables" as *;
 
 .container {
-  margin: auto;
-  padding: 10px;
+  margin: 0 0 $dashboard-section-gap;
+  padding: 0;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  gap: $spacing-sm;
+  margin-bottom: $dashboard-section-title-gap;
+
+  h2 {
+    margin: 0;
+    color: $textcolor-4;
+    font-size: $h2-size;
+    font-weight: $h2-weight;
+    line-height: 1;
+  }
 }
 
 .edit-btn {
-  background: $primary;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: $accent-2;
+  color: $textcolor-2;
+  border: $border-width solid $accent-2;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-sm;
+  border-radius: $radius-sm;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
   cursor: pointer;
 }
 
 /* Upload */
 .file-input {
-  margin-bottom: 10px;
+  margin-bottom: $spacing-sm;
+  color: $textcolor-4;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
 }
 
 /* Gallery */
 .gallery {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax($dashboard-gallery-card-min-width, 1fr));
+  gap: 20px;
 }
 
 /* Cards */
 .card {
   position: relative;
-  min-width: 220px;
-  height: 140px;
-  border-radius: 10px;
+  min-width: 0;
+  height: $dashboard-gallery-card-height;
+  border-radius: $radius-xl;
   overflow: hidden;
-  background: #eee;
+  background: $tertiary;
 }
 
 .card img {
@@ -162,14 +178,26 @@ const handleRemoveImage = async (id) => {
 /* Delete button */
 .delete-btn {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  background: rgba(0,0,0,0.6);
-  color: white;
+  top: $spacing-xs;
+  right: $spacing-xs;
+  background: rgba($textcolor-1, 0.6);
+  color: $textcolor-2;
   border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  border-radius: $radius-pill;
+  width: $spacing-md;
+  height: $spacing-md;
   cursor: pointer;
+}
+
+@media (max-width: $breakpoint-lg) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax($dashboard-gallery-card-min-width, 1fr));
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

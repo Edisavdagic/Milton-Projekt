@@ -34,6 +34,7 @@ service firebase.storage {
       return fileName.matches('^[a-zA-Z0-9._-]{1,100}$');
     }
 
+    /* PROJECT IMAGES */
     match /projects/{projectId}/images/{imageId}/{fileName} {
 
       allow read:
@@ -52,20 +53,20 @@ service firebase.storage {
         if isAdmin();
     }
 
+    /* DOCUMENTS */
+    match /documents/{fileName} {
+
+      allow read:
+        if request.auth != null;
+
+      allow write:
+        if request.auth != null
+        && request.resource.size < 20 * 1024 * 1024;
+    }
+
+    /* DENY EVERYTHING ELSE */
     match /{allPaths=**} {
       allow read, write: if false;
-    }
-  }
-}
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /documents/{fileName} {
-      // Any signed-in user can read documents
-      allow read: if request.auth != null;
-
-      // Any signed-in user can upload; max 20 MB
-      allow write: if request.auth != null
-        && request.resource.size < 20 * 1024 * 1024;
     }
   }
 }

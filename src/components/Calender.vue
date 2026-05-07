@@ -448,39 +448,39 @@ function goToMonth(month) {
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 
-$calendar-blue: $tertiary;
-$calendar-line: $primary;
-$event-bg: $accent-1;
-$event-muted: $secondary;
-
 .calendar {
   overflow: hidden;
-  border: 2px solid $calendar-line;
-  border-radius: 8px;
-  background: $calendar-blue;
-  color: #1d1d1f;
+  border: $calendar-border-width solid $accent-2;
+  border-radius: $radius-md;
+  background: $tertiary;
+  color: $textcolor-4;
   font-family: $font-family;
 
   &__header {
     display: flex;
     justify-content: flex-end;
-    padding: 10px 14px 0;
+    padding: $calendar-header-padding;
   }
 
   &__view-switch {
     display: flex;
-    gap: 6px;
+    gap: $calendar-view-switch-gap;
 
     button {
-      border: 1px solid $calendar-line;
-      border-radius: 6px;
-      background: #fff;
+      min-height: $dashboard-control-height;
+      border: $border-width solid $accent-2;
+      border-radius: $radius-md;
+      background: $textcolor-2;
       color: $primary;
-      padding: 6px 10px;
+      padding: 0 $spacing-sm;
+      font-family: $font-family;
+      font-size: $dashboard-small-font-size;
+      font-weight: $h2-weight;
       cursor: pointer;
 
       &.active {
         background: $accent-1;
+        color: $textcolor-3;
       }
     }
   }
@@ -489,9 +489,10 @@ $event-muted: $secondary;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 36px;
-    padding: 10px 16px 16px;
-    font-size: 32px;
+    gap: $calendar-nav-gap;
+    padding: $calendar-nav-padding;
+    color: $textcolor-3;
+    font-size: $calendar-nav-font-size;
     font-weight: $h1-weight;
     text-align: center;
 
@@ -499,13 +500,14 @@ $event-muted: $secondary;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 50px;
+      width: $calendar-nav-button-size;
+      height: $calendar-nav-button-size;
       border: none;
-      border-radius: 50%;
+      border-radius: $radius-pill;
       background: $primary;
-      color: #fff;
-      font-size: 46px;
+      color: $textcolor-2;
+      font-family: $font-family;
+      font-size: $calendar-nav-button-font-size;
       line-height: 1;
       cursor: pointer;
     }
@@ -514,15 +516,16 @@ $event-muted: $secondary;
   &__days {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    border-top: 2px solid $calendar-line;
-    border-bottom: 2px solid $calendar-line;
-    background: #fff;
+    border-top: $calendar-border-width solid $accent-2;
+    border-bottom: $calendar-border-width solid $accent-2;
+    background: $textcolor-2;
+    color: $textcolor-3;
     font-weight: $h1-weight;
 
     div {
       min-width: 0;
-      padding: 6px 8px;
-      border-right: 1px solid $calendar-line;
+      padding: $calendar-day-padding-y $calendar-day-padding-x;
+      border-right: $border-width solid $accent-2;
       text-align: center;
 
       &:last-child {
@@ -539,12 +542,12 @@ $event-muted: $secondary;
     position: relative;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-auto-rows: minmax(76px, auto);
-    min-height: 560px;
+    grid-auto-rows: minmax($calendar-grid-row-height, auto);
+    min-height: $calendar-grid-min-height;
   }
 
   &__column {
-    border-right: 1px solid $calendar-line;
+    border-right: $border-width solid $accent-2;
     z-index: 1;
 
     &:nth-child(5) {
@@ -552,7 +555,7 @@ $event-muted: $secondary;
     }
 
     &.is-today {
-      background: rgba(249, 221, 143, 0.18);
+      background: rgba($accent-1, 0.18);
     }
   }
 
@@ -562,64 +565,72 @@ $event-muted: $secondary;
     z-index: 2;
     align-self: start;
     justify-self: center;
-    margin-top: 12px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.85);
+    margin-top: $calendar-empty-margin-top;
+    padding: $calendar-empty-padding-y $calendar-empty-padding-x;
+    border-radius: $radius-sm;
+    background: rgba($textcolor-2, 0.85);
     color: $primary;
+    font-size: $body-size;
+    font-weight: $h2-weight;
   }
 
   &__month {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 6px;
-    padding: 10px;
-    background: #fff;
+    gap: $calendar-panel-gap;
+    padding: $calendar-panel-padding;
+    background: $textcolor-2;
   }
 
   &__month-day {
-    min-height: 106px;
-    border: 1px solid $border-color;
-    border-radius: 6px;
-    background: #fff;
-    padding: 6px;
+    min-height: $calendar-month-day-min-height;
+    border: $border-width solid $border-color;
+    border-radius: $radius-sm;
+    background: $textcolor-2;
+    padding: $calendar-month-day-padding;
+    color: $textcolor-4;
+    font-family: $font-family;
     text-align: left;
     cursor: pointer;
 
     &.is-today {
-      border-color: $calendar-line;
-      background: rgba(249, 221, 143, 0.28);
+      border-color: $accent-2;
+      background: rgba($accent-1, 0.28);
     }
 
     .date {
       display: block;
       margin-bottom: $spacing-xxs;
-      font-size: $small-size;
+      color: $textcolor-3;
+      font-size: $dashboard-small-font-size;
       font-weight: $h1-weight;
     }
   }
 
   &__more {
     display: block;
-    margin-top: 3px;
+    margin-top: $calendar-event-small-margin-top;
     color: $primary;
-    font-size: 11px;
+    font-size: $dashboard-status-font-size;
+    font-weight: $h2-weight;
   }
 
   &__year {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    padding: 10px;
-    background: #fff;
+    gap: $spacing-sm;
+    padding: $calendar-panel-padding;
+    background: $textcolor-2;
   }
 
   &__month-box {
-    border: 1px solid $border-color;
-    border-radius: 6px;
-    background: #fff;
-    padding: 20px;
+    border: $border-width solid $border-color;
+    border-radius: $radius-sm;
+    background: $textcolor-2;
+    padding: $calendar-month-box-padding;
     color: $primary;
+    font-family: $font-family;
+    font-size: $body-size;
     font-weight: $h1-weight;
     text-align: center;
     cursor: pointer;
@@ -635,13 +646,13 @@ $event-muted: $secondary;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: $calendar-event-gap;
   min-width: 0;
-  margin: 8px 0;
-  padding: 12px;
-  border-radius: 8px;
-  background: $event-bg;
-  color: #171717;
+  margin: $calendar-event-margin-y 0;
+  padding: $calendar-event-padding;
+  border-radius: $radius-md;
+  background: $accent-1;
+  color: $textcolor-3;
 
   &__text {
     min-width: 0;
@@ -649,7 +660,8 @@ $event-muted: $secondary;
 
   &__title {
     overflow: hidden;
-    font-size: 22px;
+    color: $textcolor-3;
+    font-size: $calendar-event-title-size;
     font-weight: $h1-weight;
     line-height: 1.15;
     text-overflow: ellipsis;
@@ -659,10 +671,20 @@ $event-muted: $secondary;
   &__desc {
     overflow: hidden;
     margin-top: $spacing-xxs;
-    color: #747474;
+    color: $textcolor-5;
     font-size: $body-size;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__period {
+    display: flex;
+    gap: $spacing-xxs;
+    flex-wrap: wrap;
+    margin-top: $spacing-xs;
+    color: $primary;
+    font-size: $dashboard-small-font-size;
+    font-weight: $h2-weight;
   }
 
   &__actors {
@@ -671,17 +693,20 @@ $event-muted: $secondary;
     gap: $spacing-xxs;
     flex: 0 1 auto;
     flex-wrap: wrap;
-    min-width: 90px;
+    min-width: $calendar-event-actor-min-width;
 
     span {
-      max-width: 180px;
+      max-width: $calendar-event-actor-max-width;
       overflow: hidden;
-      border: 1px solid $calendar-line;
-      border-radius: 8px;
-      background: #fff;
-      padding: $spacing-xxs $spacisng-xs;
-      color: #777;
-      font-size: $body-size;
+      min-height: $dashboard-chip-height;
+      border: $border-width solid $accent-2;
+      border-radius: $radius-sm;
+      background: $textcolor-2;
+      padding: 0 $spacing-xs;
+      color: $textcolor-5;
+      font-size: $dashboard-small-font-size;
+      font-weight: $h2-weight;
+      line-height: $dashboard-chip-height;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -689,31 +714,33 @@ $event-muted: $secondary;
 
   &.small {
     display: block;
-    margin-top: 3px;
-    padding: 3px 5px;
-    border-radius: $spacing-xxs;
-    background: $event-bg;
-    font-size: 11px;
+    margin-top: $calendar-event-small-margin-top;
+    padding: $calendar-event-small-padding-y $calendar-event-small-padding-x;
+    border-radius: $radius-xs;
+    background: $accent-1;
+    color: $textcolor-3;
+    font-size: $dashboard-status-font-size;
+    font-weight: $h2-weight;
     line-height: 1.2;
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: $breakpoint-md) {
   .calendar {
     &__nav {
-      gap: 16px;
-      font-size: 22px;
+      gap: $calendar-mobile-nav-gap;
+      font-size: $calendar-mobile-nav-font-size;
 
       button {
-        width: 42px;
-        height: 42px;
-        font-size: 34px;
+        width: $calendar-mobile-nav-button-size;
+        height: $calendar-mobile-nav-button-size;
+        font-size: $calendar-mobile-nav-button-font-size;
       }
     }
 
     &__grid {
-      grid-auto-rows: minmax(90px, auto);
-      min-height: 620px;
+      grid-auto-rows: minmax($calendar-mobile-grid-row-height, auto);
+      min-height: $calendar-mobile-grid-min-height;
     }
 
     &__month,
@@ -725,21 +752,46 @@ $event-muted: $secondary;
   .event {
     align-items: flex-start;
     flex-direction: column;
-    gap: 8px;
-    padding: 10px;
+    gap: $spacing-xs;
+    padding: $spacing-sm;
 
     &__title {
-      font-size: $body-size;
+      font-size: $calendar-mobile-event-title-size;
       white-space: normal;
     }
 
     &__desc {
-      font-size: 13px;
+      font-size: $calendar-mobile-event-desc-size;
       white-space: normal;
     }
 
     &__actors {
       justify-content: flex-start;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .calendar {
+    &__header {
+      justify-content: flex-start;
+    }
+
+    &__view-switch {
+      width: 100%;
+
+      button {
+        flex: 1;
+      }
+    }
+
+    &__nav {
+      justify-content: space-between;
+    }
+
+    &__month,
+    &__year {
+      grid-template-columns: 1fr;
     }
   }
 }
