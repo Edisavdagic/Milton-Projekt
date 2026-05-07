@@ -60,6 +60,36 @@ service cloud.firestore {
         allow update, create, delete: if isAdmin();
       }
 
+      // Dashboard gallery image documents
+      match /images/{imageId} {
+        allow read: if signedIn() && (isAdmin() || isMember());
+
+        allow create: if isAdmin()
+          && request.resource.data.keys().hasOnly([
+            "src",
+            "storagePath",
+            "name",
+            "size",
+            "contentType",
+            "createdAt",
+            "createdBy"
+          ])
+          && request.resource.data.src is string
+          && request.resource.data.src.size() > 0
+          && request.resource.data.storagePath is string
+          && request.resource.data.storagePath.size() > 0
+          && request.resource.data.name is string
+          && request.resource.data.size is int
+          && request.resource.data.size > 0
+          && request.resource.data.contentType is string
+          && request.resource.data.contentType.matches("image/.*")
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.createdBy == request.auth.uid;
+
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
+
       // Chat conversations between project members
       match /chats/{chatId} {
         allow read: if signedIn()

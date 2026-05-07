@@ -15,6 +15,7 @@
       type="file"
       multiple
       accept="image/*"
+      :disabled="uploading"
       @change="handleFiles"
     />
 
@@ -24,12 +25,13 @@
         :key="image.id"
         class="card"
       >
-        <img :src="image.src" alt="Uploaded image" />
+        <img :src="image.src" :alt="image.name || 'Uploaded image'" />
 
         <button
           v-if="editing"
           class="delete-btn"
-          @click="removeImage(image.id)"
+          :disabled="uploading"
+          @click="handleRemoveImage(image.id)"
         >
           ✕
         </button>
@@ -39,16 +41,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useImages } from "@/composables/useImages";
 import { useAuthStore } from "@/stores/auth";
 
-const { images, addImage, removeImage } = useImages();
+const route = useRoute();
 const authStore = useAuthStore();
+const projectId = computed(() => route.params.projectId);
+const {
+  images,
+  uploading,
+  loadImages,
+  addImage,
+  removeImage,
+  cleanup,
+} = useImages(projectId);
 
 const editing = ref(false);
 const fileInput = ref(null);
 const maxSize = 5 * 1024 * 1024;
+
+watch(projectId, (id) => loadImages(id), { immediate: true });
+onUnmounted(cleanup);
 
 // toggle edit
 const toggleEdit = () => {
@@ -56,10 +71,11 @@ const toggleEdit = () => {
 };
 
 // upload handler
-const handleFiles = (event) => {
-  const files = Array.from(event.target.files);
+const handleFiles = async (event) => {
+  const files = Array.from(event.target.files ?? []);
+  const validFiles = [];
 
-  files.forEach(file => {
+  files.forEach((file) => {
     // check if it's an image
     if (!file.type.startsWith("image/")) return;
 
@@ -69,21 +85,25 @@ const handleFiles = (event) => {
       return;
     }
 
-    const reader = new FileReader();
-
-    // when file is loaded, add to gallery
-    reader.onload = (e) => {
-      addImage({
-        id: crypto.randomUUID(),
-        src: e.target.result
-      });
-    };
-
-    reader.readAsDataURL(file);
+    validFiles.push(file);
   });
 
+  try {
+    await Promise.all(validFiles.map((file) => addImage(file)));
+  } catch {
+    alert("Billedet kunne ikke uploades. Prøv igen.");
+  }
+
   // reset input
-  fileInput.value.value = "";
+  if (fileInput.value) fileInput.value.value = "";
+};
+
+const handleRemoveImage = async (id) => {
+  try {
+    await removeImage(id);
+  } catch {
+    alert("Billedet kunne ikke slettes. Prøv igen.");
+  }
 };
 </script>
 
@@ -91,7 +111,6 @@ const handleFiles = (event) => {
 @use "../assets/styles/variables" as *;
 
 .container {
-  max-width: flex;
   margin: auto;
   padding: 10px;
 }

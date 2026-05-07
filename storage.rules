@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return signedIn()
+        ? firestore.get(
+            /databases/(default)/documents/Users/$(request.auth.uid)
+          ).data
+        : null;
+    }
+
+    function isAdmin() {
+      return userDoc().role == "admin";
+    }
+
+    function projectData(projectId) {
+      return firestore.get(
+        /databases/(default)/documents/projects/$(projectId)
+      ).data;
+    }
+
+    function isMember(projectId) {
+      return signedIn()
+        && request.auth.uid in projectData(projectId).memberUid;
+    }
+
+    function validFileName(fileName) {
+      return fileName.matches('^[a-zA-Z0-9._-]{1,100}$');
+    }
+
+    match /projects/{projectId}/images/{imageId}/{fileName} {
+
+      allow read:
+        if signedIn()
+        && (isAdmin() || isMember(projectId));
+
+      allow create:
+        if isAdmin()
+        && validFileName(fileName)
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches("image/.*");
+
+      allow update: if false;
+
+      allow delete:
+        if isAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
