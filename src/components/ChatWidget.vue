@@ -366,20 +366,20 @@ const handleSend = async () => {
   &__message {
     max-width: 78%;
     padding: 12px 14px;
-    font-size: 16px;
+    font-size: $body-size;
     line-height: 1.25;
     color: #000;
 
     &--me {
       align-self: flex-end;
       background: $accent-1;
-      border-radius: 18px 18px 4px 18px;
+      border-radius: $spacing-sm $spacing-sm $spacing-xxs $spacing-sm;
     }
 
     &--them {
       align-self: flex-start;
       background: #fff;
-      border-radius: 18px 18px 18px 4px;
+      border-radius: $spacing-sm $spacing-sm $spacing-xxs $spacing-sm;
     }
   }
 
@@ -388,7 +388,7 @@ const handleSend = async () => {
     align-items: center;
     gap: 10px;
     color: #b1b1b1;
-    font-size: 12px;
+    font-size: $small-size;
     font-weight: $h1-weight;
 
     &::before,

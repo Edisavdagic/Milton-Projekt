@@ -132,7 +132,7 @@ async function login() {
     color: white;
     background-color: $primary;
     font-size: $body-size;
-    font-weight: 500;
+    font-weight: $h3-weight;
 
     &:disabled {
       opacity: 0.7;

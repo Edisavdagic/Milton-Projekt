@@ -238,7 +238,7 @@ h1 {
 
 .history-group h2 {
   margin: 0 0 24px;
-  font-size: 28px;
+  font-size: $h3-size;
   font-weight: $h2-weight;
   color: #201d24;
 }
@@ -270,7 +270,7 @@ h1 {
     h3 {
       margin: 0 0 2px;
       font-size: 32px;
-      font-weight: 600;
+      font-weight: $h2-weight;
       line-height: 1.15;
       color: #201d24;
     }
@@ -278,7 +278,7 @@ h1 {
     p {
       margin: 0;
       font-size: 22px;
-      font-weight: 500;
+      font-weight: $h3-weight;
       line-height: 1.2;
       color: $tertiary;
     }

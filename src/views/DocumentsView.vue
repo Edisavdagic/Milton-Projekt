@@ -1,44 +1,85 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import { collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db, storage } from "@/services/firebase";
 
 const searchQuery = ref("");
 const selectedFilter = ref("all");
 const documents = ref([]);
 const isLoading = ref(true);
 const error = ref("");
+const isUploading = ref(false);
+const fileInput = ref(null);
+const pendingFile = ref(null);
+const pendingBeskrivelse = ref("");
 
-// hardcoded data.
-// TODO Firebase: erstat med rigtige data fra Firestore. Husk at tilføje type og uploadedAtLabel til hvert dokument.
-const mockDocuments = [
-  {
-    id: "test",
-    file: "test.pdf",
-    name: "test",
-    beskrivelse: "Kontrakt mellem byggherre og leverandør.",
-    uploadedAt: "2026-02-07",
-  },
-  {
-    id: "endnu en test",
-    file: "endnu en test.pdf",
-    name: "endnu en test",
-    beskrivelse: "Opsummering af fremdrift og økonomi for februar.",
-    uploadedAt: "2026-02-08",
-  },
-  {
-    id: "render",
-    file: "render.svg",
-    name: "Render",
-    beskrivelse: "Visualisering af facaden fra sydsiden.",
-    uploadedAt: "2026-02-08",
-  },
-  {
-    id: "grundfoto",
-    file: "grundfoto.svg",
-    name: "Grundfoto",
-    beskrivelse: "Dronefoto af byggegrund med markering af skel.",
-    uploadedAt: "2026-02-07",
-  },
-];
+function onFileChosen(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  fileInput.value.value = "";
+  pendingFile.value = file;
+  pendingBeskrivelse.value = "";
+}
+
+function cancelUpload() {
+  pendingFile.value = null;
+  pendingBeskrivelse.value = "";
+}
+
+async function confirmUpload() {
+  const file = pendingFile.value;
+  if (!file) return;
+
+  isUploading.value = true;
+  error.value = "";
+  try {
+    const path = `documents/${Date.now()}_${file.name}`;
+    const fileRef = storageRef(storage, path);
+    const snapshot = await uploadBytesResumable(fileRef, file, { contentType: file.type });
+    const url = await getDownloadURL(snapshot.ref);
+
+    await addDoc(collection(db, "documents"), {
+      name: file.name,
+      file: file.name,
+      beskrivelse: pendingBeskrivelse.value.trim(),
+      url,
+      storagePath: path,
+      uploadedAt: serverTimestamp(),
+    });
+
+    pendingFile.value = null;
+    pendingBeskrivelse.value = "";
+    await loadDocuments();
+  } catch (e) {
+    error.value = e.message;
+  } finally {
+    isUploading.value = false;
+  }
+}
+
+async function loadDocuments() {
+  isLoading.value = true;
+  error.value = "";
+  try {
+    const q = query(collection(db, "documents"), orderBy("uploadedAt", "desc"));
+    const snap = await getDocs(q);
+    documents.value = snap.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: doc.id,
+        type: getTypeDetails(data.file),
+        uploadedAtLabel: formatDate(data.uploadedAt?.toDate()),
+      };
+    });
+  } catch (e) {
+    error.value = e.message;
+    documents.value = [];
+  } finally {
+    isLoading.value = false;
+  }
+}
 
 const filterOptions = [
   {
@@ -123,46 +164,6 @@ const visibleDocuments = computed(() => {
   });
 });
 
-function fileUrl(fileName) {
-  return `/documents/${fileName}`;
-}
-
-function iconLabel(typeKey) {
-  if (typeKey === "pdf") {
-    return "PDF";
-  }
-
-  if (typeKey === "image") {
-    return "IMG";
-  }
-
-  return "FIL";
-}
-
-async function loadDocuments() {
-  isLoading.value = true;
-  error.value = "";
-
-  try {
-    // Hold async for at simulere indlæsningstid. Fjern når der hentes rigtige data.
-    await new Promise((resolve) => setTimeout(resolve, 150));
-
-    // TODO Firebase: Hent dokumenter fra Firestore og erstat mock data. Husk at tilføje type og uploadedAtLabel til hvert dokument.
-    documents.value = mockDocuments.map((item) => {
-      return {
-        ...item,
-        type: getTypeDetails(item.file),
-        uploadedAtLabel: formatDate(item.uploadedAt),
-      };
-    });
-  } catch (loadError) {
-    error.value =
-      loadError instanceof Error ? loadError.message : "Noget gik galt under indlæsning.";
-    documents.value = [];
-  } finally {
-    isLoading.value = false;
-  }
-}
 
 onMounted(loadDocuments);
 </script>
@@ -173,25 +174,83 @@ onMounted(loadDocuments);
       <h1 class="documents-page__title">Dokumenter</h1>
 
       <div class="documents-page__controls">
-        <input
-          v-model="searchQuery"
-          class="documents-page__search"
-          type="search"
-          placeholder="Søg i dokumenter"
-        />
+        <div class="documents-page__search-wrap">
+          <input
+            v-model="searchQuery"
+            class="documents-page__search"
+            type="search"
+            placeholder="Søg i dokumenter"
+          />
+          <svg class="documents-page__search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </div>
 
-        <select
-          v-model="selectedFilter"
-          class="documents-page__filter"
-          :class="{ 'documents-page__filter--icon-only': selectedFilter === 'all' }"
-          aria-label="Filtrer dokumenter"
+        <div class="documents-page__filter-wrap">
+          <svg class="documents-page__filter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16"/><path d="M7 12h10"/><path d="M10 18h4"/>
+          </svg>
+          <span class="documents-page__filter-label">Filter</span>
+          <select
+            v-model="selectedFilter"
+            class="documents-page__filter"
+            aria-label="Filtrer dokumenter"
+          >
+            <option v-for="option in filterOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
+        <input
+          ref="fileInput"
+          type="file"
+          accept=".pdf,image/*"
+          style="display:none"
+          @change="onFileChosen"
+        />
+        <button
+          class="documents-page__upload-btn"
+          type="button"
+          :disabled="isUploading"
+          @click="fileInput.click()"
         >
-          <option v-for="option in filterOptions" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </select>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          {{ isUploading ? "Uploader..." : "Tilføj fil" }}
+        </button>
       </div>
     </header>
+
+    <Teleport to="body">
+      <div v-if="pendingFile" class="upload-modal__backdrop" @click.self="cancelUpload">
+        <div class="upload-modal">
+          <h2 class="upload-modal__title">Tilføj fil</h2>
+
+          <p class="upload-modal__filename">{{ pendingFile.name }}</p>
+
+          <label class="upload-modal__label" for="upload-beskrivelse">Beskrivelse</label>
+          <textarea
+            id="upload-beskrivelse"
+            v-model="pendingBeskrivelse"
+            class="upload-modal__textarea"
+            placeholder="Kort beskrivelse af filen (valgfrit)"
+            rows="3"
+          />
+
+          <div class="upload-modal__actions">
+            <button class="upload-modal__cancel" type="button" @click="cancelUpload">Annuller</button>
+            <button class="upload-modal__confirm" type="button" :disabled="isUploading" @click="confirmUpload">
+              {{ isUploading ? "Uploader..." : "Upload" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <div v-if="error" class="documents-page__status documents-page__status--error">
       <p>{{ error }}</p>
@@ -220,7 +279,7 @@ onMounted(loadDocuments);
             <td>
               <a
                 class="documents-page__name"
-                :href="fileUrl(document.file)"
+                :href="document.url"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -230,12 +289,13 @@ onMounted(loadDocuments);
             <td class="documents-page__description">{{ document.beskrivelse }}</td>
             <td>
               <div class="documents-page__type">
-                <span
-                  class="documents-page__icon"
-                  :class="`documents-page__icon--${document.type.key}`"
-                >
-                  {{ iconLabel(document.type.key) }}
-                </span>
+                <svg v-if="document.type.key === 'image'" class="documents-page__type-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <svg v-else class="documents-page__type-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span class="documents-page__type-label">{{ document.type.label }}</span>
               </div>
             </td>
             <td>{{ document.uploadedAtLabel }}</td>
@@ -252,7 +312,7 @@ onMounted(loadDocuments);
 .documents-page {
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(180deg, #eae8e7 0%, #f4f3f3 100%);
+  background: $secondary;
 
   &__header {
     align-items: flex-start;
@@ -274,36 +334,77 @@ onMounted(loadDocuments);
     flex-wrap: wrap;
   }
 
-  &__search,
-  &__filter {
+  &__search-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 16rem;
+  }
+
+  &__search {
     border: 1px solid #d2cecb;
     border-radius: 20px;
     background-color: #fff;
     min-height: 2.5rem;
-    padding: 0 0.75rem;
+    padding: 0 2.2rem 0 0.75rem;
     font-size: 0.95rem;
+    width: 100%;
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
   }
 
-  &__search {
-    min-width: 16rem;
+  &__search-icon {
+    position: absolute;
+    right: 0.7rem;
+    width: 1rem;
+    height: 1rem;
+    color: #909090;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  &__filter-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid #d2cecb;
+    border-radius: 20px;
+    background-color: #fff;
+    padding: 0 0.9rem;
+    min-height: 2.5rem;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      border-color: #b5b0ad;
+    }
+  }
+
+  &__filter-icon {
+    width: 1rem;
+    height: 1rem;
+    color: #505050;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  &__filter-label {
+    font-size: 0.95rem;
+    color: #1f1f1f;
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   &__filter {
-    min-width: 7.5rem;
-    padding: 0 2rem 0 0.75rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23505550' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h16'/%3E%3Cpath d='M7 12h10'/%3E%3Cpath d='M10 18h4'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.6rem center;
-    background-size: 0.9rem;
-  }
-
-  &__filter--icon-only {
-    width: 2.5rem;
-    min-width: 2.5rem;
-    padding: 0;
-    color: transparent;
-    text-indent: -9999px;
-    background-position: center;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
   }
 
   &__table-wrap {
@@ -331,18 +432,18 @@ onMounted(loadDocuments);
       font-size: 0.8rem;
       letter-spacing: 0.02em;
       text-transform: uppercase;
-      background-color: #f4f2f1;
+      background-color: #fff;
       color: #505050;
     }
 
-    tbody tr:nth-child(even) {
-      background-color: #faf9f8;
+    tbody tr:nth-child(odd) {
+      background-color: $secondary;
     }
   }
 
   &__name {
     color: #1f1f1f;
-    font-weight: 600;
+    font-weight: $h2-weight;
     text-decoration: none;
 
     &:hover {
@@ -361,33 +462,19 @@ onMounted(loadDocuments);
   &__type {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
-  &__icon {
-    display: inline-flex;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 700;
+  &__type-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: #909090;
+    flex-shrink: 0;
+  }
 
-    &--pdf {
-      background-color: #fee2e2;
-      color: #b91c1c;
-    }
-
-    &--image {
-      background-color: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    &--file {
-      background-color: #e5e7eb;
-      color: #1f2937;
-    }
+  &__type-label {
+    font-size: 0.9rem;
+    color: #505050;
   }
 
   &__status {
@@ -408,13 +495,44 @@ onMounted(loadDocuments);
     padding: 0.5rem 0.75rem;
     cursor: pointer;
   }
+
+  &__upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0 1rem;
+    min-height: 2.5rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $accent-2;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
 }
 
 @media (max-width: 768px) {
   .documents-page {
     padding: 1rem;
 
-    &__search {
+    &__search-wrap {
       min-width: 100%;
     }
 
@@ -422,8 +540,115 @@ onMounted(loadDocuments);
       width: 100%;
     }
 
-    &__filter {
+    &__filter-wrap {
       width: 100%;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+@use "../assets/styles/variables" as *;
+
+.upload-modal {
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: min(28rem, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+
+  &__title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #1f1f1f;
+  }
+
+  &__filename {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #505050;
+    background: #f4f3f3;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    word-break: break-all;
+  }
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: $h2-weight;
+    color: #1f1f1f;
+  }
+
+  &__textarea {
+    resize: vertical;
+    border: 1px solid #d2cecb;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 2px solid $primary;
+      outline-offset: 1px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  &__cancel {
+    background: none;
+    border: 1px solid #d2cecb;
+    border-radius: 20px;
+    padding: 0 1rem;
+    min-height: 2.5rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    color: #505050;
+
+    &:hover {
+      border-color: #a09a97;
+    }
+  }
+
+  &__confirm {
+    background-color: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0 1.25rem;
+    min-height: 2.5rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background-color: $accent-2;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   }
 }

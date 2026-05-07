@@ -258,7 +258,7 @@ const statusLabel = (status) => statusMap[status] ?? status;
 }
 
 .column {
-  font-size: 12px;
+  font-size: $small-size;
   opacity: 0.6;
 }
 
@@ -271,8 +271,8 @@ const statusLabel = (status) => statusMap[status] ?? status;
 }
 
 .details input {
-  padding: 4px;
-  font-size: 12px;
+  padding: $spacing-xxs;
+  font-size: $small-size;
 }
 
 .actor-editor {
@@ -284,19 +284,19 @@ const statusLabel = (status) => statusMap[status] ?? status;
 
 .actor-chips {
   display: flex;
-  gap: 4px;
+  gap: $spacing-xxs;
   flex-wrap: wrap;
 }
 
 .actor-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 6px;
-  border-radius: 6px;
+  gap: $spacing-xxs;
+  padding: $spacing-xxs $spacing-xs;
+  border-radius: $spacing-xs;
   background: #fff;
   border: 1px solid #ccc;
-  font-size: 12px;
+  font-size: $small-size;
 }
 
 .actor-remove {
@@ -313,29 +313,29 @@ const statusLabel = (status) => statusMap[status] ?? status;
 
 .actor-add {
   display: flex;
-  gap: 4px;
+  gap: $spacing-xxs;
 }
 
 .actor-add button {
-  padding: 4px 8px;
+  padding: $spacing-xxs $spacing-xs;
   border: none;
-  border-radius: 6px;
+  border-radius: $spacing-xs;
   background: $accent-2;
   color: white;
-  font-size: 12px;
+  font-size: $small-size;
   cursor: pointer;
 }
 
 .actor-summary {
-  font-size: 12px;
+  font-size: $small-size;
   color: $primary;
 }
 
 /* STATUS */
 .status {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: $spacing-xxs $spacing-xs;
+  border-radius: $spacing-xs;
+  font-size: $small-size;
 }
 
 .status.færdig {
