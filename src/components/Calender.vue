@@ -448,10 +448,10 @@ function goToMonth(month) {
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 
-$calendar-blue: #8fb5bf;
-$calendar-line: #005e6e;
-$event-bg: #f9dd8f;
-$event-muted: #eae8e7;
+$calendar-blue: $tertiary;
+$calendar-line: $primary;
+$event-bg: $accent-1;
+$event-muted: $secondary;
 
 .calendar {
   overflow: hidden;
@@ -492,7 +492,7 @@ $event-muted: #eae8e7;
     gap: 36px;
     padding: 10px 16px 16px;
     font-size: 32px;
-    font-weight: 700;
+    font-weight: $h1-weight;
     text-align: center;
 
     button {
@@ -517,7 +517,7 @@ $event-muted: #eae8e7;
     border-top: 2px solid $calendar-line;
     border-bottom: 2px solid $calendar-line;
     background: #fff;
-    font-weight: 700;
+    font-weight: $h1-weight;
 
     div {
       min-width: 0;
@@ -593,9 +593,9 @@ $event-muted: #eae8e7;
 
     .date {
       display: block;
-      margin-bottom: 4px;
-      font-size: 12px;
-      font-weight: 700;
+      margin-bottom: $spacing-xxs;
+      font-size: $small-size;
+      font-weight: $h1-weight;
     }
   }
 
@@ -620,7 +620,7 @@ $event-muted: #eae8e7;
     background: #fff;
     padding: 20px;
     color: $primary;
-    font-weight: 700;
+    font-weight: $h1-weight;
     text-align: center;
     cursor: pointer;
 
@@ -650,7 +650,7 @@ $event-muted: #eae8e7;
   &__title {
     overflow: hidden;
     font-size: 22px;
-    font-weight: 700;
+    font-weight: $h1-weight;
     line-height: 1.15;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -658,9 +658,9 @@ $event-muted: #eae8e7;
 
   &__desc {
     overflow: hidden;
-    margin-top: 4px;
+    margin-top: $spacing-xxs;
     color: #747474;
-    font-size: 16px;
+    font-size: $body-size;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -668,7 +668,7 @@ $event-muted: #eae8e7;
   &__actors {
     display: flex;
     justify-content: flex-end;
-    gap: 4px;
+    gap: $spacing-xxs;
     flex: 0 1 auto;
     flex-wrap: wrap;
     min-width: 90px;
@@ -679,9 +679,9 @@ $event-muted: #eae8e7;
       border: 1px solid $calendar-line;
       border-radius: 8px;
       background: #fff;
-      padding: 4px 7px;
+      padding: $spacing-xxs $spacisng-xs;
       color: #777;
-      font-size: 16px;
+      font-size: $body-size;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -691,7 +691,7 @@ $event-muted: #eae8e7;
     display: block;
     margin-top: 3px;
     padding: 3px 5px;
-    border-radius: 4px;
+    border-radius: $spacing-xxs;
     background: $event-bg;
     font-size: 11px;
     line-height: 1.2;
@@ -729,7 +729,7 @@ $event-muted: #eae8e7;
     padding: 10px;
 
     &__title {
-      font-size: 16px;
+      font-size: $body-size;
       white-space: normal;
     }
 

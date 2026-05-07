@@ -184,15 +184,15 @@ const statusClass = (status) => `status ${status}`;
 
 .milestone-item {
   display: flex;
-  gap: 8px;
+  gap: $spacing-xs;
   align-items: center;
   margin: 10px 0;
 }
 
 .status {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: $spacing-xxs $spacing-xs;
+  border-radius: $spacing-xs;
+  font-size: $small-size;
 }
 
 .status.færdig {
@@ -220,8 +220,8 @@ button {
 }
 
 .progress {
-  margin-top: 12px;
-  font-size: 12px;
+  margin-top: $spacing-s;
+  font-size: $small-size;
   opacity: 0.7;
 }
 </style>
