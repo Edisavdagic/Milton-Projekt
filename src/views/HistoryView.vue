@@ -5,6 +5,39 @@
   <section class="history-page">
     <h1> Historik </h1>
 
+    <div class="history-page__controls">
+        <div class="history-page__search">
+          <input
+            type="text"
+            placeholder="Search"
+          />
+          <img
+            class="history-page__search-icon"
+            src="@/assets/icons/Search.svg"
+            alt="Søge ikon"
+          />
+        </div>
+
+        <div class="history-page__filters">
+          <button class="history-page__chip history-page__chip--active" type="button">
+            Alle
+          </button>
+
+          <button class="history-page__chip" type="button">
+            Ændringer
+          </button>
+
+          <button class="history-page__chip" type="button">
+            Tilføjelser
+          </button>
+
+          <button class="history-page__chip" type="button">
+            Dokumentation
+          </button>
+        </div>
+      </div>
+
+
     <section class="history-group">
       <h2>I dag</h2>
 
@@ -129,7 +162,6 @@
 @use '@/assets/styles/variables' as *;
 
 h1 {
-  margin: 0 0 36px;
   font-size: $h1-size;
   font-weight: $h1-weight;
   line-height: 1.15;
@@ -141,6 +173,63 @@ h1 {
   min-height: 100%;
   padding: $spacing-sm $spacing-xl $spacing-xl;
   font-family: $font-family;
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+    margin-bottom: 31px;
+  }
+
+  &__search {
+    position: relative;
+    flex: 0 0 420px;
+    max-width: 420px;
+    min-width: 260px;
+
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: $spacing-xs $spacing-lg $spacing-xs $spacing-sm;
+      border-radius: 999px;
+      border: 1px solid $border-color;
+      font-size: $body-size;
+      outline: none;
+      background: #fff;
+      color: $primary;
+    }
+  }
+
+  &__search-icon {
+    position: absolute;
+    right: $spacing-sm;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__chip {
+    border: 1px solid $border-color;
+    background: #fff;
+    color: $primary;
+    padding: $spacing-xxs $spacing-sm;
+    border-radius: 5px;
+    cursor: default;
+    font-size: $body-size;
+  }
+
+  &__chip--active {
+    background: $accent-2;
+    color: #fff;
+    border-color: $accent-2;
+  }
 }
 
 .history-group {
