@@ -125,6 +125,14 @@ service cloud.firestore {
       allow read: if signedIn() && request.auth.uid in resource.data.participants;
     }
 
+    // Documents: any signed-in user can read and create; only admins can delete
+    match /documents/{docId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+
     // Default deny for everything else until explicitly allowed
     match /{document=**} {
       allow read, write: if false;
