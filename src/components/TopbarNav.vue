@@ -56,7 +56,7 @@ defineProps({
         <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
       </button>
       <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
-
+      <div class="topbar-user">
       <div class="user-meta">
         <span class="user-name">{{ currentUser.name }}</span>
         <span class="user-email">{{ currentUser.email }}</span>
@@ -66,6 +66,7 @@ defineProps({
         <img src="@/assets/icons/Globe.svg" alt="Sprog ikon" />
         <span>Sprog</span>
       </div>
+    </div>
     </div>
 
     <ChatWidget
