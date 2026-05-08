@@ -18,7 +18,7 @@
       class="milestone-column"
     >
       <div class="header" :class="{ 'header--with-icon': column.icon }">
-        <span v-if="column.icon" class="milestone-icon">{{ column.icon }}</span>
+        <span v-if="column.icon" class="milestone-icon" v-html="iconSvg(column.icon)"></span>
         <div>
           <h3>{{ column.title }}</h3>
           <p v-if="column.subtitle">{{ column.subtitle }}</p>
@@ -90,6 +90,21 @@
 
 <script setup>
 import { reactive, computed, watch, onMounted } from "vue";
+
+import hammerIcon from "@/assets/icons/hammer-solid.png";
+import plugIcon from "@/assets/icons/plug-solid.png";
+import paintRollerIcon from "@/assets/icons/paint-roller-solid.png";
+
+const ICONS = {
+  hammer: hammerIcon,
+  plug: plugIcon,
+  brush: paintRollerIcon,
+};
+
+const iconSvg = (name) => {
+  const src = ICONS[name];
+  return src ? `<img src="${src}" width="18" height="18" alt="${name}" />` : "";
+};
 import { useRoute } from "vue-router";
 import { useMilestoneStore } from "@/stores/milestones";
 import { useAuthStore } from "@/stores/auth";
