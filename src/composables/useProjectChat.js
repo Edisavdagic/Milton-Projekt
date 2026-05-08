@@ -6,6 +6,53 @@ import {
   query, where, orderBy, onSnapshot, serverTimestamp,
 } from 'firebase/firestore'
 
+/**
+ * @typedef {Object} ChatEntry
+ * @property {string} chatId - Deterministic ID from both UIDs sorted and joined with `_`.
+ * @property {string} otherUid - UID of the other participant.
+ * @property {string} otherName - Display name of the other participant.
+ * @property {string} otherRole - Role of the other participant.
+ * @property {string|null} lastMessage - Most recent message text, or `null` if none yet.
+ * @property {Object|null} lastMessageAt - Firestore Timestamp of the last message, or null if no messages yet.
+ */
+
+/**
+ * @typedef {Object} MessageEntry
+ * @property {string} id - Firestore document ID.
+ * @property {string} text - Message body.
+ * @property {'me'|'them'} sender - Whether the message belongs to the current user.
+ * @property {Date} createdAt - JavaScript Date of creation.
+ */
+
+/**
+ * @typedef {Object} DateSeparator
+ * @property {string} id - Unique key in the form `date-<dateStr>-<firstMsgId>`.
+ * @property {'date'} type - Discriminator for rendering a date divider row.
+ * @property {string} text - Localised date label (Danish locale, e.g. "torsdag 8. maj").
+ */
+
+/**
+ * @typedef {Object} UseChatReturn
+ * @property {Object} chats - Reactive ref containing an array of {@link ChatEntry} objects.
+ * @property {Object} messages - Reactive ref containing an array of {@link MessageEntry} or {@link DateSeparator} objects.
+ * @property {Object} loadingChats - Reactive ref; `true` while chat threads are being fetched.
+ * @property {Object} loadingMessages - Reactive ref; `true` while messages are being fetched.
+ * @property {Object} activeChatId - Reactive ref holding the currently open chat ID, or `null`.
+ * @property {Function} loadChats - Subscribe to chats for a project. See {@link loadChats}.
+ * @property {Function} loadAllChats - Subscribe to all chats across projects. See {@link loadAllChats}.
+ * @property {Function} loadMessages - Subscribe to messages in a chat. See {@link loadMessages}.
+ * @property {Function} sendMessage - Send a message in a chat. See {@link sendMessage}.
+ * @property {Function} cleanup - Unsubscribe all active listeners.
+ */
+
+/**
+ * Vue composable for project-scoped direct messaging backed by Firestore.
+ *
+ * Manages real-time listeners for chat threads and their messages.
+ * Call `cleanup()` when the owning component unmounts to unsubscribe all listeners.
+ *
+ * @returns {UseChatReturn}
+ */
 export function useChat() {
   const authStore = useAuthStore()
 
@@ -18,6 +65,15 @@ export function useChat() {
   let unsubChats = null
   let unsubMessages = null
 
+  /**
+   * Subscribes to the chat threads for a specific project, limited to the
+   * current user's conversations with the supplied members. Fetches member
+   * profiles once and then keeps `chats` in sync via a real-time listener.
+   *
+   * @param {string} projectId - Firestore project document ID.
+   * @param {string[]} memberUids - UIDs of all project members (including the current user).
+   * @returns {Promise<void>}
+   */
   async function loadChats(projectId, memberUids) {
     if (!projectId || !memberUids?.length) return
     loadingChats.value = true
@@ -81,6 +137,13 @@ export function useChat() {
     )
   }
 
+  /**
+   * Subscribes to **all** chat threads the current user participates in,
+   * across every project (uses a Firestore `collectionGroup` query).
+   * Results are sorted by most recent message descending.
+   *
+   * @returns {void}
+   */
   function loadAllChats() {
     loadingChats.value = true
     const myUid = authStore.user.uid
@@ -117,6 +180,15 @@ export function useChat() {
     )
   }
 
+  /**
+   * Subscribes to the messages of a specific chat thread.
+   * Injects date-separator entries between messages from different calendar days.
+   * Replaces any previously active message listener.
+   *
+   * @param {string} projectId - Firestore project document ID.
+   * @param {string} chatId - ID of the chat document within the project.
+   * @returns {void}
+   */
   function loadMessages(projectId, chatId) {
     if (unsubMessages) unsubMessages()
     activeChatId.value = chatId
@@ -139,6 +211,18 @@ export function useChat() {
     })
   }
 
+  /**
+   * Sends a message in a chat thread and upserts the chat document with
+   * participant metadata and the latest message preview.
+   *
+   * @param {string} projectId - Firestore project document ID.
+   * @param {string} chatId - ID of the chat document (must equal `[myUid, otherUid].sort().join('_')`).
+   * @param {string} text - Raw message text; leading/trailing whitespace is trimmed. No-ops if blank.
+   * @param {string} otherUid - UID of the recipient.
+   * @param {string} otherName - Display name of the recipient (stored on the chat document).
+   * @param {string} otherRole - Role of the recipient (stored on the chat document).
+   * @returns {Promise<void>}
+   */
   async function sendMessage(projectId, chatId, text, otherUid, otherName, otherRole) {
     const trimmed = text.trim()
     if (!trimmed) return
@@ -169,6 +253,12 @@ export function useChat() {
     )
   }
 
+  /**
+   * Unsubscribes all active Firestore listeners (chats and messages).
+   * Call this in the component's `onUnmounted` hook to avoid memory leaks.
+   *
+   * @returns {void}
+   */
   function cleanup() {
     if (unsubChats) { unsubChats(); unsubChats = null }
     if (unsubMessages) { unsubMessages(); unsubMessages = null }
@@ -188,6 +278,12 @@ export function useChat() {
   }
 }
 
+/**
+ * Inserts {@link DateSeparator} entries between messages that fall on different calendar days.
+ *
+ * @param {MessageEntry[]} msgs - Chronologically ordered message list.
+ * @returns {Array.<(MessageEntry|DateSeparator)>}
+ */
 function injectDateSeparators(msgs) {
   const result = []
   let lastDate = null
