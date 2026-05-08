@@ -16,10 +16,16 @@
 
       <button
         v-if="authStore.isAdmin"
-        class="controls__edit"
+        class="edit-all"
         type="button"
         @click="editDetails = !editDetails"
       >
+      <img
+          class="edit-all__icon"
+          src="@/assets/icons/Edit 2.svg"
+          alt="Rediger ikon"
+      />
+
         {{ editDetails ? "Færdig" : "Rediger" }}
       </button>
     </div>
@@ -244,6 +250,25 @@ const statusLabel = (status) => statusMap[status] ?? status;
   gap: $spacing-xs;
   margin-bottom: $spacing-md;
   flex-wrap: wrap;
+}
+
+.edit-all {
+  margin-left: auto;
+
+  background: $accent-2;
+  color: $textcolor-2;
+  border: $border-width solid $accent-2;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-sm;
+  border-radius: $radius-sm;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .controls input,
