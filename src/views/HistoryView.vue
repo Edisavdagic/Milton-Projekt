@@ -1,42 +1,25 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <section class="history-page">
-    <h1> Historik </h1>
+    <h1>Historik</h1>
 
     <div class="history-page__controls">
-        <div class="history-page__search">
-          <input
-            type="text"
-            placeholder="Search"
-          />
-          <img
-            class="history-page__search-icon"
-            src="@/assets/icons/Search.svg"
-            alt="Søge ikon"
-          />
-        </div>
-
-        <div class="history-page__filters">
-          <button class="history-page__chip history-page__chip--active" type="button">
-            Alle
-          </button>
-
-          <button class="history-page__chip" type="button">
-            Ændringer
-          </button>
-
-          <button class="history-page__chip" type="button">
-            Tilføjelser
-          </button>
-
-          <button class="history-page__chip" type="button">
-            Dokumentation
-          </button>
-        </div>
+      <div class="history-page__search">
+        <input type="text" placeholder="Search" />
+        <img class="history-page__search-icon" src="@/assets/icons/Search.svg" alt="Søge ikon" />
       </div>
 
+      <div class="history-page__filters">
+        <button class="history-page__chip history-page__chip--active" type="button">Alle</button>
+
+        <button class="history-page__chip" type="button">Ændringer</button>
+
+        <button class="history-page__chip" type="button">Tilføjelser</button>
+
+        <button class="history-page__chip" type="button">Dokumentation</button>
+      </div>
+    </div>
 
     <section class="history-group">
       <h2>I dag</h2>
@@ -63,9 +46,9 @@
         </div>
       </article>
 
-            <article class="history-item">
+      <article class="history-item">
         <div class="history-item__icon">
-          <img src="@/assets/icons/Check Square.svg" alt="Tjek ikon" />
+          <img src="@/assets/icons/Check square.svg" alt="Tjek ikon" />
         </div>
 
         <div class="history-item__text">
@@ -74,7 +57,7 @@
         </div>
       </article>
 
-            <article class="history-item">
+      <article class="history-item">
         <div class="history-item__icon">
           <img src="@/assets/icons/Send.svg" alt="Send ikon" />
         </div>
@@ -111,7 +94,7 @@
         </div>
       </article>
 
-       <article class="history-item">
+      <article class="history-item">
         <div class="history-item__icon">
           <img src="@/assets/icons/Edit.svg" alt="Rediger ikon" />
         </div>
@@ -122,7 +105,7 @@
         </div>
       </article>
 
-       <article class="history-item">
+      <article class="history-item">
         <div class="history-item__icon">
           <img src="@/assets/icons/Upload.svg" alt="Tilføj ikon" />
         </div>
@@ -159,7 +142,7 @@
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/variables' as *;
+@use "@/assets/styles/variables" as *;
 
 h1 {
   font-size: $h1-size;
@@ -285,5 +268,3 @@ h1 {
   }
 }
 </style>
-
-
