@@ -187,9 +187,11 @@ onMounted(loadDocuments);
         </div>
 
         <div class="documents-page__filter-wrap">
-          <svg class="documents-page__filter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h16"/><path d="M7 12h10"/><path d="M10 18h4"/>
-          </svg>
+          <img
+            class="documents-page__filter-icon"
+            src="@/assets/icons/Filter.svg"
+            alt="Filter ikon"
+          />
           <span class="documents-page__filter-label">Filter</span>
           <select
             v-model="selectedFilter"
@@ -215,12 +217,11 @@ onMounted(loadDocuments);
           :disabled="isUploading"
           @click="fileInput.click()"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="12" y1="18" x2="12" y2="12"/>
-            <line x1="9" y1="15" x2="15" y2="15"/>
-          </svg>
+        <img
+          class="documents-page__upload-icon"
+          src="@/assets/icons/File 2.svg"
+          alt="Fil ikon"
+        />
           {{ isUploading ? "Uploader..." : "Tilføj fil" }}
         </button>
       </div>
