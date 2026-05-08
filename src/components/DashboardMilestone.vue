@@ -5,6 +5,11 @@
       <p>Få et overblik over processen</p>
     </div>
     <button v-if="authStore.isAdmin" class="edit-all" @click="toggleAll">
+      <img
+        class="edit-all__icon"
+        src="@/assets/icons/Edit 2.svg"
+        alt="Rediger ikon"
+      />
       {{ editing ? "Færdig" : "Rediger" }}
     </button>
   </div>
@@ -210,6 +215,9 @@ const statusClass = (status) => `status ${status}`;
   font-size: $dashboard-small-font-size;
   font-weight: $h2-weight;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .milestones-wrapper {

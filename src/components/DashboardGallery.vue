@@ -2,7 +2,12 @@
   <div class="container">
     <div class="header">
       <h2>Seneste billeder</h2>
-      <button class="edit-btn" v-if="authStore.isAdmin" @click="toggleEdit">
+      <button class="edit-all" v-if="authStore.isAdmin" @click="toggleEdit">
+        <img
+          class="edit-all__icon"
+          src="@/assets/icons/Edit 2.svg"
+          alt="Rediger ikon"
+        />
         {{ editing ? "Færdig" : "Rediger" }}
       </button>
     </div>
@@ -131,7 +136,7 @@ const handleRemoveImage = async (id) => {
   }
 }
 
-.edit-btn {
+.edit-all {
   background: $accent-2;
   color: $textcolor-2;
   border: $border-width solid $accent-2;
@@ -142,6 +147,9 @@ const handleRemoveImage = async (id) => {
   font-size: $dashboard-small-font-size;
   font-weight: $h2-weight;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Upload */
