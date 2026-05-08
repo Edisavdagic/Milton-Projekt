@@ -16,7 +16,7 @@ const currentProjectId = computed(
 const isProjectRoute = computed(
   () =>
     (currentProjectId.value && ["dashboard", "calendar", "documents", "history"].includes(route.name)) ||
-    (!authStore.isAdmin && currentProjectId.value && route.name === "notifications")
+    (currentProjectId.value && route.name === "notifications")
 );
 
 const isAdminProjectOverview = computed(
