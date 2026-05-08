@@ -32,7 +32,12 @@
         aria-label="Forrige"
         @click="prev"
       >
-        ‹
+        <img
+          class="calendar__nav-icon"
+          src="@/assets/icons/Chevron-Left.png"
+          alt="Forrige"
+      />
+
       </button>
       <div>{{ formattedRange }}</div>
       <button
@@ -40,7 +45,11 @@
         aria-label="Næste"
         @click="next"
       >
-        ›
+      <img
+        class="calendar__nav-icon"
+        src="@/assets/icons/Chevron-Right.png"
+        alt="Forrige"
+      />
       </button>
     </div>
 
