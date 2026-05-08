@@ -5,6 +5,8 @@ $font-family: "Work Sans", sans-serif;
 $h1-size: 44px; // 44px
 $h2-size: 36px; // 36px
 $h3-size: 28px; // 28px
+$h4-size: 24px; // 24px
+$h5-size: 20px; // 20px
 $body-size: 16px; // 16px
 $small-size: 12px; // 12px
 
@@ -23,9 +25,11 @@ $accent-2: #005e6e;
 
 $textcolor-1: #000;
 $textcolor-2: #ffffff;
-$textcolor-3: #001A21;
-$textcolor-4: #2D2D2D;
-$textcolor-5: #7A7A7A;
+$textcolor-3: #001a21;
+$textcolor-4: #49454f;
+$textcolor-5: #7a7a7a;
+
+$error: #991b1b;
 
 // Ekstra aliases (så dine komponenter ikke fejler)
 $primary-color: $primary;
@@ -36,8 +40,10 @@ $spacing-xxs: 4px;
 $spacing-xs: 8px;
 $spacing-s: 12px;
 $spacing-sm: 16px;
+$spacing-m: 20px;
 $spacing-md: 24px;
 $spacing-lg: 31px;
+$spacing-vl: 40px;
 $spacing-xl: 48px;
 $spacing-xxl: 64px;
 
@@ -48,6 +54,7 @@ $radius-sm: 6px;
 $radius-md: 8px;
 $radius-lg: 10px;
 $radius-xl: 12px;
+$radius-xxxl: 20px;
 $radius-pill: 999px;
 
 // Breakpoints
@@ -66,7 +73,6 @@ $dashboard-small-font-size: 12px;
 $dashboard-chip-font-size: 11px;
 $dashboard-chip-height: 22px;
 $dashboard-control-height: 28px;
-$dashboard-gallery-card-height: 152px;
 $dashboard-gallery-card-min-width: 220px;
 $dashboard-milestone-gap: 20px;
 $dashboard-milestone-card-min-height: 508px;

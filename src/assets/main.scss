@@ -3,10 +3,53 @@
 * {
   margin: 0px;
   padding: 0px;
-
 }
 
 body {
   background: $secondary;
   font-family: $font-family;
+}
+
+h1 {
+  font-size: $h1-size;
+  font-weight: $h1-weight;
+}
+
+h2 {
+  font-size: $h2-size;
+  font-weight: $h2-weight;
+}
+
+h3 {
+  font-size: $h3-size;
+  font-weight: $h3-weight;
+}
+
+h4 {
+  font-size: $h4-size;
+}
+
+p {
+  font-size: $body-size;
+  font-weight: $body-weight;
+}
+
+.section-content {
+  padding: $spacing-xl $spacing-s;
+}
+
+.chip {
+  border: 1px solid $border-color;
+  background: #fff;
+  color: $textcolor-4;
+  padding: $spacing-xxs $spacing-sm;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &--active {
+    background: $accent-2;
+    color: #fff;
+    border-color: $accent-2;
+  }
 }

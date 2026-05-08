@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <section class="history-page">
+  <section class="section-content history-page">
     <h1>Historik</h1>
 
     <div class="history-page__controls">
@@ -154,7 +154,6 @@ h1 {
 .history-page {
   width: 100%;
   min-height: 100%;
-  padding: $spacing-sm $spacing-xl $spacing-xl;
   font-family: $font-family;
 
   &__controls {

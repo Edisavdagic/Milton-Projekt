@@ -123,7 +123,7 @@ const handleSend = async () => {
 
           <div>
             <h2>{{ selectedChat.otherName }}</h2>
-            <p>{{ selectedChat.otherRole === 'admin' ? 'Byggeleder' : 'Bygherre' }}</p>
+            <p>{{ selectedChat.otherRole === "admin" ? "Byggeleder" : "Bygherre" }}</p>
           </div>
         </header>
 
@@ -185,10 +185,10 @@ const handleSend = async () => {
   top: 225px;
   right: 0;
   width: 410px;
-  height: 680px;
+  height: 700px;
   background: $secondary;
   border: 1px solid #000;
-  border-radius: 8px;
+  border-radius: $radius-md;
   z-index: 1000;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
   overflow: hidden;
@@ -198,11 +198,11 @@ const handleSend = async () => {
     top: 0;
     right: 0;
     width: 42px;
-    height: 40px;
+    height: $spacing-vl;
     border: none;
     background: $primary;
     color: #fff;
-    font-size: 34px;
+    font-size: $h2-size;
     cursor: pointer;
     border-radius: 0 5px 0 8px;
     z-index: 3;
@@ -210,7 +210,7 @@ const handleSend = async () => {
 
   &__list-view {
     height: 100%;
-    padding: 28px;
+    padding: $spacing-md;
   }
 
   &__title {
@@ -222,13 +222,13 @@ const handleSend = async () => {
 
   &__search {
     position: relative;
-    margin-bottom: 16px;
+    margin-bottom: $spacing-sm;
 
     input {
       width: 100%;
       box-sizing: border-box;
       height: 50px;
-      border-radius: 999px;
+      border-radius: $radius-pill;
       border: none;
       padding: 0 $spacing-lg 0 $spacing-sm;
       font-size: $body-size;
@@ -242,8 +242,8 @@ const handleSend = async () => {
       top: 50%;
       transform: translateY(-50%);
       pointer-events: none;
-      width: 20px;
-      height: 20px;
+      width: $spacing-m;
+      height: $spacing-m;
     }
   }
 
@@ -255,9 +255,9 @@ const handleSend = async () => {
 
   &__tab {
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-xs;
     background: #fff;
-    padding: 10px 14px;
+    padding: $spacing-s $spacing-sm;
     font-weight: $h1-weight;
     font-size: $body-size;
     cursor: pointer;
@@ -275,29 +275,29 @@ const handleSend = async () => {
     grid-template-columns: 64px 1fr auto;
     align-items: center;
     gap: $spacing-xs;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 16px;
-    border: 1.5px solid #9cc9d2;
-    background: #fff;
+    padding: $radius-lg;
+    margin-bottom: $radius-lg;
+    border-radius: $spacing-sm;
+    border: 1.5px solid $tertiary;
+    background: $textcolor-2;
     cursor: pointer;
     text-align: left;
 
     h3 {
       margin: 0;
       font-size: $h3-size;
-      color: #000;
+      color: $textcolor-1;
     }
 
     p {
       margin: 2px 0 0;
       font-size: $body-size;
-      color: #777;
+      color: $textcolor-5;
     }
 
     span {
       font-size: $body-size;
-      color: #777;
+      color: $textcolor-5;
       white-space: nowrap;
     }
   }
@@ -329,27 +329,27 @@ const handleSend = async () => {
     align-items: center;
     gap: 14px;
     background: #fff;
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1px solid $secondary;
 
     h2 {
       margin: 0;
-      font-size: 30px;
+      font-size: $h3-size;
       line-height: 1;
       color: #000;
     }
 
     p {
       margin: 6px 0 0;
-      font-size: 22px;
-      color: #777;
+      font-size: $h5-size;
+      color: $textcolor-5;
     }
   }
 
   &__back {
     border: none;
     background: transparent;
-    font-size: 34px;
-    color: #000;
+    font-size: $h2-size;
+    color: $textcolor-1;
     cursor: pointer;
     padding: 0;
   }
@@ -357,15 +357,15 @@ const handleSend = async () => {
   &__messages {
     flex: 1;
     overflow-y: auto;
-    padding: 18px 24px;
+    padding: $spacing-m $spacing-md;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: $spacing-sm;
   }
 
   &__message {
     max-width: 78%;
-    padding: 12px 14px;
+    padding: $spacing-xs $spacing-sm;
     font-size: $body-size;
     line-height: 1.25;
     color: #000;
@@ -386,8 +386,8 @@ const handleSend = async () => {
   &__date {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #b1b1b1;
+    gap: $spacing-sm;
+    color: $textcolor-5;
     font-size: $small-size;
     font-weight: $h1-weight;
 
@@ -396,7 +396,7 @@ const handleSend = async () => {
       content: "";
       flex: 1;
       height: 1px;
-      background: #d2d2d2;
+      background: $secondary;
     }
   }
 
@@ -404,7 +404,7 @@ const handleSend = async () => {
     min-height: 118px;
     padding: 18px;
     background: #fff;
-    border-top: 1px solid #d4d4d4;
+    border-top: 1px solid $secondary;
     border-radius: 18px 18px 0 0;
 
     input {
@@ -415,13 +415,13 @@ const handleSend = async () => {
       color: $primary;
 
       &::placeholder {
-        color: #b5b5b5;
+        color: $textcolor-5;
       }
     }
   }
 
   &__composer-actions {
-    margin-top: 22px;
+    margin-top: $spacing-m;
     display: flex;
     align-items: center;
     gap: 18px;
@@ -436,23 +436,23 @@ const handleSend = async () => {
       justify-content: center;
 
       img {
-        width: 24px;
-        height: 24px;
+        width: $spacing-md;
+        height: $spacing-md;
       }
     }
   }
 
   &__send {
     margin-left: auto;
-    width: 42px;
-    height: 42px;
+    width: $spacing-vl;
+    height: $spacing-vl;
     border: 2px solid $primary !important;
     border-radius: 50%;
     background: transparent;
 
     img {
-      width: 20px;
-      height: 20px;
+      width: $spacing-m;
+      height: $spacing-m;
     }
   }
 }

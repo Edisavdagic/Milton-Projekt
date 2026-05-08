@@ -1,82 +1,76 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
-import ProjectCard from '@/components/ProjectCard.vue'
-import { useProjectsStore } from '@/stores/project'
+import { onMounted, computed, ref } from "vue";
+import ProjectCard from "@/components/ProjectCard.vue";
+import { useProjectsStore } from "@/stores/project";
 
-const projectsStore = useProjectsStore()
-const search = ref('')
-const statusFilter = ref('all')
-const sortOrder = ref('newest')
+const projectsStore = useProjectsStore();
+const search = ref("");
+const statusFilter = ref("all");
+const sortOrder = ref("newest");
 
 onMounted(() => {
-  projectsStore.fetchProjects()
-  projectsStore.setCurrentProject(null)
-})
+  projectsStore.fetchProjects();
+  projectsStore.setCurrentProject(null);
+});
 
 const filterProjects = computed(() => {
-  const term = search.value.toLowerCase().trim()
+  const term = search.value.toLowerCase().trim();
 
   return projectsStore.projects
     .filter((project) => {
-      if (statusFilter.value === 'active') return project.isActive
-      if (statusFilter.value === 'completed') return !project.isActive
-      return true
+      if (statusFilter.value === "active") return project.isActive;
+      if (statusFilter.value === "completed") return !project.isActive;
+      return true;
     })
     .filter((project) => {
-      if (!term) return true
+      if (!term) return true;
       return [project.name, project.projectType, project.siteManagerName, project.description]
         .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(term))
+        .some((value) => value.toLowerCase().includes(term));
     })
     .sort((a, b) => {
-      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
-      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
 
-      if (sortOrder.value === 'newest') {
-        return bTime - aTime
+      if (sortOrder.value === "newest") {
+        return bTime - aTime;
       }
 
-      return aTime - bTime
-    })
-})
+      return aTime - bTime;
+    });
+});
 
-const activeProjects = computed(() =>
-  filterProjects.value.filter((project) => project.isActive)
-)
+const activeProjects = computed(() => filterProjects.value.filter((project) => project.isActive));
 
 const completedProjects = computed(() =>
-  filterProjects.value.filter((project) => !project.isActive)
-)
+  filterProjects.value.filter((project) => !project.isActive),
+);
 
 function setStatusFilter(value) {
-  statusFilter.value = value
+  statusFilter.value = value;
 }
 
 function setSortOrder(value) {
-  sortOrder.value = value
+  sortOrder.value = value;
 }
 
 function editProject(project) {
-  console.log(project)
+  console.log(project);
 }
 
 function showHistory(project) {
-  console.log(project)
+  console.log(project);
 }
 </script>
 
 <template>
-  <section class="projects-overview">
+  <section class="section-content projects-overview">
     <div class="projects-overview__top">
       <h1 class="projects-overview__title">Projekt Oversigt</h1>
 
       <div class="projects-overview__controls">
         <div class="projects-overview__search">
-          <input
-            v-model="search"
-            type="text"
-            placeholder="Search"
-          />
+          <input v-model="search" type="text" placeholder="Search" />
           <img
             class="projects-overview__search-icon"
             src="@/assets/icons/Search.svg"
@@ -87,10 +81,7 @@ function showHistory(project) {
         <div class="projects-overview__filters">
           <button
             type="button"
-            :class="[
-              'projects-overview__chip',
-              { 'projects-overview__chip--active': statusFilter === 'active' }
-            ]"
+            :class="['chip', { 'chip--active': statusFilter === 'active' }]"
             @click="setStatusFilter('active')"
           >
             Aktive
@@ -98,10 +89,7 @@ function showHistory(project) {
 
           <button
             type="button"
-            :class="[
-              'projects-overview__chip',
-              { 'projects-overview__chip--active': statusFilter === 'completed' }
-            ]"
+            :class="['chip', { 'chip--active': statusFilter === 'completed' }]"
             @click="setStatusFilter('completed')"
           >
             Afsluttet
@@ -109,10 +97,7 @@ function showHistory(project) {
 
           <button
             type="button"
-            :class="[
-              'projects-overview__chip',
-              { 'projects-overview__chip--active': sortOrder === 'newest' }
-            ]"
+            :class="['chip', { 'chip--active': sortOrder === 'newest' }]"
             @click="setSortOrder('newest')"
           >
             Nyeste
@@ -120,10 +105,7 @@ function showHistory(project) {
 
           <button
             type="button"
-            :class="[
-              'projects-overview__chip',
-              { 'projects-overview__chip--active': sortOrder === 'oldest' }
-            ]"
+            :class="['chip', { 'chip--active': sortOrder === 'oldest' }]"
             @click="setSortOrder('oldest')"
           >
             Ældste
@@ -173,9 +155,6 @@ function showHistory(project) {
 @use "../assets/styles/variables" as *;
 
 .projects-overview {
-  padding: $spacing-xl;
-  font-family: $font-family;
-
   &__top {
     display: flex;
     flex-direction: column;
@@ -234,7 +213,7 @@ function showHistory(project) {
 
   &__new-button {
     background: $accent-2;
-    border: 1px sollid $border-color;
+    border: 1px solid $border-color;
     color: #fff;
     padding: $spacing-xxs $spacing-sm;
     border-radius: 5px;
@@ -252,24 +231,8 @@ function showHistory(project) {
     display: inline-block;
   }
 
-  &__chip {
-    border: 1px solid $border-color;
-    background: #fff;
-    color: $primary;
-    padding: $spacing-xxs $spacing-sm;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  &__chip--active {
-    background: $accent-2;
-    color: #fff;
-    border-color: $accent-2;
-  }
-
   &__section {
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-md;
   }
 
   &__section-title {

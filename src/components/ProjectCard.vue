@@ -109,7 +109,7 @@ function openDashboard(project) {
       padding: $spacing-xs $spacing-sm;
       border-radius: 8px;
       background: $secondary;
-      color: $primary;
+      color: $textcolor-1;
       font-size: 14px;
       font-weight: $h2-weight;
     }
@@ -139,7 +139,7 @@ function openDashboard(project) {
       border-radius: 8px;
       padding: $spacing-xs $spacing-sm;
       background: $secondary;
-      color: $primary;
+      color: $textcolor-1;
       font-family: $font-family;
       font-size: 15px;
       font-weight: $h2-weight;
@@ -161,13 +161,13 @@ function openDashboard(project) {
   padding: $spacing-xs $spacing-sm;
   border-radius: 8px;
   background: $accent-1;
-  color: $primary;
+  color: $textcolor-1;
   font-size: 14px;
   font-weight: $h2-weight;
 }
 
 .history-btn {
   background: $accent-1 !important;
-  color: $primary;
+  color: $textcolor-1;
 }
 </style>

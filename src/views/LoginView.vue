@@ -99,20 +99,20 @@ async function login() {
 
   &__logo {
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: $spacing-xl;
   }
 
   &__form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: $spacing-sm;
   }
 
   &__input {
     width: 100%;
-    padding: 0.9rem 1rem;
-    border-radius: 8px;
+    padding: $spacing-sm $spacing-sm;
+    border-radius: $radius-md;
     border: none;
     font-size: $body-size;
     outline: none;
@@ -125,11 +125,11 @@ async function login() {
 
   &__button {
     width: 100%;
-    padding: 0.9rem 1rem;
+    padding: $spacing-sm $spacing-sm;
     border: none;
-    border-radius: 5px;
+    border-radius: $radius-sm;
     cursor: pointer;
-    color: white;
+    color: $textcolor-2;
     background-color: $primary;
     font-size: $body-size;
     font-weight: $h3-weight;
@@ -142,8 +142,8 @@ async function login() {
 
   &__error {
     margin: 0;
-    color: #b30000;
-    font-size: 0.9rem;
+    color: $error;
+    font-size: $body-size;
   }
 
   &__forgot-password {

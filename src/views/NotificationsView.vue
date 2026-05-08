@@ -1,10 +1,9 @@
-<script setup>
-</script>
+<script setup></script>
 
 <!-- TODO: Skal senere renderes dynamisk via notifications som "nice to have funktionalitet"-->
 <template>
-  <section class="notifications-page">
-    <h1> Mine Notifikationer</h1>
+  <section class="section-content notifications-page">
+    <h1>Mine Notifikationer</h1>
     <section class="notifications-list">
       <article class="notification-item">
         <div class="notification-item__icon">
@@ -54,7 +53,7 @@
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/styles/variables' as *;
+@use "@/assets/styles/variables" as *;
 
 h1 {
   margin: 0 0 36px;
@@ -66,7 +65,6 @@ h1 {
 .notifications-page {
   width: 100%;
   min-height: 100%;
-  padding: $spacing-sm $spacing-xl $spacing-xl;
   font-family: $font-family;
 }
 

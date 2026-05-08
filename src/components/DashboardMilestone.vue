@@ -17,11 +17,7 @@
   <p v-if="store.loading">Indlæser milepæle...</p>
 
   <div v-else class="milestones-wrapper">
-    <div
-      v-for="(column, colIndex) in store.milestones"
-      :key="column.id"
-      class="milestone-column"
-    >
+    <div v-for="(column, colIndex) in store.milestones" :key="column.id" class="milestone-column">
       <div class="header" :class="{ 'header--with-icon': column.icon }">
         <span v-if="column.icon" class="milestone-icon" v-html="iconSvg(column.icon)"></span>
         <div>
@@ -56,36 +52,18 @@
           <option value="færdig">Færdig</option>
         </select>
 
-        <span
-          v-else
-          :class="statusClass(item.status)"
-        >
+        <span v-else :class="statusClass(item.status)">
           {{ statusLabel(item.status) }}
         </span>
 
         <!-- DELETE -->
-        <button
-          v-if="editMode[colIndex]"
-          class="delete"
-          @click="remove(colIndex, index)"
-        >
-          ✕
-        </button>
+        <button v-if="editMode[colIndex]" class="delete" @click="remove(colIndex, index)">✕</button>
       </div>
 
       <!-- ADD -->
-      <button
-        v-if="editMode[colIndex]"
-        class="add"
-        @click="add(colIndex)"
-      >
-        + Tilføj milepæl
-      </button>
+      <button v-if="editMode[colIndex]" class="add" @click="add(colIndex)">+ Tilføj milepæl</button>
 
-      <div
-        class="progress"
-        :style="{ '--progress': `${store.progress(column.items)}%` }"
-      >
+      <div class="progress" :style="{ '--progress': `${store.progress(column.items)}%` }">
         <span>{{ store.progress(column.items) }}% færdig</span>
         <div class="progress-bar"></div>
       </div>
@@ -136,13 +114,13 @@ watch(
     editMode.length = 0;
     cols.forEach(() => editMode.push(false));
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 /**
  * Global editing state
  */
-const editing = computed(() => editMode.every(e => e));
+const editing = computed(() => editMode.every((e) => e));
 
 /**
  * Toggle alle kolonner
@@ -222,7 +200,7 @@ const statusClass = (status) => `status ${status}`;
 
 .milestones-wrapper {
   display: flex;
-  gap: $dashboard-milestone-gap;
+  gap: $spacing-md;
   margin-bottom: $dashboard-section-gap;
 }
 

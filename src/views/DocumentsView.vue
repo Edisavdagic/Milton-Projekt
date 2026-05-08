@@ -164,12 +164,11 @@ const visibleDocuments = computed(() => {
   });
 });
 
-
 onMounted(loadDocuments);
 </script>
 
 <template>
-  <section class="documents-page">
+  <section class="section-content documents-page">
     <header class="documents-page__header">
       <h1 class="documents-page__title">Dokumenter</h1>
 
@@ -181,8 +180,18 @@ onMounted(loadDocuments);
             type="search"
             placeholder="Søg i dokumenter"
           />
-          <svg class="documents-page__search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          <svg
+            class="documents-page__search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
           </svg>
         </div>
 
@@ -208,7 +217,7 @@ onMounted(loadDocuments);
           ref="fileInput"
           type="file"
           accept=".pdf,image/*"
-          style="display:none"
+          style="display: none"
           @change="onFileChosen"
         />
         <button
@@ -217,11 +226,7 @@ onMounted(loadDocuments);
           :disabled="isUploading"
           @click="fileInput.click()"
         >
-        <img
-          class="documents-page__upload-icon"
-          src="@/assets/icons/File 2.svg"
-          alt="Fil ikon"
-        />
+          <img class="documents-page__upload-icon" src="@/assets/icons/File 2.svg" alt="Fil ikon" />
           {{ isUploading ? "Uploader..." : "Tilføj fil" }}
         </button>
       </div>
@@ -244,8 +249,15 @@ onMounted(loadDocuments);
           />
 
           <div class="upload-modal__actions">
-            <button class="upload-modal__cancel" type="button" @click="cancelUpload">Annuller</button>
-            <button class="upload-modal__confirm" type="button" :disabled="isUploading" @click="confirmUpload">
+            <button class="upload-modal__cancel" type="button" @click="cancelUpload">
+              Annuller
+            </button>
+            <button
+              class="upload-modal__confirm"
+              type="button"
+              :disabled="isUploading"
+              @click="confirmUpload"
+            >
               {{ isUploading ? "Uploader..." : "Upload" }}
             </button>
           </div>
@@ -290,11 +302,34 @@ onMounted(loadDocuments);
             <td class="documents-page__description">{{ document.beskrivelse }}</td>
             <td>
               <div class="documents-page__type">
-                <svg v-if="document.type.key === 'image'" class="documents-page__type-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                <svg
+                  v-if="document.type.key === 'image'"
+                  class="documents-page__type-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
                 </svg>
-                <svg v-else class="documents-page__type-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                <svg
+                  v-else
+                  class="documents-page__type-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
                 </svg>
                 <span class="documents-page__type-label">{{ document.type.label }}</span>
               </div>
@@ -311,27 +346,25 @@ onMounted(loadDocuments);
 @use "../assets/styles/variables" as *;
 
 .documents-page {
-  min-height: 100vh;
-  padding: 2rem;
   background: $secondary;
+  padding-bottom: $spacing-sm;
 
   &__header {
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
+    gap: $spacing-sm;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    margin-bottom: $spacing-md;
   }
 
   &__title {
     margin: 0;
-    font-size: 2.25rem;
     color: #1f1f1f;
   }
 
   &__controls {
     display: flex;
-    gap: 0.75rem;
+    gap: $spacing-s;
     flex-wrap: wrap;
   }
 
@@ -348,7 +381,7 @@ onMounted(loadDocuments);
     background-color: #fff;
     min-height: 2.5rem;
     padding: 0 2.2rem 0 0.75rem;
-    font-size: 0.95rem;
+    font-size: $body-size;
     width: 100%;
 
     &::-webkit-search-cancel-button {
@@ -359,8 +392,8 @@ onMounted(loadDocuments);
   &__search-icon {
     position: absolute;
     right: 0.7rem;
-    width: 1rem;
-    height: 1rem;
+    width: $spacing-sm;
+    height: $spacing-sm;
     color: #909090;
     pointer-events: none;
     flex-shrink: 0;
@@ -370,12 +403,12 @@ onMounted(loadDocuments);
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: $spacing-xs;
     border: 1px solid #d2cecb;
-    border-radius: 20px;
+    border-radius: $radius-xxxl;
     background-color: #fff;
-    padding: 0 0.9rem;
-    min-height: 2.5rem;
+    padding: 0 $spacing-sm;
+    min-height: $spacing-vl;
     cursor: pointer;
     user-select: none;
 
@@ -385,16 +418,16 @@ onMounted(loadDocuments);
   }
 
   &__filter-icon {
-    width: 1rem;
-    height: 1rem;
-    color: #505050;
+    width: $spacing-sm;
+    height: $spacing-sm;
+    color: $textcolor-5;
     flex-shrink: 0;
     pointer-events: none;
   }
 
   &__filter-label {
-    font-size: 0.95rem;
-    color: #1f1f1f;
+    font-size: $spacing-sm;
+    color: $textcolor-1;
     white-space: nowrap;
     pointer-events: none;
   }
@@ -411,30 +444,31 @@ onMounted(loadDocuments);
   &__table-wrap {
     overflow: auto;
     border: 1px solid #d7d3d0;
-    border-radius: 0.75rem;
-    background-color: #fff;
+    border-radius: $radius-xl;
+    background-color: $textcolor-2;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
   }
 
   &__table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
 
     th,
     td {
       text-align: left;
-      padding: 0.75rem;
+      padding: $spacing-s;
       border-bottom: 1px solid #ece9e7;
-      font-size: 0.95rem;
+      font-size: $body-size;
       white-space: nowrap;
+      max-width: 352px;
     }
 
     th {
-      font-size: 0.8rem;
-      letter-spacing: 0.02em;
+      font-size: $small-size;
       text-transform: uppercase;
-      background-color: #fff;
-      color: #505050;
+      background-color: $textcolor-2;
+      color: $textcolor-4;
     }
 
     tbody tr:nth-child(odd) {
@@ -443,9 +477,10 @@ onMounted(loadDocuments);
   }
 
   &__name {
-    color: #1f1f1f;
+    color: $textcolor-1;
     font-weight: $h2-weight;
     text-decoration: none;
+    max-width: 352px;
 
     &:hover {
       color: $accent-2;
@@ -454,8 +489,8 @@ onMounted(loadDocuments);
   }
 
   &__description {
-    color: #5f5f5f;
-    max-width: 22rem;
+    color: $textcolor-4;
+    max-width: 352px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -463,58 +498,58 @@ onMounted(loadDocuments);
   &__type {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: $spacing-xs;
   }
 
   &__type-icon {
-    width: 1.1rem;
-    height: 1.1rem;
-    color: #909090;
+    width: $spacing-sm;
+    height: $spacing-sm;
+    color: $textcolor-5;
     flex-shrink: 0;
   }
 
   &__type-label {
-    font-size: 0.9rem;
-    color: #505050;
+    font-size: $body-size;
+    color: $textcolor-4;
   }
 
   &__status {
     margin: 1rem 0;
-    color: #4b5563;
+    color: $textcolor-4;
 
     &--error {
-      color: #991b1b;
+      color: $error;
     }
   }
 
   &__retry {
-    margin-top: 0.5rem;
+    margin-top: $spacing-xs;
     background-color: $primary;
-    color: #fff;
+    color: textcolor-2;
     border: none;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    border-radius: $radius-md;
+    padding: $spacing-xs $spacing-s;
     cursor: pointer;
   }
 
   &__upload-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: $spacing-xs;
     background-color: $primary;
-    color: #fff;
+    color: $textcolor-2;
     border: none;
-    border-radius: 20px;
-    padding: 0 1rem;
-    min-height: 2.5rem;
-    font-size: 0.95rem;
+    border-radius: $radius-xxxl;
+    padding: 0 $spacing-sm;
+    min-height: $spacing-vl;
+    font-size: $body-size;
     font-family: inherit;
     cursor: pointer;
     white-space: nowrap;
 
     svg {
-      width: 1rem;
-      height: 1rem;
+      width: $spacing-sm;
+      height: $spacing-sm;
       flex-shrink: 0;
     }
 
@@ -531,7 +566,7 @@ onMounted(loadDocuments);
 
 @media (max-width: 768px) {
   .documents-page {
-    padding: 1rem;
+    padding: $spacing-sm;
 
     &__search-wrap {
       min-width: 100%;
@@ -563,42 +598,42 @@ onMounted(loadDocuments);
   }
 
   background: #fff;
-  border-radius: 1rem;
-  padding: 2rem;
-  width: min(28rem, 90vw);
+  border-radius: $radius-xl;
+  padding: $spacing-sm;
+  width: min(444px, 90vw);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: $spacing-s;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 
   &__title {
     margin: 0;
-    font-size: 1.2rem;
-    color: #1f1f1f;
+    font-size: $h5-size;
+    color: $textcolor-1;
   }
 
   &__filename {
     margin: 0;
-    font-size: 0.9rem;
-    color: #505050;
-    background: #f4f3f3;
-    border-radius: 0.5rem;
-    padding: 0.4rem 0.75rem;
+    font-size: $body-size;
+    color: $textcolor-4;
+    background: $secondary;
+    border-radius: $radius-md;
+    padding: $radius-sm $spacing-s;
     word-break: break-all;
   }
 
   &__label {
-    font-size: 0.85rem;
+    font-size: $small-size;
     font-weight: $h2-weight;
-    color: #1f1f1f;
+    color: $textcolor-1;
   }
 
   &__textarea {
     resize: vertical;
     border: 1px solid #d2cecb;
-    border-radius: 0.5rem;
-    padding: 0.6rem 0.75rem;
-    font-size: 0.95rem;
+    border-radius: $radius-md;
+    padding: $radius-lg $spacing-s;
+    font-size: $body-size;
     font-family: inherit;
     width: 100%;
     box-sizing: border-box;
@@ -612,23 +647,23 @@ onMounted(loadDocuments);
   &__actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
+    gap: $spacing-xs;
+    margin-top: $spacing-xxs;
   }
 
   &__cancel {
     background: none;
     border: 1px solid #d2cecb;
-    border-radius: 20px;
-    padding: 0 1rem;
-    min-height: 2.5rem;
-    font-size: 0.95rem;
+    border-radius: $radius-md;
+    padding: 0 $spacing-sm;
+    min-height: $spacing-md;
+    font-size: $body-size;
     font-family: inherit;
     cursor: pointer;
-    color: #505050;
+    color: $textcolor-4;
 
     &:hover {
-      border-color: #a09a97;
+      border-color: $accent-1;
     }
   }
 
@@ -636,10 +671,10 @@ onMounted(loadDocuments);
     background-color: $primary;
     color: #fff;
     border: none;
-    border-radius: 20px;
-    padding: 0 1.25rem;
-    min-height: 2.5rem;
-    font-size: 0.95rem;
+    border-radius: $radius-md;
+    padding: 0 $spacing-md;
+    min-height: $spacing-vl;
+    font-size: $body-size;
     font-family: inherit;
     cursor: pointer;
 

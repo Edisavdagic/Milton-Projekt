@@ -25,11 +25,7 @@
     />
 
     <div class="gallery">
-      <div
-        v-for="image in images"
-        :key="image.id"
-        class="card"
-      >
+      <div v-for="image in images" :key="image.id" class="card">
         <img :src="image.src" :alt="image.name || 'Uploaded image'" />
 
         <button
@@ -54,14 +50,7 @@ import { useAuthStore } from "@/stores/auth";
 const route = useRoute();
 const authStore = useAuthStore();
 const projectId = computed(() => route.params.projectId);
-const {
-  images,
-  uploading,
-  loadImages,
-  addImage,
-  removeImage,
-  cleanup,
-} = useImages(projectId);
+const { images, uploading, loadImages, addImage, removeImage, cleanup } = useImages(projectId);
 
 const editing = ref(false);
 const fileInput = ref(null);
@@ -163,15 +152,14 @@ const handleRemoveImage = async (id) => {
 /* Gallery */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, minmax($dashboard-gallery-card-min-width, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-m;
 }
 
 /* Cards */
 .card {
   position: relative;
-  min-width: 0;
-  height: $dashboard-gallery-card-height;
+  height: 219px;
   border-radius: $radius-xl;
   overflow: hidden;
   background: $tertiary;

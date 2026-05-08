@@ -10,7 +10,9 @@ const route = useRoute();
 const isChatOpen = ref(false);
 
 const showBackToProjectOverview = computed(
-  () => authStore.isAdmin && ["dashboard", "calendar", "documents", "notifications", "history"].includes(route.name)
+  () =>
+    authStore.isAdmin &&
+    ["dashboard", "calendar", "documents", "notifications", "history"].includes(route.name),
 );
 
 const goToProjectOverview = () => {
@@ -35,44 +37,42 @@ defineProps({
 
 <template>
   <header class="topbarNav">
-    <div class="address-pill">
+    <div class="topbarNav__address-pill">
       <button
         v-if="showBackToProjectOverview"
-        class="icon-button topbar-back"
+        class="topbarNav__back"
         @click="goToProjectOverview"
         type="button"
       >
         <img src="@/assets/icons/Arrow.svg" alt="Tilbage til projektoverview" />
       </button>
-      <p>{{ projectAddress }}</p>
+      <h4 class="topbarNav__address">{{ projectAddress }}</h4>
     </div>
 
-    <div class="topbar-actions">
-      <button class="icon-button" @click="isChatOpen = !isChatOpen">
-        <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
-      </button>
-
-      <button class="icon-button" @click="goToNotifications">
-        <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
-      </button>
-      <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
-      <div class="topbar-user">
-      <div class="user-meta">
-        <span class="user-name">{{ currentUser.name }}</span>
-        <span class="user-email">{{ currentUser.email }}</span>
+    <div class="topbarNav__actions">
+      <div class="topbarNav__icons">
+        <button class="topbarNav__icon-button" @click="isChatOpen = !isChatOpen">
+          <img src="@/assets/icons/Message.svg" alt="Besked ikon" />
+        </button>
+        <button class="topbarNav__icon-button" @click="goToNotifications">
+          <img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
+        </button>
+        <img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
       </div>
 
-      <div class="language-switch">
-        <img src="@/assets/icons/Globe.svg" alt="Sprog ikon" />
-        <span>Sprog</span>
+      <div class="topbarNav__user">
+        <div class="topbarNav__user-meta">
+          <span class="topbarNav__user-name">{{ currentUser.name }}</span>
+          <span class="topbarNav__user-email">{{ currentUser.email }}</span>
+        </div>
+        <div class="topbarNav__language-switch">
+          <img src="@/assets/icons/Globe.svg" alt="Sprog ikon" />
+          <span>Sprog</span>
+        </div>
       </div>
     </div>
-    </div>
 
-    <ChatWidget
-      :is-open="isChatOpen"
-      @close="isChatOpen = false"
-    />
+    <ChatWidget :is-open="isChatOpen" @close="isChatOpen = false" />
   </header>
 </template>
 
