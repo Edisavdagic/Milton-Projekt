@@ -10,7 +10,7 @@ const route = useRoute();
 const isChatOpen = ref(false);
 
 const showBackToProjectOverview = computed(
-  () => authStore.isAdmin && ["dashboard", "calendar", "documents", "notifications"].includes(route.name)
+  () => authStore.isAdmin && ["dashboard", "calendar", "documents", "notifications", "history"].includes(route.name)
 );
 
 const goToProjectOverview = () => {
