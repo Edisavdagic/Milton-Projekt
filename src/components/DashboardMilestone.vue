@@ -72,11 +72,11 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch, onMounted } from "vue";
+import { reactive, computed, watch, onMounted } from 'vue';
 
-import hammerIcon from "@/assets/icons/hammer-solid.png";
-import plugIcon from "@/assets/icons/plug-solid.png";
-import paintRollerIcon from "@/assets/icons/paint-roller-solid.png";
+import hammerIcon from '@/assets/icons/hammer-solid.png';
+import plugIcon from '@/assets/icons/plug-solid.png';
+import paintRollerIcon from '@/assets/icons/paint-roller-solid.png';
 
 const ICONS = {
   hammer: hammerIcon,
@@ -86,11 +86,11 @@ const ICONS = {
 
 const iconSvg = (name) => {
   const src = ICONS[name];
-  return src ? `<img src="${src}" width="18" height="18" alt="${name}" />` : "";
+  return src ? `<img src="${src}" width="18" height="18" alt="${name}" />` : '';
 };
-import { useRoute } from "vue-router";
-import { useMilestoneStore } from "@/stores/milestones";
-import { useAuthStore } from "@/stores/auth";
+import { useRoute } from 'vue-router';
+import { useMilestoneStore } from '@/stores/milestones';
+import { useAuthStore } from '@/stores/auth';
 
 const store = useMilestoneStore();
 const route = useRoute();
@@ -145,9 +145,9 @@ const add = (col) => {
  * Status helpers
  */
 const statusMap = {
-  færdig: "Færdig",
-  igang: "I gang",
-  ikke: "Ikke begyndt",
+  færdig: 'Færdig',
+  igang: 'I gang',
+  ikke: 'Ikke begyndt',
 };
 
 const statusLabel = (status) => statusMap[status] ?? status;

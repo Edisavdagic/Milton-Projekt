@@ -136,16 +136,16 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from "vue";
-import { useMilestoneStore } from "@/stores/milestones";
-import { useAuthStore } from "@/stores/auth";
+import { computed, reactive, ref } from 'vue';
+import { useMilestoneStore } from '@/stores/milestones';
+import { useAuthStore } from '@/stores/auth';
 
 const store = useMilestoneStore();
 const authStore = useAuthStore();
 
 /* STATE (UI only) */
-const search = ref("");
-const filter = ref("");
+const search = ref('');
+const filter = ref('');
 const editDetails = ref(false);
 const actorDrafts = reactive({});
 
@@ -157,8 +157,8 @@ const actorList = (task) => {
     return task.actors.map((actor) => String(actor).trim()).filter(Boolean);
   }
 
-  if (typeof task.actors === "string") {
-    return task.actors.split(",").map((actor) => actor.trim()).filter(Boolean);
+  if (typeof task.actors === 'string') {
+    return task.actors.split(',').map((actor) => actor.trim()).filter(Boolean);
   }
 
   return [];
@@ -173,14 +173,14 @@ const addActor = async (task) => {
 
   const actors = actorList(task);
   const actorExists = actors.some(
-    (currentActor) => currentActor.toLowerCase() === actor.toLowerCase()
+    (currentActor) => currentActor.toLowerCase() === actor.toLowerCase(),
   );
 
   if (!actorExists) {
     await store.updateActors(task.id, [...actors, actor]);
   }
 
-  actorDrafts[task.id] = "";
+  actorDrafts[task.id] = '';
 };
 
 const removeActor = async (task, actorIndex) => {
@@ -198,7 +198,7 @@ const filteredTasks = computed(() => {
       t.title,
       t.column,
       ...actorList(t),
-    ].join(" ").toLowerCase();
+    ].join(' ').toLowerCase();
 
     const matchesSearch = searchableText.includes(search.value.toLowerCase());
 
@@ -208,9 +208,9 @@ const filteredTasks = computed(() => {
 
 /* LABELS */
 const statusMap = {
-  færdig: "Færdig",
-  igang: "I gang",
-  ikke: "Ikke begyndt",
+  færdig: 'Færdig',
+  igang: 'I gang',
+  ikke: 'Ikke begyndt',
 };
 
 const statusLabel = (status) => statusMap[status] ?? status;

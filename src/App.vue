@@ -1,21 +1,21 @@
 <script setup>
-import { computed } from "vue";
-import { RouterView } from "vue-router";
-import SidebarNav from "@/components/SidebarNav.vue";
-import TopbarNav from "@/components/TopbarNav.vue";
-import { useAuthStore } from "@/stores/auth";
-import { useProjectsStore } from "@/stores/project";
+import { computed } from 'vue';
+import { RouterView } from 'vue-router';
+import SidebarNav from '@/components/SidebarNav.vue';
+import TopbarNav from '@/components/TopbarNav.vue';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
 
 const authStore = useAuthStore();
 const projectsStore = useProjectsStore();
 
 const user = computed(() => ({
-  name: authStore.profile?.name || "Gæst",
-  email: authStore.user?.email || "Ikke logget ind",
+  name: authStore.profile?.name || 'Gæst',
+  email: authStore.user?.email || 'Ikke logget ind',
 }));
 
-const projectName = computed(() => projectsStore.currentProject?.name || "");
-const projectId = computed(() => projectsStore.currentProject?.id || "");
+const projectName = computed(() => projectsStore.currentProject?.name || '');
+const projectId = computed(() => projectsStore.currentProject?.id || '');
 </script>
 
 <template>

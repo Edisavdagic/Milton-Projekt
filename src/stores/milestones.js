@@ -1,25 +1,25 @@
-import { defineStore } from 'pinia'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
-import { db } from '@/services/firebase'
+import { defineStore } from 'pinia';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
+import { db } from '@/services/firebase';
 
-const GROUP_IDS = ['construction', 'framing', 'interior']
+const GROUP_IDS = ['construction', 'framing', 'interior'];
 
 function toDateString(value) {
-  if (!value) return ''
-  if (value?.toDate) return value.toDate().toISOString().split('T')[0]
-  return value
+  if (!value) return '';
+  if (value?.toDate) return value.toDate().toISOString().split('T')[0];
+  return value;
 }
 
 function toActorList(value) {
   if (Array.isArray(value)) {
-    return value.map((actor) => String(actor).trim()).filter(Boolean)
+    return value.map((actor) => String(actor).trim()).filter(Boolean);
   }
 
   if (typeof value === 'string') {
-    return value.split(',').map((actor) => actor.trim()).filter(Boolean)
+    return value.split(',').map((actor) => actor.trim()).filter(Boolean);
   }
 
-  return []
+  return [];
 }
 
 export const useMilestoneStore = defineStore('milestones', {
@@ -33,33 +33,33 @@ export const useMilestoneStore = defineStore('milestones', {
   getters: {
     flatTasks: (state) =>
       state.milestones.flatMap((col) =>
-        col.items.map((item) => ({ ...item, column: col.title }))
+        col.items.map((item) => ({ ...item, column: col.title })),
       ),
 
     progress: () => (items) => {
-      if (!items.length) return 0
-      const done = items.filter((i) => i.status === 'færdig').length
-      return Math.round((done / items.length) * 100)
+      if (!items.length) return 0;
+      const done = items.filter((i) => i.status === 'færdig').length;
+      return Math.round((done / items.length) * 100);
     },
   },
 
   actions: {
     async fetchMilestones(projectId) {
-      this.loading = true
-      this.error = null
-      this.projectId = projectId
+      this.loading = true;
+      this.error = null;
+      this.projectId = projectId;
       try {
         this.milestones = await Promise.all(
           GROUP_IDS.map(async (groupId, idx) => {
-            const groupRef = doc(db, 'projects', projectId, 'milestoneGroups', groupId)
-            const milestonesRef = collection(db, 'projects', projectId, 'milestoneGroups', groupId, 'milestones')
+            const groupRef = doc(db, 'projects', projectId, 'milestoneGroups', groupId);
+            const milestonesRef = collection(db, 'projects', projectId, 'milestoneGroups', groupId, 'milestones');
 
             const [groupSnap, milestonesSnap] = await Promise.all([
               getDoc(groupRef),
               getDocs(milestonesRef),
-            ])
+            ]);
 
-            const groupData = groupSnap.data() ?? {}
+            const groupData = groupSnap.data() ?? {};
 
             return {
               id: idx + 1,
@@ -75,108 +75,108 @@ export const useMilestoneStore = defineStore('milestones', {
                 endDate: toDateString(d.data().endDate),
                 actors: toActorList(d.data().actors),
               })),
-            }
-          })
-        )
-        this.milestones.sort((a, b) => a.order - b.order)
+            };
+          }),
+        );
+        this.milestones.sort((a, b) => a.order - b.order);
       } catch (err) {
-        this.error = err.message
+        this.error = err.message;
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     },
 
     async updateTask(taskId, updates) {
       for (const col of this.milestones) {
-        const task = col.items.find((t) => t.id === taskId)
+        const task = col.items.find((t) => t.id === taskId);
         if (task) {
-          Object.assign(task, updates)
+          Object.assign(task, updates);
           if (this.projectId && !taskId.startsWith('local-')) {
             const taskRef = doc(
               db, 'projects', this.projectId,
               'milestoneGroups', col.groupId,
-              'milestones', taskId
-            )
-            await updateDoc(taskRef, updates)
+              'milestones', taskId,
+            );
+            await updateDoc(taskRef, updates);
           }
-          return
+          return;
         }
       }
     },
 
     async updateActors(taskId, value) {
-      await this.updateTask(taskId, { actors: toActorList(value) })
+      await this.updateTask(taskId, { actors: toActorList(value) });
     },
 
     async updateStartDate(taskId, date) {
-      await this.updateTask(taskId, { startDate: date })
+      await this.updateTask(taskId, { startDate: date });
     },
 
     async updateEndDate(taskId, date) {
-      await this.updateTask(taskId, { endDate: date })
+      await this.updateTask(taskId, { endDate: date });
     },
 
     async addItem(colIndex) {
-      const col = this.milestones[colIndex]
+      const col = this.milestones[colIndex];
       const item = {
         title: 'Ny milepæl',
         status: 'ikke',
         startDate: '',
         endDate: '',
         actors: [],
-      }
+      };
 
       if (this.projectId) {
         const milestonesRef = collection(
           db, 'projects', this.projectId,
           'milestoneGroups', col.groupId,
-          'milestones'
-        )
-        const itemRef = await addDoc(milestonesRef, item)
-        col.items.push({ id: itemRef.id, ...item })
-        return
+          'milestones',
+        );
+        const itemRef = await addDoc(milestonesRef, item);
+        col.items.push({ id: itemRef.id, ...item });
+        return;
       }
 
       col.items.push({
         id: `local-${Date.now()}`,
         ...item,
-      })
+      });
     },
 
     async removeItem(colIndex, itemIndex) {
-      const col = this.milestones[colIndex]
-      const item = col.items[itemIndex]
+      const col = this.milestones[colIndex];
+      const item = col.items[itemIndex];
 
-      if (!item) return
+      if (!item) return;
 
       if (this.projectId && !item.id.startsWith('local-')) {
         const itemRef = doc(
           db, 'projects', this.projectId,
           'milestoneGroups', col.groupId,
-          'milestones', item.id
-        )
-        await deleteDoc(itemRef)
+          'milestones', item.id,
+        );
+        await deleteDoc(itemRef);
       }
 
-      col.items.splice(itemIndex, 1)
+      col.items.splice(itemIndex, 1);
     },
 
     async updateItem(colIndex, itemIndex, data) {
-      const col = this.milestones[colIndex]
-      const item = col?.items[itemIndex]
+      const col = this.milestones[colIndex];
+      const item = col?.items[itemIndex];
 
-      if (!item) return
+      if (!item) return;
 
-      Object.assign(item, data)
+      Object.assign(item, data);
 
       if (this.projectId && !item.id.startsWith('local-')) {
         const itemRef = doc(
           db, 'projects', this.projectId,
           'milestoneGroups', col.groupId,
-          'milestones', item.id
-        )
-        await updateDoc(itemRef, data)
+          'milestones', item.id,
+        );
+        await updateDoc(itemRef, data);
       }
     },
   },
-})
+});

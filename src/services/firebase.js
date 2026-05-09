@@ -1,7 +1,7 @@
-import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,7 +18,7 @@ const missingConfigKeys = Object.entries(firebaseConfig)
 
 if (missingConfigKeys.length) {
   console.warn(
-    `[firebase] Missing env vars: ${missingConfigKeys.join(", ")}. Add them to your .env file.`,
+    `[firebase] Missing env vars: ${missingConfigKeys.join(', ')}. Add them to your .env file.`,
   );
 }
 

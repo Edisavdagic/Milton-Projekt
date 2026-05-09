@@ -1,12 +1,12 @@
 <script setup>
-import { computed } from "vue";
-import DashboardGallery from "@/components/DashboardGallery.vue";
-import DashboardMilestone from "@/components/DashboardMilestone.vue";
-import DashboardTaskList from "@/components/DashboardTaskList.vue";
-import { useProjectsStore } from "@/stores/project";
+import { computed } from 'vue';
+import DashboardGallery from '@/components/DashboardGallery.vue';
+import DashboardMilestone from '@/components/DashboardMilestone.vue';
+import DashboardTaskList from '@/components/DashboardTaskList.vue';
+import { useProjectsStore } from '@/stores/project';
 
 const projectsStore = useProjectsStore();
-const projectStatus = computed(() => projectsStore.currentProject?.statusText ?? "");
+const projectStatus = computed(() => projectsStore.currentProject?.statusText ?? '');
 </script>
 
 <template>

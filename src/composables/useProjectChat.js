@@ -1,10 +1,10 @@
-import { ref } from 'vue'
-import { db } from '@/services/firebase'
-import { useAuthStore } from '@/stores/auth'
+import { ref } from 'vue';
+import { db } from '@/services/firebase';
+import { useAuthStore } from '@/stores/auth';
 import {
   collection, collectionGroup, doc, getDoc, addDoc, setDoc,
   query, where, orderBy, onSnapshot, serverTimestamp,
-} from 'firebase/firestore'
+} from 'firebase/firestore';
 
 /**
  * @typedef {Object} ChatEntry
@@ -54,16 +54,16 @@ import {
  * @returns {UseChatReturn}
  */
 export function useChat() {
-  const authStore = useAuthStore()
+  const authStore = useAuthStore();
 
-  const chats = ref([])
-  const messages = ref([])
-  const loadingChats = ref(false)
-  const loadingMessages = ref(false)
-  const activeChatId = ref(null)
+  const chats = ref([]);
+  const messages = ref([]);
+  const loadingChats = ref(false);
+  const loadingMessages = ref(false);
+  const activeChatId = ref(null);
 
-  let unsubChats = null
-  let unsubMessages = null
+  let unsubChats = null;
+  let unsubMessages = null;
 
   /**
    * Subscribes to the chat threads for a specific project, limited to the
@@ -75,52 +75,52 @@ export function useChat() {
    * @returns {Promise<void>}
    */
   async function loadChats(projectId, memberUids) {
-    if (!projectId || !memberUids?.length) return
-    loadingChats.value = true
+    if (!projectId || !memberUids?.length) return;
+    loadingChats.value = true;
 
-    const myUid = authStore.user.uid
-    const otherUids = memberUids.filter(uid => uid !== myUid)
+    const myUid = authStore.user.uid;
+    const otherUids = memberUids.filter(uid => uid !== myUid);
 
     if (!otherUids.length) {
-      loadingChats.value = false
-      return
+      loadingChats.value = false;
+      return;
     }
 
-    let memberProfiles
+    let memberProfiles;
     try {
       memberProfiles = await Promise.all(
         otherUids.map(async uid => {
-          const snap = await getDoc(doc(db, 'Users', uid))
-          const data = snap.exists() ? snap.data() : {}
-          return { uid, name: data.name ?? data.email ?? uid, role: data.role ?? '' }
-        })
-      )
+          const snap = await getDoc(doc(db, 'Users', uid));
+          const data = snap.exists() ? snap.data() : {};
+          return { uid, name: data.name ?? data.email ?? uid, role: data.role ?? '' };
+        }),
+      );
     } catch (err) {
-      console.error('[useChat] Failed to fetch member profiles — check Firestore rules:', err)
-      loadingChats.value = false
-      return
+      console.error('[useChat] Failed to fetch member profiles — check Firestore rules:', err);
+      loadingChats.value = false;
+      return;
     }
 
-    if (unsubChats) unsubChats()
+    if (unsubChats) unsubChats();
 
     const chatsRef = query(
       collection(db, 'projects', projectId, 'chats'),
-      where('participants', 'array-contains', myUid)
-    )
+      where('participants', 'array-contains', myUid),
+    );
     unsubChats = onSnapshot(
       chatsRef,
       snapshot => {
-        const existingChats = {}
+        const existingChats = {};
         snapshot.forEach(d => {
-          const data = d.data()
+          const data = d.data();
           if (data.participants?.includes(myUid)) {
-            const otherUid = data.participants.find(p => p !== myUid)
+            const otherUid = data.participants.find(p => p !== myUid);
             existingChats[otherUid] = {
               lastMessage: data.lastMessage ?? '',
               lastMessageAt: data.lastMessageAt,
-            }
+            };
           }
-        })
+        });
 
         chats.value = memberProfiles.map(member => ({
           chatId: [myUid, member.uid].sort().join('_'),
@@ -129,12 +129,12 @@ export function useChat() {
           otherRole: member.role,
           lastMessage: existingChats[member.uid]?.lastMessage ?? null,
           lastMessageAt: existingChats[member.uid]?.lastMessageAt ?? null,
-        }))
+        }));
 
-        loadingChats.value = false
+        loadingChats.value = false;
       },
-      err => console.error('[useChat] Chats snapshot error:', err)
-    )
+      err => console.error('[useChat] Chats snapshot error:', err),
+    );
   }
 
   /**
@@ -145,23 +145,23 @@ export function useChat() {
    * @returns {void}
    */
   function loadAllChats() {
-    loadingChats.value = true
-    const myUid = authStore.user.uid
-    if (unsubChats) unsubChats()
+    loadingChats.value = true;
+    const myUid = authStore.user.uid;
+    if (unsubChats) unsubChats();
 
     const q = query(
       collectionGroup(db, 'chats'),
-      where('participants', 'array-contains', myUid)
-    )
+      where('participants', 'array-contains', myUid),
+    );
 
     unsubChats = onSnapshot(
       q,
       snapshot => {
-        const result = []
+        const result = [];
         snapshot.forEach(d => {
-          const data = d.data()
-          const otherUid = data.participants?.find(p => p !== myUid)
-          if (!otherUid) return
+          const data = d.data();
+          const otherUid = data.participants?.find(p => p !== myUid);
+          if (!otherUid) return;
           result.push({
             chatId: d.id,
             projectId: d.ref.parent.parent.id,
@@ -170,14 +170,14 @@ export function useChat() {
             otherRole: data.participantRoles?.[otherUid] ?? '',
             lastMessage: data.lastMessage ?? '',
             lastMessageAt: data.lastMessageAt,
-          })
-        })
-        result.sort((a, b) => (b.lastMessageAt?.toMillis?.() ?? 0) - (a.lastMessageAt?.toMillis?.() ?? 0))
-        chats.value = result
-        loadingChats.value = false
+          });
+        });
+        result.sort((a, b) => (b.lastMessageAt?.toMillis?.() ?? 0) - (a.lastMessageAt?.toMillis?.() ?? 0));
+        chats.value = result;
+        loadingChats.value = false;
       },
-      err => console.error('[useChat] All chats snapshot error:', err)
-    )
+      err => console.error('[useChat] All chats snapshot error:', err),
+    );
   }
 
   /**
@@ -190,14 +190,14 @@ export function useChat() {
    * @returns {void}
    */
   function loadMessages(projectId, chatId) {
-    if (unsubMessages) unsubMessages()
-    activeChatId.value = chatId
-    loadingMessages.value = true
+    if (unsubMessages) unsubMessages();
+    activeChatId.value = chatId;
+    loadingMessages.value = true;
 
     const q = query(
       collection(db, 'projects', projectId, 'chats', chatId, 'messages'),
-      orderBy('createdAt', 'asc')
-    )
+      orderBy('createdAt', 'asc'),
+    );
 
     unsubMessages = onSnapshot(q, snapshot => {
       const raw = snapshot.docs.map(d => ({
@@ -205,10 +205,10 @@ export function useChat() {
         text: d.data().text,
         sender: d.data().senderId === authStore.user.uid ? 'me' : 'them',
         createdAt: d.data().createdAt?.toDate() ?? new Date(),
-      }))
-      messages.value = injectDateSeparators(raw)
-      loadingMessages.value = false
-    })
+      }));
+      messages.value = injectDateSeparators(raw);
+      loadingMessages.value = false;
+    });
   }
 
   /**
@@ -224,15 +224,15 @@ export function useChat() {
    * @returns {Promise<void>}
    */
   async function sendMessage(projectId, chatId, text, otherUid, otherName, otherRole) {
-    const trimmed = text.trim()
-    if (!trimmed) return
+    const trimmed = text.trim();
+    if (!trimmed) return;
 
-    const myUid = authStore.user.uid
-    const myName = authStore.profile?.name ?? authStore.user.email
-    const myRole = authStore.profile?.role ?? ''
-    const participants = [myUid, otherUid].sort()
+    const myUid = authStore.user.uid;
+    const myName = authStore.profile?.name ?? authStore.user.email;
+    const myRole = authStore.profile?.role ?? '';
+    const participants = [myUid, otherUid].sort();
 
-    const chatRef = doc(db, 'projects', projectId, 'chats', chatId)
+    const chatRef = doc(db, 'projects', projectId, 'chats', chatId);
     await setDoc(chatRef, {
       participants,
       participantNames: { [myUid]: myName, [otherUid]: otherName },
@@ -240,7 +240,7 @@ export function useChat() {
       lastMessage: trimmed,
       lastMessageAt: serverTimestamp(),
       createdAt: serverTimestamp(),
-    }, { merge: true })
+    }, { merge: true });
 
     await addDoc(
       collection(db, 'projects', projectId, 'chats', chatId, 'messages'),
@@ -249,8 +249,8 @@ export function useChat() {
         senderId: myUid,
         senderName: myName,
         createdAt: serverTimestamp(),
-      }
-    )
+      },
+    );
   }
 
   /**
@@ -260,8 +260,8 @@ export function useChat() {
    * @returns {void}
    */
   function cleanup() {
-    if (unsubChats) { unsubChats(); unsubChats = null }
-    if (unsubMessages) { unsubMessages(); unsubMessages = null }
+    if (unsubChats) { unsubChats(); unsubChats = null; }
+    if (unsubMessages) { unsubMessages(); unsubMessages = null; }
   }
 
   return {
@@ -275,7 +275,7 @@ export function useChat() {
     loadMessages,
     sendMessage,
     cleanup,
-  }
+  };
 }
 
 /**
@@ -285,17 +285,17 @@ export function useChat() {
  * @returns {Array.<(MessageEntry|DateSeparator)>}
  */
 function injectDateSeparators(msgs) {
-  const result = []
-  let lastDate = null
+  const result = [];
+  let lastDate = null;
   for (const msg of msgs) {
     const dateStr = msg.createdAt.toLocaleDateString('da-DK', {
       weekday: 'long', day: 'numeric', month: 'short',
-    })
+    });
     if (dateStr !== lastDate) {
-      result.push({ id: `date-${dateStr}-${msg.id}`, type: 'date', text: dateStr })
-      lastDate = dateStr
+      result.push({ id: `date-${dateStr}-${msg.id}`, type: 'date', text: dateStr });
+      lastDate = dateStr;
     }
-    result.push(msg)
+    result.push(msg);
   }
-  return result
+  return result;
 }

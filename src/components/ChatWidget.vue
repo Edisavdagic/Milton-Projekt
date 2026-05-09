@@ -1,9 +1,9 @@
 <script setup>
-import { computed, ref, watch, onUnmounted } from "vue";
-import { useChat } from "@/composables/useProjectChat";
-import { useProjectsStore } from "@/stores/project";
+import { computed, ref, watch, onUnmounted } from 'vue';
+import { useChat } from '@/composables/useProjectChat';
+import { useProjectsStore } from '@/stores/project';
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const props = defineProps({
   isOpen: {
@@ -24,7 +24,7 @@ const projectsStore = useProjectsStore();
 const { chats, messages, loadChats, loadAllChats, loadMessages, sendMessage, cleanup } = useChat();
 
 const selectedChatId = ref(null);
-const newMessage = ref("");
+const newMessage = ref('');
 const isSending = ref(false);
 
 const selectedChat = computed(
@@ -60,7 +60,7 @@ const handleSend = async () => {
   if (isSending.value || !selectedChat.value || !newMessage.value.trim()) return;
   isSending.value = true;
   const text = newMessage.value;
-  newMessage.value = "";
+  newMessage.value = '';
   try {
     const projectId = selectedChat.value.projectId ?? props.projectId;
     await sendMessage(

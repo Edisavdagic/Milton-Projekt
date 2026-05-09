@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import ChatWidget from "@/components/ChatWidget.vue";
+import { computed, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import ChatWidget from '@/components/ChatWidget.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -12,15 +12,15 @@ const isChatOpen = ref(false);
 const showBackToProjectOverview = computed(
   () =>
     authStore.isAdmin &&
-    ["dashboard", "calendar", "documents", "notifications", "history"].includes(route.name),
+    ['dashboard', 'calendar', 'documents', 'notifications', 'history'].includes(route.name),
 );
 
 const goToProjectOverview = () => {
-  router.push({ name: "projectoverview" });
+  router.push({ name: 'projectoverview' });
 };
 
 const goToNotifications = () => {
-  router.push({ name: "notifications" });
+  router.push({ name: 'notifications' });
 };
 
 defineProps({
@@ -79,5 +79,4 @@ defineProps({
 <style scoped lang="scss">
 @import '@/assets/styles/components/_topbarNav.scss';
 </style>
-
 

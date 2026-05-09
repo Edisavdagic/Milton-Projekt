@@ -1,8 +1,8 @@
 <script setup>
-import { computed } from "vue";
-import { useRouter, RouterLink, useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { useProjectsStore } from "@/stores/project";
+import { computed } from 'vue';
+import { useRouter, RouterLink, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
 
 const router = useRouter();
 const route = useRoute();
@@ -10,22 +10,22 @@ const authStore = useAuthStore();
 const projectsStore = useProjectsStore();
 
 const currentProjectId = computed(
-  () => route.params.projectId || projectsStore.currentProjectId || ""
+  () => route.params.projectId || projectsStore.currentProjectId || '',
 );
 
 const isProjectRoute = computed(
   () =>
-    (currentProjectId.value && ["dashboard", "calendar", "documents", "history"].includes(route.name)) ||
-    (currentProjectId.value && route.name === "notifications")
+    (currentProjectId.value && ['dashboard', 'calendar', 'documents', 'history'].includes(route.name)) ||
+    (currentProjectId.value && route.name === 'notifications'),
 );
 
 const isAdminProjectOverview = computed(
-  () => authStore.isAdmin && route.name === "projectoverview"
+  () => authStore.isAdmin && route.name === 'projectoverview',
 );
 
 async function logout() {
   await authStore.signOutUser();
-  router.replace({ name: "login" });
+  router.replace({ name: 'login' });
 }
 </script>
 

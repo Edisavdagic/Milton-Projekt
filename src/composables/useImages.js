@@ -1,6 +1,6 @@
-import { ref, unref } from "vue";
-import { db, storage } from "@/services/firebase";
-import { useAuthStore } from "@/stores/auth";
+import { ref, unref } from 'vue';
+import { db, storage } from '@/services/firebase';
+import { useAuthStore } from '@/stores/auth';
 import {
   collection,
   deleteDoc,
@@ -10,13 +10,13 @@ import {
   query,
   serverTimestamp,
   setDoc,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
-} from "firebase/storage";
+} from 'firebase/storage';
 
 function normalizeProjectId(projectId) {
   const value = unref(projectId);
@@ -29,16 +29,16 @@ function toImage(docSnapshot) {
   return {
     id: docSnapshot.id,
     ...data,
-    src: data.src ?? data.url ?? "",
+    src: data.src ?? data.url ?? '',
     createdAt: data.createdAt?.toDate?.() ?? null,
   };
 }
 
 function sanitizeFileName(fileName) {
   return fileName
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9._-]/g, "_")
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9._-]/g, '_')
     .slice(0, 100);
 }
 
@@ -57,7 +57,7 @@ export function useImages(projectIdSource) {
   }
 
   function imageCollection(projectId) {
-    return collection(db, "projects", projectId, "images");
+    return collection(db, 'projects', projectId, 'images');
   }
 
   function cleanup() {
@@ -80,7 +80,7 @@ export function useImages(projectIdSource) {
 
     const imagesQuery = query(
       imageCollection(resolvedProjectId),
-      orderBy("createdAt", "desc"),
+      orderBy('createdAt', 'desc'),
     );
 
     unsubscribeImages = onSnapshot(
@@ -90,7 +90,7 @@ export function useImages(projectIdSource) {
         loading.value = false;
       },
       (err) => {
-        console.error("[useImages] Failed to load images:", err);
+        console.error('[useImages] Failed to load images:', err);
         error.value = err.message;
         loading.value = false;
       },
@@ -103,11 +103,11 @@ export function useImages(projectIdSource) {
     let uploadedFileRef = null;
 
     if (!projectId) {
-      throw new Error("Mangler projectId til billedupload.");
+      throw new Error('Mangler projectId til billedupload.');
     }
 
     if (!user?.uid) {
-      throw new Error("Du skal være logget ind for at uploade billeder.");
+      throw new Error('Du skal være logget ind for at uploade billeder.');
     }
 
     activeUploads.value += 1;
@@ -116,7 +116,7 @@ export function useImages(projectIdSource) {
 
     try {
       const imageDocRef = doc(imageCollection(projectId));
-      const cleanName = sanitizeFileName(file.name || "image");
+      const cleanName = sanitizeFileName(file.name || 'image');
       const path = `projects/${projectId}/images/${imageDocRef.id}/${cleanName}`;
       const fileRef = storageRef(storage, path);
 
@@ -143,7 +143,7 @@ export function useImages(projectIdSource) {
         await deleteObject(uploadedFileRef).catch(() => {});
       }
 
-      console.error("[useImages] Failed to upload image:", err);
+      console.error('[useImages] Failed to upload image:', err);
       error.value = err.message;
       throw err;
     } finally {
@@ -163,13 +163,13 @@ export function useImages(projectIdSource) {
     try {
       if (image?.storagePath) {
         await deleteObject(storageRef(storage, image.storagePath)).catch((err) => {
-          if (err.code !== "storage/object-not-found") throw err;
+          if (err.code !== 'storage/object-not-found') throw err;
         });
       }
 
-      await deleteDoc(doc(db, "projects", projectId, "images", id));
+      await deleteDoc(doc(db, 'projects', projectId, 'images', id));
     } catch (err) {
-      console.error("[useImages] Failed to remove image:", err);
+      console.error('[useImages] Failed to remove image:', err);
       error.value = err.message;
       throw err;
     }

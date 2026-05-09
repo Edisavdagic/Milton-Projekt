@@ -1,8 +1,8 @@
-import { computed, ref } from "vue";
-import { defineStore } from "pinia";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/services/firebase";
+import { computed, ref } from 'vue';
+import { defineStore } from 'pinia';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/services/firebase';
 
 /** @typedef {Object} FirebaseUser */
 /** @typedef {Function} FirebaseUnsubscribe */
@@ -29,7 +29,7 @@ import { auth, db } from "@/services/firebase";
  *
  * @returns {AuthStore}
  */
-export const useAuthStore = defineStore("auth", () => {
+export const useAuthStore = defineStore('auth', () => {
   /** @type {*} */
   const user = ref(null);
   /** @type {*} */
@@ -46,7 +46,7 @@ export const useAuthStore = defineStore("auth", () => {
   let initPromise = null;
 
   const isAuthenticated = computed(() => Boolean(user.value));
-  const isAdmin = computed(() => role.value === "admin");
+  const isAdmin = computed(() => role.value === 'admin');
 
   /** Clears any previously stored auth error message. */
   function clearError() {
@@ -65,7 +65,7 @@ export const useAuthStore = defineStore("auth", () => {
       return null;
     }
 
-    const userRef = doc(db, "Users", uid);
+    const userRef = doc(db, 'Users', uid);
     const userSnap = await getDoc(userRef);
 
     role.value = userSnap.exists() ? userSnap.data().role : null;
@@ -78,7 +78,7 @@ export const useAuthStore = defineStore("auth", () => {
       return null;
     }
 
-    const userRef = doc(db, "Users", uid);
+    const userRef = doc(db, 'Users', uid);
     const userSnap = await getDoc(userRef);
 
     profile.value = userSnap.exists() ? userSnap.data() : null;
@@ -108,7 +108,7 @@ export const useAuthStore = defineStore("auth", () => {
             await Promise.all([fetchRole(firebaseUser.uid), fetchProfile(firebaseUser.uid)]);
           } catch (err) {
             role.value = null;
-            error.value = err.message || "Role lookup failed.";
+            error.value = err.message || 'Role lookup failed.';
           }
         } else {
           role.value = null;
@@ -141,7 +141,7 @@ export const useAuthStore = defineStore("auth", () => {
       await Promise.all([fetchRole(credential.user.uid), fetchProfile(credential.user.uid)]);
       return credential.user;
     } catch (err) {
-      error.value = err.message || "Login failed.";
+      error.value = err.message || 'Login failed.';
       throw err;
     } finally {
       loading.value = false;
@@ -163,7 +163,7 @@ export const useAuthStore = defineStore("auth", () => {
       role.value = null;
       profile.value = null;
     } catch (err) {
-      error.value = err.message || "Sign out failed.";
+      error.value = err.message || 'Sign out failed.';
       throw err;
     } finally {
       loading.value = false;

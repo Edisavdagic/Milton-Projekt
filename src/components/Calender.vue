@@ -155,41 +155,41 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import dayjs from "dayjs";
-import { useMilestoneStore } from "@/stores/milestones";
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import dayjs from 'dayjs';
+import { useMilestoneStore } from '@/stores/milestones';
 
 const route = useRoute();
 const store = useMilestoneStore();
 
 const currentDate = ref(dayjs());
-const view = ref("week");
+const view = ref('week');
 const hasSetInitialDate = ref(false);
 
 const weekdayNames = [
-  "Søndag",
-  "Mandag",
-  "Tirsdag",
-  "Onsdag",
-  "Torsdag",
-  "Fredag",
-  "Lørdag",
+  'Søndag',
+  'Mandag',
+  'Tirsdag',
+  'Onsdag',
+  'Torsdag',
+  'Fredag',
+  'Lørdag',
 ];
 
 const monthNames = [
-  "januar",
-  "februar",
-  "marts",
-  "april",
-  "maj",
-  "juni",
-  "juli",
-  "august",
-  "september",
-  "oktober",
-  "november",
-  "december",
+  'januar',
+  'februar',
+  'marts',
+  'april',
+  'maj',
+  'juni',
+  'juli',
+  'august',
+  'september',
+  'oktober',
+  'november',
+  'december',
 ];
 
 const actorList = (task) => {
@@ -197,8 +197,8 @@ const actorList = (task) => {
     return task.actors.map((actor) => String(actor).trim()).filter(Boolean);
   }
 
-  if (typeof task.actors === "string") {
-    return task.actors.split(",").map((actor) => actor.trim()).filter(Boolean);
+  if (typeof task.actors === 'string') {
+    return task.actors.split(',').map((actor) => actor.trim()).filter(Boolean);
   }
 
   return [];
@@ -210,23 +210,23 @@ const parseDate = (value) => {
   }
 
   const parsed = dayjs(value);
-  return parsed.isValid() ? parsed.startOf("day") : null;
+  return parsed.isValid() ? parsed.startOf('day') : null;
 };
 
 const startOfWorkWeek = (date) => {
   const mondayOffset = (date.day() + 6) % 7;
-  return date.startOf("day").subtract(mondayOffset, "day");
+  return date.startOf('day').subtract(mondayOffset, 'day');
 };
 
 const formatDateRange = (start, end) => {
   const startMonth = monthNames[start.month()];
   const endMonth = monthNames[end.month()];
 
-  if (start.isSame(end, "month")) {
-    return `${start.format("D")}. ${startMonth} - ${end.format("D")}. ${endMonth} ${end.format("YYYY")}`;
+  if (start.isSame(end, 'month')) {
+    return `${start.format('D')}. ${startMonth} - ${end.format('D')}. ${endMonth} ${end.format('YYYY')}`;
   }
 
-  return `${start.format("D")}. ${startMonth} - ${end.format("D")}. ${endMonth} ${end.format("YYYY")}`;
+  return `${start.format('D')}. ${startMonth} - ${end.format('D')}. ${endMonth} ${end.format('YYYY')}`;
 };
 
 const formatEventPeriod = (start, end) => {
@@ -234,10 +234,10 @@ const formatEventPeriod = (start, end) => {
     const weekday = weekdayNames[date.day()].slice(0, 3);
     const month = monthNames[date.month()].slice(0, 3);
 
-    return `${weekday} ${date.format("D")}. ${month}`;
+    return `${weekday} ${date.format('D')}. ${month}`;
   };
 
-  if (start.isSame(end, "day")) {
+  if (start.isSame(end, 'day')) {
     return formatDate(start);
   }
 
@@ -254,19 +254,19 @@ const taskEvents = computed(() =>
         return null;
       }
 
-      const startsBeforeEnd = firstDate.isBefore(secondDate) || firstDate.isSame(secondDate, "day");
+      const startsBeforeEnd = firstDate.isBefore(secondDate) || firstDate.isSame(secondDate, 'day');
       const start = startsBeforeEnd ? firstDate : secondDate;
       const end = startsBeforeEnd ? secondDate : firstDate;
       const actors = actorList(task);
 
       return {
         id: task.id,
-        title: task.title || "Opgave",
+        title: task.title || 'Opgave',
         description: task.description || task.column || statusLabel(task.status),
         start,
         end,
         periodLabel: formatEventPeriod(start, end),
-        actorLabels: actors.length ? actors : ["Ansvarlige"],
+        actorLabels: actors.length ? actors : ['Ansvarlige'],
       };
     })
     .filter(Boolean)
@@ -275,8 +275,8 @@ const taskEvents = computed(() =>
         return a.start.valueOf() - b.start.valueOf();
       }
 
-      return b.end.diff(b.start, "day") - a.end.diff(a.start, "day");
-    })
+      return b.end.diff(b.start, 'day') - a.end.diff(a.start, 'day');
+    }),
 );
 
 const eventsByDate = computed(() => {
@@ -285,13 +285,13 @@ const eventsByDate = computed(() => {
   taskEvents.value.forEach((event) => {
     let date = event.start;
 
-    while (date.isBefore(event.end, "day") || date.isSame(event.end, "day")) {
-      const key = date.format("YYYY-MM-DD");
+    while (date.isBefore(event.end, 'day') || date.isSame(event.end, 'day')) {
+      const key = date.format('YYYY-MM-DD');
       const events = map.get(key) ?? [];
 
       events.push(event);
       map.set(key, events);
-      date = date.add(1, "day");
+      date = date.add(1, 'day');
     }
   });
 
@@ -302,30 +302,30 @@ const startOfWeek = computed(() => startOfWorkWeek(currentDate.value));
 
 const weekDays = computed(() =>
   Array.from({ length: 5 }).map((_, index) => {
-    const date = startOfWeek.value.add(index, "day");
+    const date = startOfWeek.value.add(index, 'day');
 
     return {
-      date: date.format("YYYY-MM-DD"),
-      isToday: date.isSame(dayjs(), "day"),
-      label: `${weekdayNames[date.day()]} ${date.format("D")}`,
+      date: date.format('YYYY-MM-DD'),
+      isToday: date.isSame(dayjs(), 'day'),
+      label: `${weekdayNames[date.day()]} ${date.format('D')}`,
     };
-  })
+  }),
 );
 
 const weekEvents = computed(() => {
   const weekStart = startOfWeek.value;
-  const weekEnd = weekStart.add(4, "day");
+  const weekEnd = weekStart.add(4, 'day');
 
   return taskEvents.value
-    .filter((event) => !event.end.isBefore(weekStart, "day") && !event.start.isAfter(weekEnd, "day"))
+    .filter((event) => !event.end.isBefore(weekStart, 'day') && !event.start.isAfter(weekEnd, 'day'))
     .map((event, index) => {
-      const visibleStart = event.start.isBefore(weekStart, "day") ? weekStart : event.start;
-      const visibleEnd = event.end.isAfter(weekEnd, "day") ? weekEnd : event.end;
+      const visibleStart = event.start.isBefore(weekStart, 'day') ? weekStart : event.start;
+      const visibleEnd = event.end.isAfter(weekEnd, 'day') ? weekEnd : event.end;
 
       return {
         ...event,
-        columnStart: visibleStart.diff(weekStart, "day") + 1,
-        columnSpan: visibleEnd.diff(visibleStart, "day") + 1,
+        columnStart: visibleStart.diff(weekStart, 'day') + 1,
+        columnSpan: visibleEnd.diff(visibleStart, 'day') + 1,
         visiblePeriodLabel: formatEventPeriod(visibleStart, visibleEnd),
         row: index + 2,
       };
@@ -335,40 +335,40 @@ const weekEvents = computed(() => {
 const weekRowCount = computed(() => Math.max(8, weekEvents.value.length + 2));
 
 const monthDays = computed(() => {
-  const start = currentDate.value.startOf("month");
-  const end = currentDate.value.endOf("month");
+  const start = currentDate.value.startOf('month');
+  const end = currentDate.value.endOf('month');
   const days = [];
   let date = start;
 
-  while (date.isBefore(end) || date.isSame(end, "day")) {
-    const dateKey = date.format("YYYY-MM-DD");
+  while (date.isBefore(end) || date.isSame(end, 'day')) {
+    const dateKey = date.format('YYYY-MM-DD');
 
     days.push({
       date: dateKey,
-      day: date.format("D"),
+      day: date.format('D'),
       events: eventsByDate.value.get(dateKey) ?? [],
-      isToday: date.isSame(dayjs(), "day"),
+      isToday: date.isSame(dayjs(), 'day'),
     });
-    date = date.add(1, "day");
+    date = date.add(1, 'day');
   }
 
   return days;
 });
 
 const formattedRange = computed(() => {
-  if (view.value === "week") {
-    return formatDateRange(startOfWeek.value, startOfWeek.value.add(4, "day"));
+  if (view.value === 'week') {
+    return formatDateRange(startOfWeek.value, startOfWeek.value.add(4, 'day'));
   }
 
-  if (view.value === "month") {
-    return `${monthNames[currentDate.value.month()]} ${currentDate.value.format("YYYY")}`;
+  if (view.value === 'month') {
+    return `${monthNames[currentDate.value.month()]} ${currentDate.value.format('YYYY')}`;
   }
 
-  if (view.value === "year") {
-    return currentDate.value.format("YYYY");
+  if (view.value === 'year') {
+    return currentDate.value.format('YYYY');
   }
 
-  return currentDate.value.format("D. MMMM YYYY");
+  return currentDate.value.format('D. MMMM YYYY');
 });
 
 onMounted(() => {
@@ -379,7 +379,7 @@ watch(
   () => route.params.projectId,
   (projectId) => {
     fetchProjectMilestones(projectId);
-  }
+  },
 );
 
 watch(
@@ -390,7 +390,7 @@ watch(
       hasSetInitialDate.value = true;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 async function fetchProjectMilestones(projectId) {
@@ -405,28 +405,24 @@ async function fetchProjectMilestones(projectId) {
 
 function statusLabel(status) {
   const labels = {
-    færdig: "Færdig",
-    igang: "I gang",
-    ikke: "Ikke begyndt",
+    færdig: 'Færdig',
+    igang: 'I gang',
+    ikke: 'Ikke begyndt',
   };
 
-  return labels[status] ?? "Opgave";
+  return labels[status] ?? 'Opgave';
 }
 
 function prev() {
-  if (view.value === "week") currentDate.value = currentDate.value.subtract(1, "week");
-  if (view.value === "month") currentDate.value = currentDate.value.subtract(1, "month");
-  if (view.value === "year") currentDate.value = currentDate.value.subtract(1, "year");
+  if (view.value === 'week') currentDate.value = currentDate.value.subtract(1, 'week');
+  if (view.value === 'month') currentDate.value = currentDate.value.subtract(1, 'month');
+  if (view.value === 'year') currentDate.value = currentDate.value.subtract(1, 'year');
 }
 
 function next() {
-  if (view.value === "week") currentDate.value = currentDate.value.add(1, "week");
-  if (view.value === "month") currentDate.value = currentDate.value.add(1, "month");
-  if (view.value === "year") currentDate.value = currentDate.value.add(1, "year");
-}
-
-function getEventsForDay(date) {
-  return eventsByDate.value.get(date) ?? [];
+  if (view.value === 'week') currentDate.value = currentDate.value.add(1, 'week');
+  if (view.value === 'month') currentDate.value = currentDate.value.add(1, 'month');
+  if (view.value === 'year') currentDate.value = currentDate.value.add(1, 'year');
 }
 
 function getColumnStyle(dayIndex) {
@@ -445,12 +441,12 @@ function getWeekEventStyle(event) {
 
 function goToWeek(date) {
   currentDate.value = dayjs(date);
-  view.value = "week";
+  view.value = 'week';
 }
 
 function goToMonth(month) {
   currentDate.value = currentDate.value.month(month - 1);
-  view.value = "month";
+  view.value = 'month';
 }
 </script>
 
