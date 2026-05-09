@@ -1,170 +1,73 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
-import { ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { db, storage } from "@/services/firebase";
+import { computed, ref } from 'vue';
+import UploadModal from '@/components/UploadModal.vue';
+import { useDocuments } from '@/composables/useDocuments';
 
-const searchQuery = ref("");
-const selectedFilter = ref("all");
-const documents = ref([]);
-const isLoading = ref(true);
-const error = ref("");
-const isUploading = ref(false);
+const {
+  documents,
+  isLoading,
+  isUploading,
+  error,
+  loadDocuments,
+  uploadDocument,
+} = useDocuments();
+
+const searchQuery = ref('');
+const selectedFilter = ref('all');
 const fileInput = ref(null);
+/** @type {import('vue').Ref<File | null>} */
 const pendingFile = ref(null);
-const pendingBeskrivelse = ref("");
-
-function onFileChosen(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  fileInput.value.value = "";
-  pendingFile.value = file;
-  pendingBeskrivelse.value = "";
-}
-
-function cancelUpload() {
-  pendingFile.value = null;
-  pendingBeskrivelse.value = "";
-}
-
-async function confirmUpload() {
-  const file = pendingFile.value;
-  if (!file) return;
-
-  isUploading.value = true;
-  error.value = "";
-  try {
-    const path = `documents/${Date.now()}_${file.name}`;
-    const fileRef = storageRef(storage, path);
-    const snapshot = await uploadBytesResumable(fileRef, file, { contentType: file.type });
-    const url = await getDownloadURL(snapshot.ref);
-
-    await addDoc(collection(db, "documents"), {
-      name: file.name,
-      file: file.name,
-      beskrivelse: pendingBeskrivelse.value.trim(),
-      url,
-      storagePath: path,
-      uploadedAt: serverTimestamp(),
-    });
-
-    pendingFile.value = null;
-    pendingBeskrivelse.value = "";
-    await loadDocuments();
-  } catch (e) {
-    error.value = e.message;
-  } finally {
-    isUploading.value = false;
-  }
-}
-
-async function loadDocuments() {
-  isLoading.value = true;
-  error.value = "";
-  try {
-    const q = query(collection(db, "documents"), orderBy("uploadedAt", "desc"));
-    const snap = await getDocs(q);
-    documents.value = snap.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        ...data,
-        id: doc.id,
-        type: getTypeDetails(data.file),
-        uploadedAtLabel: formatDate(data.uploadedAt?.toDate()),
-      };
-    });
-  } catch (e) {
-    error.value = e.message;
-    documents.value = [];
-  } finally {
-    isLoading.value = false;
-  }
-}
 
 const filterOptions = [
-  {
-    value: "all",
-    label: "Alle filer",
-  },
-  {
-    value: "pdf",
-    label: "PDF",
-  },
-  {
-    value: "image",
-    label: "Billeder",
-  },
+  { value: 'all', label: 'Alle filer' },
+  { value: 'pdf', label: 'PDF' },
+  { value: 'image', label: 'Billeder' },
 ];
 
-const imageExtensions = new Set(["png", "jpg", "jpeg", "gif", "webp", "svg"]);
-
-function getFileExtension(fileName) {
-  const segments = fileName.split(".");
-
-  if (segments.length < 2) {
-    return "";
-  }
-
-  return segments.pop().toLowerCase();
-}
-
-function getTypeDetails(fileName) {
-  const extension = getFileExtension(fileName);
-
-  if (extension === "pdf") {
-    return {
-      key: "pdf",
-      label: "pdf",
-    };
-  }
-
-  if (imageExtensions.has(extension)) {
-    return {
-      key: "image",
-      label: extension,
-    };
-  }
-
-  return {
-    key: "file",
-    label: extension || "ukendt",
-  };
-}
-
-function formatDate(value) {
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Ukendt dato";
-  }
-
-  return new Intl.DateTimeFormat("da-DK", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-}
-
 const visibleDocuments = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase();
+  const term = searchQuery.value.trim().toLowerCase();
 
   return documents.value.filter((document) => {
     const matchesFilter =
-      selectedFilter.value === "all" || document.type.key === selectedFilter.value;
+      selectedFilter.value === 'all' || document.type.key === selectedFilter.value;
 
-    if (!query) {
-      return matchesFilter;
-    }
+    if (!term) return matchesFilter;
 
-    const matchesQuery = [document.name, document.beskrivelse, document.type.label].some((field) =>
-      field.toLowerCase().includes(query),
+    const matchesQuery = [document.name, document.beskrivelse, document.type.label].some(
+      (field) => field?.toLowerCase().includes(term),
     );
 
     return matchesFilter && matchesQuery;
   });
 });
 
-onMounted(loadDocuments);
+/** @param {Event} event */
+function onFileChosen(event) {
+  const input = /** @type {HTMLInputElement} */ (event.target);
+  const file = input.files?.[0];
+  if (!file) return;
+  input.value = '';
+  pendingFile.value = file;
+}
+
+function cancelUpload() {
+  pendingFile.value = null;
+}
+
+/** @param {string} beskrivelse */
+async function confirmUpload(beskrivelse) {
+  const file = pendingFile.value;
+  if (!file) return;
+
+  try {
+    await uploadDocument(file, beskrivelse);
+    pendingFile.value = null;
+  } catch {
+    // error is surfaced via the composable's `error` ref
+  }
+}
+
+loadDocuments();
 </script>
 
 <template>
@@ -227,43 +130,17 @@ onMounted(loadDocuments);
           @click="fileInput.click()"
         >
           <img class="documents-page__upload-icon" src="@/assets/icons/File 2.svg" alt="Fil ikon" />
-          {{ isUploading ? "Uploader..." : "Tilføj fil" }}
+          {{ isUploading ? 'Uploader...' : 'Tilføj fil' }}
         </button>
       </div>
     </header>
 
-    <Teleport to="body">
-      <div v-if="pendingFile" class="upload-modal__backdrop" @click.self="cancelUpload">
-        <div class="upload-modal">
-          <h2 class="upload-modal__title">Tilføj fil</h2>
-
-          <p class="upload-modal__filename">{{ pendingFile.name }}</p>
-
-          <label class="upload-modal__label" for="upload-beskrivelse">Beskrivelse</label>
-          <textarea
-            id="upload-beskrivelse"
-            v-model="pendingBeskrivelse"
-            class="upload-modal__textarea"
-            placeholder="Kort beskrivelse af filen (valgfrit)"
-            rows="3"
-          />
-
-          <div class="upload-modal__actions">
-            <button class="upload-modal__cancel" type="button" @click="cancelUpload">
-              Annuller
-            </button>
-            <button
-              class="upload-modal__confirm"
-              type="button"
-              :disabled="isUploading"
-              @click="confirmUpload"
-            >
-              {{ isUploading ? "Uploader..." : "Upload" }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
+    <UploadModal
+      :file="pendingFile"
+      :is-uploading="isUploading"
+      @confirm="confirmUpload"
+      @cancel="cancelUpload"
+    />
 
     <div v-if="error" class="documents-page__status documents-page__status--error">
       <p>{{ error }}</p>
@@ -343,7 +220,7 @@ onMounted(loadDocuments);
 </template>
 
 <style scoped lang="scss">
-@use "../assets/styles/variables" as *;
+@use '../assets/styles/variables' as *;
 
 .documents-page {
   background: $secondary;
@@ -581,8 +458,4 @@ onMounted(loadDocuments);
     }
   }
 }
-</style>
-
-<style lang="scss">
-@import '@/assets/styles/views/_documentsview.scss';
 </style>
