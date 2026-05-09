@@ -40,7 +40,7 @@ p {
 
 .chip {
   border: 1px solid $border-color;
-  background: #fff;
+  background: $textcolor-2;
   color: $textcolor-4;
   padding: $spacing-xxs $spacing-sm;
   border-radius: 5px;

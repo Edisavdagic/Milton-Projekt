@@ -4,7 +4,7 @@ h1 {
   font-size: $h1-size;
   font-weight: $h1-weight;
   line-height: 1.15;
-  color: #000;
+  color: $textcolor-1;
 }
 
 .history-page {
@@ -34,7 +34,7 @@ h1 {
       border: 1px solid $border-color;
       font-size: $body-size;
       outline: none;
-      background: #fff;
+      background: $textcolor-2;
       color: $primary;
     }
   }
@@ -55,7 +55,7 @@ h1 {
 
   &__chip {
     border: 1px solid $border-color;
-    background: #fff;
+    background: $textcolor-2;
     color: $primary;
     padding: $spacing-xxs $spacing-sm;
     border-radius: 5px;
@@ -65,7 +65,7 @@ h1 {
 
   &__chip--active {
     background: $accent-2;
-    color: #fff;
+    color: $textcolor-2;
     border-color: $accent-2;
   }
 }
@@ -78,7 +78,7 @@ h1 {
   margin: 0 0 24px;
   font-size: $h3-size;
   font-weight: $h2-weight;
-  color: #201d24;
+  color: $textcolor-3;
 }
 
 .history-item {
@@ -86,7 +86,7 @@ h1 {
   align-items: flex-start;
   gap: 28px;
   padding: 36px 0 28px;
-  border-bottom: 2px solid #d8d0dc;
+  border-bottom: 2px solid $secondary;
 
   &__icon {
     width: 44px;
@@ -110,7 +110,7 @@ h1 {
       font-size: 32px;
       font-weight: $h2-weight;
       line-height: 1.15;
-      color: #201d24;
+      color: $textcolor-3;
     }
 
     p {

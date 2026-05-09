@@ -7,7 +7,7 @@
   width: 410px;
   height: 700px;
   background: $secondary;
-  border: 1px solid #000;
+  border: 1px solid $textcolor-1;
   border-radius: $radius-md;
   z-index: 1000;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
@@ -21,7 +21,7 @@
     height: $spacing-vl;
     border: none;
     background: $primary;
-    color: #fff;
+    color: $textcolor-2;
     font-size: $h2-size;
     cursor: pointer;
     border-radius: 0 5px 0 8px;
@@ -37,7 +37,7 @@
     font-size: $h2-size;
     font-weight: $h2-weight;
     margin-bottom: $spacing-xs;
-    color: #000;
+    color: $textcolor-1;
   }
 
   &__search {
@@ -53,7 +53,7 @@
       padding: 0 $spacing-lg 0 $spacing-sm;
       font-size: $body-size;
       outline: none;
-      background: #fff;
+      background: $textcolor-2;
     }
 
     img {
@@ -76,7 +76,7 @@
   &__tab {
     border: none;
     border-radius: $radius-xs;
-    background: #fff;
+    background: $textcolor-2;
     padding: $spacing-s $spacing-sm;
     font-weight: $h1-weight;
     font-size: $body-size;
@@ -84,7 +84,7 @@
 
     &--active {
       background: $primary;
-      color: #fff;
+      color: $textcolor-2;
     }
   }
 
@@ -126,7 +126,7 @@
     width: 54px;
     height: 54px;
     border-radius: 50%;
-    background: #cfcfcf;
+    background: $secondary;
 
     &--large {
       width: 72px;
@@ -139,7 +139,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    background: #e9e9e9;
+    background: $secondary;
   }
 
   &__conversation-header {
@@ -148,14 +148,14 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    background: #fff;
+    background: $textcolor-2;
     border-bottom: 1px solid $secondary;
 
     h2 {
       margin: 0;
       font-size: $h3-size;
       line-height: 1;
-      color: #000;
+      color: $textcolor-1;
     }
 
     p {
@@ -188,7 +188,7 @@
     padding: $spacing-xs $spacing-sm;
     font-size: $body-size;
     line-height: 1.25;
-    color: #000;
+    color: $textcolor-1;
 
     &--me {
       align-self: flex-end;
@@ -198,7 +198,7 @@
 
     &--them {
       align-self: flex-start;
-      background: #fff;
+      background: $textcolor-2;
       border-radius: $spacing-sm $spacing-sm $spacing-xxs $spacing-sm;
     }
   }
@@ -223,7 +223,7 @@
   &__composer {
     min-height: 118px;
     padding: 18px;
-    background: #fff;
+    background: $textcolor-2;
     border-top: 1px solid $secondary;
     border-radius: 18px 18px 0 0;
 
