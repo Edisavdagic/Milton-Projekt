@@ -1,0 +1,94 @@
+@use "../variables" as *;
+
+.container {
+  margin: 0 0 $dashboard-section-gap;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $dashboard-section-title-gap;
+
+  h2 {
+    margin: 0;
+    color: $textcolor-4;
+    font-size: $h2-size;
+    font-weight: $h2-weight;
+    line-height: 1;
+  }
+}
+
+.edit-all {
+  background: $accent-2;
+  color: $textcolor-2;
+  border: $border-width solid $accent-2;
+  min-height: $dashboard-control-height;
+  padding: 0 $spacing-sm;
+  border-radius: $radius-sm;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+  font-weight: $h2-weight;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Upload */
+.file-input {
+  margin-bottom: $spacing-sm;
+  color: $textcolor-4;
+  font-family: $font-family;
+  font-size: $dashboard-small-font-size;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-m;
+}
+
+/* Cards */
+.card {
+  position: relative;
+  height: 219px;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  background: $tertiary;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Delete button */
+.delete-btn {
+  position: absolute;
+  top: $spacing-xs;
+  right: $spacing-xs;
+  background: rgba($textcolor-1, 0.6);
+  color: $textcolor-2;
+  border: none;
+  border-radius: $radius-pill;
+  width: $spacing-md;
+  height: $spacing-md;
+  cursor: pointer;
+}
+
+@media (max-width: $breakpoint-lg) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax($dashboard-gallery-card-min-width, 1fr));
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}

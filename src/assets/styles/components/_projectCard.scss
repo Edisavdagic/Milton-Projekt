@@ -1,0 +1,113 @@
+@use "../variables" as *;
+
+.project-item {
+  display: grid;
+  grid-template-columns: 220px 1fr 160px;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  border-radius: 10px;
+  background: $accent-2;
+  color: #fff;
+  font-family: $font-family;
+  cursor: pointer;
+
+  &__img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-sm;
+
+    h3 {
+      margin: 0;
+      font-size: $h3-size;
+      font-weight: $h3-weight;
+      line-height: 1;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-sm;
+
+    span {
+      padding: $spacing-xs $spacing-sm;
+      border-radius: 8px;
+      background: $secondary;
+      color: $textcolor-1;
+      font-size: 14px;
+      font-weight: $h2-weight;
+    }
+  }
+
+  p {
+    margin: 0 0 $spacing-sm;
+    max-width: 760px;
+    font-size: $body-size;
+    font-weight: $body-weight;
+    line-height: 1.45;
+    color: $secondary;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: $spacing-sm;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-xs;
+      border: none;
+      border-radius: 8px;
+      padding: $spacing-xs $spacing-sm;
+      background: $secondary;
+      color: $textcolor-1;
+      font-family: $font-family;
+      font-size: 15px;
+      font-weight: $h2-weight;
+      cursor: pointer;
+
+      img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+    }
+  }
+}
+
+.notice,
+.status {
+  display: inline-block;
+  width: fit-content;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 8px;
+  background: $accent-1;
+  color: $textcolor-1;
+  font-size: 14px;
+  font-weight: $h2-weight;
+}
+
+.history-btn {
+  background: $accent-1 !important;
+  color: $textcolor-1;
+}

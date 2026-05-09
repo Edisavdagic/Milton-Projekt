@@ -1,0 +1,89 @@
+@use "../variables" as *;
+
+.login {
+  display: flex;
+  flex-direction: row;
+
+  &__left {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $secondary;
+  }
+
+  &__right {
+    width: 50%;
+    height: 100vh;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__box {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 100%;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__input {
+    width: 100%;
+    padding: $spacing-sm $spacing-sm;
+    border-radius: $radius-md;
+    border: none;
+    font-size: $body-size;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: $secondary;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    padding: $spacing-sm $spacing-sm;
+    border: none;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    color: $textcolor-2;
+    background-color: $primary;
+    font-size: $body-size;
+    font-weight: $h3-weight;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+  }
+
+  &__error {
+    margin: 0;
+    color: $error;
+    font-size: $body-size;
+  }
+
+  &__forgot-password {
+    text-align: center;
+    font-size: $body-size;
+    color: $primary;
+    text-decoration: underline;
+  }
+}
