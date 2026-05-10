@@ -156,5 +156,5 @@ const statusClass = (status) => `status ${status}`;
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_dashboardmilestone.scss';
+@use '@/assets/styles/components/dashboardmilestone';
 </style>

@@ -23,5 +23,5 @@ const projectStatus = computed(() => projectsStore.currentProject?.statusText ??
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/views/_dashboardview.scss';
+@use '@/assets/styles/views/dashboardview';
 </style>

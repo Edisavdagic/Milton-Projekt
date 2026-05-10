@@ -451,5 +451,5 @@ function goToMonth(month) {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/components/_calendar.scss";
+@use "@/assets/styles/components/calendar";
 </style>

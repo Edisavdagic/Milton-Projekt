@@ -57,5 +57,5 @@ function openDashboard(project) {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_projectCard.scss';
+@use '@/assets/styles/components/projectCard';
 </style>

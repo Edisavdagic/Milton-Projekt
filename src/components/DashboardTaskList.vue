@@ -217,5 +217,5 @@ const statusLabel = (status) => statusMap[status] ?? status;
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_dashboardtasklist.scss';
+@use '@/assets/styles/components/dashboardtasklist';
 </style>

@@ -77,6 +77,5 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_topbarNav.scss';
+@use '@/assets/styles/components/topbarNav';
 </style>
-

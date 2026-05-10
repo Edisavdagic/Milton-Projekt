@@ -64,5 +64,5 @@ async function login() {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/views/_loginview.scss';
+@use '@/assets/styles/views/loginview';
 </style>

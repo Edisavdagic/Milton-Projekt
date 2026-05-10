@@ -178,5 +178,5 @@ const handleSend = async () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/styles/components/_chatwidget.scss";
+@use "@/assets/styles/components/chatwidget";
 </style>

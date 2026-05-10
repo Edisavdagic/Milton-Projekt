@@ -160,5 +160,5 @@ async function logout() {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_sidebarNav.scss';
+@use '@/assets/styles/components/sidebarNav';
 </style>

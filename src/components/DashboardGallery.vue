@@ -102,5 +102,5 @@ const handleRemoveImage = async (id) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/styles/components/_dashboardgallery.scss";
+@use "@/assets/styles/components/dashboardgallery";
 </style>

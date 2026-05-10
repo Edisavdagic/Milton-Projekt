@@ -170,5 +170,5 @@ function showHistory(project) {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/views/_projectoverview.scss';
+@use '@/assets/styles/views/projectoverview';
 </style>
