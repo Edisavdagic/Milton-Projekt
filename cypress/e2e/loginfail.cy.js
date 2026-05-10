@@ -10,7 +10,7 @@ describe('Login fejl', () => {
 
     cy.get('.login__error')
       .should('be.visible')
-      .and('contain', 'Firebase: Error (auth/invalid-credential).');
+      .and('contain', 'Ugyldig e-mail eller adgangskode.');
       cy.screenshot();
   });
 });
