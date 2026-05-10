@@ -15,6 +15,7 @@
     "docs": "jsdoc -c jsdoc.json"
   },
   "dependencies": {
+    "dayjs": "^1.11.20",
     "firebase": "^11.7.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.29",
