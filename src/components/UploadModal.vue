@@ -81,7 +81,7 @@ function cancel() {
     z-index: 1000;
   }
 
-  background: #fff;
+  background: $textcolor-2;
   border-radius: $radius-xl;
   padding: $spacing-sm;
   width: min(444px, 90vw);
@@ -114,7 +114,7 @@ function cancel() {
 
   &__textarea {
     resize: vertical;
-    border: 1px solid #d2cecb;
+    border: 1px solid $secondary;
     border-radius: $radius-md;
     padding: $radius-lg $spacing-s;
     font-size: $body-size;
@@ -137,7 +137,7 @@ function cancel() {
 
   &__cancel {
     background: none;
-    border: 1px solid #d2cecb;
+    border: 1px solid $secondary;
     border-radius: $radius-md;
     padding: 0 $spacing-sm;
     min-height: $spacing-md;
@@ -153,7 +153,7 @@ function cancel() {
 
   &__confirm {
     background-color: $primary;
-    color: #fff;
+    color: $textcolor-2;
     border: none;
     border-radius: $radius-md;
     padding: 0 $spacing-md;
