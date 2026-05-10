@@ -1,108 +1,187 @@
-# Milton-project
+# Milton Projekt
 
-This template should help get you started developing with Vue 3 in Vite.
+Milton Projekt er en Vue 3-applikation til projektstyring i bygge-/renoveringsforløb. Appen samler projektoverblik, dashboard, milepæle, opgaver, kalender, dokumenter, billedgalleri og chat i én Firebase-backed løsning.
 
-## Recommended IDE Setup
+## Funktioner
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Login med Firebase Authentication og rollebaseret adgang for `admin` og `user`.
+- Admin-overblik over alle projekter med søgning, statusfilter og sortering.
+- Projektdashboard med status, seneste billeder, milepæle og opgaver.
+- Admin-redigering af milepæle, opgavestatus, datoer, aktører og projektbilleder.
+- Dokumentbibliotek med upload, søgning og filtrering på PDF/billeder.
+- Kalender med uge-, måneds- og årsvisning baseret på projektets opgaver.
+- Projektchat mellem medlemmer med realtidsdata fra Firestore.
+- Statiske visninger til historik og notifikationer, klar til senere dynamisk data.
 
-## Recommended Browser Setup
+## Tech stack
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- Vue 3, Vite og Vue Router
+- Pinia til state management
+- Firebase Authentication, Firestore, Storage og Hosting
+- SCSS til styling
+- Vitest og Vue Test Utils til unit tests
+- Cypress til end-to-end tests
+- JSDoc med Docdash-template til dokumentation
 
-## Customize configuration
+## Krav
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Node.js `^20.19.0` eller `>=22.12.0`
+- npm
+- Et Firebase-projekt med Authentication, Firestore og Storage aktiveret
 
-## Project Setup
+## Kom godt i gang
+
+Installer dependencies:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+Opret en lokal miljøfil:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+På macOS/Linux:
+
+```sh
+cp .env.example .env
+```
+
+Udfyld Firebase-værdierne i `.env`:
+
+```env
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+```
+
+Start udviklingsserveren:
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Scripts
 
 ```sh
-npm run build
+npm run dev          # Starter Vite dev-server
+npm run build        # Bygger appen til dist/
+npm run preview      # Serverer production build lokalt
+npm run lint         # Kører ESLint med autofix og cache
+npm run test:unit    # Kører Vitest unit tests
+npm run test:e2e:dev # Åbner Cypress mod Vite dev-server
+npm run test:e2e     # Bygger, starter preview og kører Cypress headless
+npm run docs         # Genererer JSDoc i docs/
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Firebase
+
+Firebase-klienten initialiseres i `src/services/firebase.js`. Appen forventer følgende produkter:
+
+- Authentication med Email/Password-login.
+- Firestore til brugere, projekter, milepæle, dokumentmetadata, chat og billedmetadata.
+- Storage til dokumenter og projektbilleder.
+- Hosting med SPA-rewrite til `dist/index.html`.
+
+Regler ligger i:
+
+- `firestore.rules`
+- `storage.rules`
+- `database.rules.json`
+- `firestore.indexes.json`
+
+Projektet er sat op til Firebase Hosting i `firebase.json`, og standardprojektet i `.firebaserc` er `milton-projekt`.
+
+## Firestore-struktur
+
+De vigtigste collections og subcollections:
+
+- `Users/{uid}`: brugerprofil og rolle.
+- `projects/{projectId}`: projektdata og `memberUid`.
+- `projects/{projectId}/milestoneGroups/{groupId}/milestones/{milestoneId}`: milepæle og opgaver.
+- `projects/{projectId}/images/{imageId}`: billedmetadata til dashboardgalleri.
+- `projects/{projectId}/chats/{chatId}/messages/{messageId}`: projektrelateret chat.
+- `documents/{docId}`: dokumentmetadata for uploadede filer.
+
+Storage paths:
+
+- `projects/{projectId}/images/{imageId}/{fileName}` til projektbilleder.
+- `documents/{fileName}` til dokumenter.
+
+## Ruter
+
+- `/`: login.
+- `/projektoversigt`: admin-overblik over projekter.
+- `/notifikationer`: notifikationsside.
+- `/historik`: historikside.
+- `/project/:projectId/dashboard`: projektdashboard.
+- `/project/:projectId/dokumenter`: dokumenter.
+- `/project/:projectId/kalender`: kalender.
+
+Alle projektrelaterede ruter kræver login. Når en almindelig bruger logger ind, hentes brugerens projekt via `memberUid`; admins sendes til projektoversigten.
+
+## Projektstruktur
+
+```text
+src/
+  assets/        SCSS, billeder og ikoner
+  components/    Genbrugelige UI-komponenter
+  composables/   Firebase- og domænelogik til chat, dokumenter, billeder og kalender
+  router/        Vue Router-konfiguration og auth guards
+  services/      Firebase-initialisering
+  stores/        Pinia stores til auth, projekter og milepæle
+  utils/         Hjælpefunktioner og unit tests
+  views/         Sider/ruteviews
+cypress/         End-to-end tests
+docs/            Genereret JSDoc-output
+scripts/         Hjælpescripts til dokumentation
+```
+
+## Tests og kvalitet
+
+Kør unit tests:
 
 ```sh
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+Kør end-to-end tests mod production build:
 
 ```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
 npm run test:e2e
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Kør lint:
 
 ```sh
 npm run lint
 ```
 
-## Firebase Setup
+## Dokumentation
 
-1. Install dependencies:
-
-```sh
-npm install
-```
-
-2. Create a local env file from `.env.example`:
+Generer JSDoc:
 
 ```sh
-cp .env.example .env.local
+npm run docs
 ```
 
-On Windows PowerShell:
+Output lander i `docs/`.
 
-```powershell
-Copy-Item .env.example .env.local
+## Deployment
+
+Byg appen:
+
+```sh
+npm run build
 ```
 
-3. In Firebase Console, open your web app settings and copy values into `.env.local`:
+Deploy til Firebase Hosting med Firebase CLI:
 
-- `VITE_FIREBASE_API_KEY`
-- `VITE_FIREBASE_AUTH_DOMAIN`
-- `VITE_FIREBASE_PROJECT_ID`
-- `VITE_FIREBASE_STORAGE_BUCKET`
-- `VITE_FIREBASE_MESSAGING_SENDER_ID`
-- `VITE_FIREBASE_APP_ID`
-
-4. Enable Firebase products in console:
-
-- Authentication -> Sign-in method -> Email/Password
-- Firestore Database -> Create database
-- Storage -> Get started
-
-## Firebase Integration Notes
-
-- Firebase client is initialized in `src/services/firebase.js`.
-- Auth state is managed in `src/stores/auth.js`.
-- Routes `/dashboard`, `/dokumenter`, and `/notifikationer` require sign-in.
-- Login screen now signs in with Firebase Authentication.
+```sh
+firebase deploy
+```
