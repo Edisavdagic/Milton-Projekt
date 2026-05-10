@@ -1,49 +1,51 @@
+import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
-export const useProjectsStore = defineStore('projects', {
-  state: () => ({
-    projects: [],
-    currentProject: null,
-    loading: false,
-  }),
+export const useProjectsStore = defineStore('projects', () => {
+  const projects = ref([]);
+  const currentProject = ref(null);
+  const loading = ref(false);
 
-  getters: {
-    currentProjectId: (state) => state.currentProject?.id ?? null,
-  },
+  const currentProjectId = computed(() => currentProject.value?.id ?? null);
 
-  actions: {
-    async fetchProjects() {
-      this.loading = true;
-      try {
-        const snapshot = await getDocs(collection(db, 'projects'));
-        this.projects = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loading = false;
+  async function fetchProjects() {
+    loading.value = true;
+    try {
+      const snapshot = await getDocs(collection(db, 'projects'));
+      projects.value = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function fetchUserProject(uid) {
+    try {
+      const q = query(collection(db, 'projects'), where('memberUid', 'array-contains', uid));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        const d = snapshot.docs[0];
+        currentProject.value = { id: d.id, ...d.data() };
       }
-    },
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-    async fetchUserProject(uid) {
-      try {
-        const q = query(collection(db, 'projects'), where('memberUid', 'array-contains', uid));
-        const snapshot = await getDocs(q);
-        if (!snapshot.empty) {
-          const doc = snapshot.docs[0];
-          this.currentProject = { id: doc.id, ...doc.data() };
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
+  function setCurrentProject(project) {
+    currentProject.value = project;
+  }
 
-    setCurrentProject(project) {
-      this.currentProject = project;
-    },
-  },
+  return {
+    projects,
+    currentProject,
+    currentProjectId,
+    loading,
+    fetchProjects,
+    fetchUserProject,
+    setCurrentProject,
+  };
 });
