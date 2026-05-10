@@ -5,7 +5,7 @@ h1 {
   font-size: $h1-size;
   font-weight: $h1-weight;
   line-height: 1.15;
-  color: #000;
+  color: $textcolor-1;
 }
 .notifications-page {
   width: 100%;
@@ -39,7 +39,7 @@ h1 {
   }
 
   &__text {
-    border-bottom: 2px solid #d8d0dc;
+    border-bottom: 2px solid $secondary;
     padding-bottom: 10px;
     width: 55%;
 
@@ -48,7 +48,7 @@ h1 {
       font-size: 32px;
       font-weight: $h2-weight;
       line-height: 1.15;
-      color: #201d24;
+      color: $textcolor-3;
     }
 
     p {

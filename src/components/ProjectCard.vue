@@ -1,6 +1,6 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { useProjectsStore } from "@/stores/project";
+import { useRouter } from 'vue-router';
+import { useProjectsStore } from '@/stores/project';
 
 defineProps({
   project: {
@@ -9,13 +9,13 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["edit-project", "show-history"]);
+const emit = defineEmits(['edit-project', 'show-history']);
 const router = useRouter();
 const projectsStore = useProjectsStore();
 
 function openDashboard(project) {
   projectsStore.setCurrentProject(project);
-  router.push({ name: "dashboard", params: { projectId: project.id } });
+  router.push({ name: 'dashboard', params: { projectId: project.id } });
 }
 </script>
 
@@ -57,5 +57,5 @@ function openDashboard(project) {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/components/_projectCard.scss';
+@use '@/assets/styles/components/projectCard';
 </style>

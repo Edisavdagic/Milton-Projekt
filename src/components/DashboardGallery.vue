@@ -42,10 +42,10 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useImages } from "@/composables/useImages";
-import { useAuthStore } from "@/stores/auth";
+import { computed, onUnmounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useImages } from '@/composables/useImages';
+import { useAuthStore } from '@/stores/auth';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -71,7 +71,7 @@ const handleFiles = async (event) => {
 
   files.forEach((file) => {
     // check if it's an image
-    if (!file.type.startsWith("image/")) return;
+    if (!file.type.startsWith('image/')) return;
 
     // check file size
     if (file.size > maxSize) {
@@ -85,22 +85,22 @@ const handleFiles = async (event) => {
   try {
     await Promise.all(validFiles.map((file) => addImage(file)));
   } catch {
-    alert("Billedet kunne ikke uploades. Prøv igen.");
+    alert('Billedet kunne ikke uploades. Prøv igen.');
   }
 
   // reset input
-  if (fileInput.value) fileInput.value.value = "";
+  if (fileInput.value) fileInput.value.value = '';
 };
 
 const handleRemoveImage = async (id) => {
   try {
     await removeImage(id);
   } catch {
-    alert("Billedet kunne ikke slettes. Prøv igen.");
+    alert('Billedet kunne ikke slettes. Prøv igen.');
   }
 };
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/styles/components/_dashboardgallery.scss";
+@use "@/assets/styles/components/dashboardgallery";
 </style>

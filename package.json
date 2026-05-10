@@ -11,10 +11,8 @@
     "prepare": "cypress install",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
-    "lint": "run-s lint:*",
-    "docs": "jsdoc -c jsdoc.json",
-    "lint:oxlint": "oxlint . --fix",
-    "lint:eslint": "eslint . --fix --cache"
+    "lint": "eslint . --fix --cache",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "firebase": "^11.7.1",
@@ -31,13 +29,10 @@
     "docdash": "^2.0.2",
     "eslint": "^10.0.2",
     "eslint-plugin-cypress": "^6.1.0",
-    "eslint-plugin-oxlint": "~1.50.0",
     "eslint-plugin-vue": "~10.8.0",
     "globals": "^17.3.0",
     "jsdoc": "^4.0.5",
     "jsdom": "^28.1.0",
-    "npm-run-all2": "^8.0.4",
-    "oxlint": "~1.50.0",
     "sass": "^1.98.0",
     "sass-embedded": "^1.98.0",
     "start-server-and-test": "^2.1.5",

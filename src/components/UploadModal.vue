@@ -1,4 +1,74 @@
-@use "../variables" as *;
+<script setup>
+import { ref, watch } from 'vue';
+
+const props = defineProps({
+  file: {
+    type: File,
+    default: null,
+  },
+  isUploading: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['confirm', 'cancel']);
+
+const beskrivelse = ref('');
+
+watch(
+  () => props.file,
+  (file) => {
+    if (file) beskrivelse.value = '';
+  },
+);
+
+function confirm() {
+  emit('confirm', beskrivelse.value);
+}
+
+function cancel() {
+  emit('cancel');
+}
+</script>
+
+<template>
+  <Teleport to="body">
+    <div v-if="file" class="upload-modal__backdrop" @click.self="cancel">
+      <div class="upload-modal">
+        <h2 class="upload-modal__title">Tilføj fil</h2>
+
+        <p class="upload-modal__filename">{{ file.name }}</p>
+
+        <label class="upload-modal__label" for="upload-beskrivelse">Beskrivelse</label>
+        <textarea
+          id="upload-beskrivelse"
+          v-model="beskrivelse"
+          class="upload-modal__textarea"
+          placeholder="Kort beskrivelse af filen (valgfrit)"
+          rows="3"
+        />
+
+        <div class="upload-modal__actions">
+          <button class="upload-modal__cancel" type="button" @click="cancel">
+            Annuller
+          </button>
+          <button
+            class="upload-modal__confirm"
+            type="button"
+            :disabled="isUploading"
+            @click="confirm"
+          >
+            {{ isUploading ? 'Uploader...' : 'Upload' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+</template>
+
+<style lang="scss">
+@use '@/assets/styles/variables' as *;
 
 .upload-modal {
   &__backdrop {
@@ -11,7 +81,7 @@
     z-index: 1000;
   }
 
-  background: $textcolor-2;
+  background: #fff;
   border-radius: $radius-xl;
   padding: $spacing-sm;
   width: min(444px, 90vw);
@@ -44,7 +114,7 @@
 
   &__textarea {
     resize: vertical;
-    border: 1px solid $secondary;
+    border: 1px solid #d2cecb;
     border-radius: $radius-md;
     padding: $radius-lg $spacing-s;
     font-size: $body-size;
@@ -67,7 +137,7 @@
 
   &__cancel {
     background: none;
-    border: 1px solid $secondary;
+    border: 1px solid #d2cecb;
     border-radius: $radius-md;
     padding: 0 $spacing-sm;
     min-height: $spacing-md;
@@ -83,7 +153,7 @@
 
   &__confirm {
     background-color: $primary;
-    color: $textcolor-2;
+    color: #fff;
     border: none;
     border-radius: $radius-md;
     padding: 0 $spacing-md;
@@ -102,3 +172,4 @@
     }
   }
 }
+</style>

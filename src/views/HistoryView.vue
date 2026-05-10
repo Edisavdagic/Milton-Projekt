@@ -142,5 +142,5 @@
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/views/_historyview.scss';
+@use '@/assets/styles/views/historyview';
 </style>

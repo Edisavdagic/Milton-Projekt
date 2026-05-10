@@ -14,7 +14,7 @@
   &__title {
     margin: 0;
     font-size: $h1-size;
-    color: #000;
+    color: $textcolor-1;
   }
 
   &__controls {
@@ -38,7 +38,7 @@
       border: 1px solid $border-color;
       font-size: $body-size;
       outline: none;
-      background: #fff;
+      background: $textcolor-2;
       color: $primary;
     }
   }
@@ -63,7 +63,7 @@
   &__new-button {
     background: $accent-2;
     border: 1px solid $border-color;
-    color: #fff;
+    color: $textcolor-2;
     padding: $spacing-xxs $spacing-sm;
     border-radius: 5px;
     font-size: $body-size;
@@ -82,7 +82,7 @@
 
   &__chip {
     border: 1px solid $border-color;
-    background: #fff;
+    background: $textcolor-2;
     color: $primary;
     padding: $spacing-xxs $spacing-sm;
     border-radius: 5px;
@@ -92,7 +92,7 @@
 
   &__chip--active {
     background: $accent-2;
-    color: #fff;
+    color: $textcolor-2;
     border-color: $accent-2;
   }
 
@@ -103,7 +103,7 @@
   &__section-title {
     margin: 0 0 $spacing-sm 0;
     font-size: $h2-size;
-    color: #000;
+    color: $textcolor-1;
   }
 
   &__list {

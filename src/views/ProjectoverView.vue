@@ -1,67 +1,67 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
-import ProjectCard from '@/components/ProjectCard.vue'
-import { useProjectsStore } from '@/stores/project'
+import { onMounted, computed, ref } from 'vue';
+import ProjectCard from '@/components/ProjectCard.vue';
+import { useProjectsStore } from '@/stores/project';
 
-const projectsStore = useProjectsStore()
-const search = ref('')
-const statusFilter = ref('all')
-const sortOrder = ref('newest')
+const projectsStore = useProjectsStore();
+const search = ref('');
+const statusFilter = ref('all');
+const sortOrder = ref('newest');
 
 onMounted(() => {
-  projectsStore.fetchProjects()
-  projectsStore.setCurrentProject(null)
-})
+  projectsStore.fetchProjects();
+  projectsStore.setCurrentProject(null);
+});
 
 const filterProjects = computed(() => {
-  const term = search.value.toLowerCase().trim()
+  const term = search.value.toLowerCase().trim();
 
   return projectsStore.projects
     .filter((project) => {
-      if (statusFilter.value === 'active') return project.isActive
-      if (statusFilter.value === 'completed') return !project.isActive
-      return true
+      if (statusFilter.value === 'active') return project.isActive;
+      if (statusFilter.value === 'completed') return !project.isActive;
+      return true;
     })
     .filter((project) => {
-      if (!term) return true
+      if (!term) return true;
       return [project.name, project.projectType, project.siteManagerName, project.description]
         .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(term))
+        .some((value) => value.toLowerCase().includes(term));
     })
     .sort((a, b) => {
-      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
-      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
 
       if (sortOrder.value === 'newest') {
-        return bTime - aTime
+        return bTime - aTime;
       }
 
-      return aTime - bTime
-    })
-})
+      return aTime - bTime;
+    });
+});
 
 const activeProjects = computed(() =>
-  filterProjects.value.filter((project) => project.isActive)
-)
+  filterProjects.value.filter((project) => project.isActive),
+);
 
 const completedProjects = computed(() =>
-  filterProjects.value.filter((project) => !project.isActive)
-)
+  filterProjects.value.filter((project) => !project.isActive),
+);
 
 function setStatusFilter(value) {
-  statusFilter.value = value
+  statusFilter.value = value;
 }
 
 function setSortOrder(value) {
-  sortOrder.value = value
+  sortOrder.value = value;
 }
 
 function editProject(project) {
-  console.log(project)
+  console.log(project);
 }
 
 function showHistory(project) {
-  console.log(project)
+  console.log(project);
 }
 </script>
 
@@ -170,5 +170,5 @@ function showHistory(project) {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/styles/views/_projectoverview.scss';
+@use '@/assets/styles/views/projectoverview';
 </style>
