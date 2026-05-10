@@ -1,7 +1,15 @@
 {
+    "plugins": ["./scripts/jsdoc-include-all.cjs"],
     "source": {
-        "include": ["src"],
-        "includePattern": ".js$"
+        "include": [
+            "src",
+            "cypress",
+            "cypress.config.js",
+            "eslint.config.js",
+            "vite.config.js",
+            "vitest.config.js"
+        ],
+        "includePattern": ".+\\.(js|vue)$"
     },
     "opts": {
         "destination": "./docs",
