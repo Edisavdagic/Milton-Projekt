@@ -74,12 +74,12 @@
               class="actor-editor"
             >
               <div
-                v-if="actorList(task).length"
+                v-if="actorList(task.actors).length"
                 class="actor-chips"
                 aria-label="Aktører"
               >
                 <span
-                  v-for="(actor, actorIndex) in actorList(task)"
+                  v-for="(actor, actorIndex) in actorList(task.actors)"
                   :key="`${task.id}-${actorIndex}-${actor}`"
                   class="actor-chip"
                 >
@@ -107,11 +107,11 @@
               </form>
             </div>
             <span
-              v-else-if="actorList(task).length"
+              v-else-if="actorList(task.actors).length"
               class="actor-summaries"
             >
               <span
-                v-for="actor in actorList(task)"
+                v-for="actor in actorList(task.actors)"
                 :key="`${task.id}-${actor}`"
                 class="actor-summary"
               >
@@ -139,6 +139,7 @@
 import { computed, reactive, ref } from 'vue';
 import { useMilestoneStore } from '@/stores/milestones';
 import { useAuthStore } from '@/stores/auth';
+import { actorList, statusLabel } from '@/utils/calendar';
 
 const store = useMilestoneStore();
 const authStore = useAuthStore();
@@ -152,18 +153,6 @@ const actorDrafts = reactive({});
 /* DATA fra store */
 const tasks = computed(() => store.flatTasks);
 
-const actorList = (task) => {
-  if (Array.isArray(task.actors)) {
-    return task.actors.map((actor) => String(actor).trim()).filter(Boolean);
-  }
-
-  if (typeof task.actors === 'string') {
-    return task.actors.split(',').map((actor) => actor.trim()).filter(Boolean);
-  }
-
-  return [];
-};
-
 const addActor = async (task) => {
   const actor = actorDrafts[task.id]?.trim();
 
@@ -171,7 +160,7 @@ const addActor = async (task) => {
     return;
   }
 
-  const actors = actorList(task);
+  const actors = actorList(task.actors);
   const actorExists = actors.some(
     (currentActor) => currentActor.toLowerCase() === actor.toLowerCase(),
   );
@@ -184,7 +173,7 @@ const addActor = async (task) => {
 };
 
 const removeActor = async (task, actorIndex) => {
-  const actors = actorList(task).filter((_, index) => index !== actorIndex);
+  const actors = actorList(task.actors).filter((_, index) => index !== actorIndex);
   await store.updateActors(task.id, actors);
 };
 
@@ -197,7 +186,7 @@ const filteredTasks = computed(() => {
     const searchableText = [
       t.title,
       t.column,
-      ...actorList(t),
+      ...actorList(t.actors),
     ].join(' ').toLowerCase();
 
     const matchesSearch = searchableText.includes(search.value.toLowerCase());
@@ -206,14 +195,6 @@ const filteredTasks = computed(() => {
   });
 });
 
-/* LABELS */
-const statusMap = {
-  færdig: 'Færdig',
-  igang: 'I gang',
-  ikke: 'Ikke begyndt',
-};
-
-const statusLabel = (status) => statusMap[status] ?? status;
 </script>
 
 <style scoped lang="scss">

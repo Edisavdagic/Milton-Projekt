@@ -91,6 +91,7 @@ const iconSvg = (name) => {
 import { useRoute } from 'vue-router';
 import { useMilestoneStore } from '@/stores/milestones';
 import { useAuthStore } from '@/stores/auth';
+import { statusLabel } from '@/utils/calendar';
 
 const store = useMilestoneStore();
 const route = useRoute();
@@ -140,17 +141,6 @@ const remove = (col, index) => {
 const add = (col) => {
   store.addItem(col);
 };
-
-/**
- * Status helpers
- */
-const statusMap = {
-  færdig: 'Færdig',
-  igang: 'I gang',
-  ikke: 'Ikke begyndt',
-};
-
-const statusLabel = (status) => statusMap[status] ?? status;
 
 const statusClass = (status) => `status ${status}`;
 </script>

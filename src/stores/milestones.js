@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '@/services/firebase';
+import { actorList } from '@/utils/calendar';
 
 const GROUP_IDS = ['construction', 'framing', 'interior'];
 
@@ -8,18 +9,6 @@ function toDateString(value) {
   if (!value) return '';
   if (value?.toDate) return value.toDate().toISOString().split('T')[0];
   return value;
-}
-
-function toActorList(value) {
-  if (Array.isArray(value)) {
-    return value.map((actor) => String(actor).trim()).filter(Boolean);
-  }
-
-  if (typeof value === 'string') {
-    return value.split(',').map((actor) => actor.trim()).filter(Boolean);
-  }
-
-  return [];
 }
 
 export const useMilestoneStore = defineStore('milestones', {
@@ -73,7 +62,7 @@ export const useMilestoneStore = defineStore('milestones', {
                 ...d.data(),
                 startDate: toDateString(d.data().startDate),
                 endDate: toDateString(d.data().endDate),
-                actors: toActorList(d.data().actors),
+                actors: actorList(d.data().actors),
               })),
             };
           }),
@@ -105,7 +94,7 @@ export const useMilestoneStore = defineStore('milestones', {
     },
 
     async updateActors(taskId, value) {
-      await this.updateTask(taskId, { actors: toActorList(value) });
+      await this.updateTask(taskId, { actors: actorList(value) });
     },
 
     async updateStartDate(taskId, date) {
