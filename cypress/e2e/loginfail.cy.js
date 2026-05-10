@@ -4,11 +4,13 @@ describe('Login fejl', () => {
 
     cy.get('input[type="email"]').type('forkert@test.dk');
     cy.get('input[type="password"]').type('forkertkode');
+    cy.screenshot();
 
     cy.contains('Log ind').click();
 
     cy.get('.login__error')
       .should('be.visible')
       .and('contain', 'Firebase: Error (auth/invalid-credential).');
+      cy.screenshot();
   });
 });

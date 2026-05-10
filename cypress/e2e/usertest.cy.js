@@ -7,7 +7,7 @@ describe('Login flow', () => {
     cy.get('input[type="email"]').should('be.visible');
     cy.get('input[type="password"]').should('be.visible');
     cy.contains('Log ind').should('be.visible');
-    cy.screenshot;
+    cy.screenshot();
   });
 });
 
@@ -17,11 +17,12 @@ describe('Login som bruger', () => {
 
     cy.get('input[type="email"]').type('test@test.com');
     cy.get('input[type="password"]').type('test1234');
+    cy.screenshot();
 
     cy.contains('Log ind').click();
 
     // Tjek redirect
     cy.url().should('include', '/dashboard');
-    cy.screenshot;
+    cy.screenshot();
   });
 });

@@ -7,6 +7,7 @@ describe('Login flow', () => {
     cy.get('input[type="email"]').should('be.visible');
     cy.get('input[type="password"]').should('be.visible');
     cy.contains('Log ind').should('be.visible');
+    cy.screenshot();
   });
 });
 
@@ -16,9 +17,11 @@ describe('Login som admin', () => {
 
     cy.get('input[type="email"]').type('testadmin@test.dk');
     cy.get('input[type="password"]').type('test1234');
+    cy.screenshot();
 
     cy.contains('Log ind').click();
 
     cy.url().should('include', '/projektoversigt');
+    cy.screenshot();
   });
 });
