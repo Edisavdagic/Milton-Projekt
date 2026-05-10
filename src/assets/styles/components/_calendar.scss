@@ -193,7 +193,7 @@
   }
 }
 
-.event {
+.calendar .event {
   z-index: 2;
   display: flex;
   align-items: center;
@@ -301,7 +301,7 @@
     }
   }
 
-  .event {
+  .calendar .event {
     align-items: flex-start;
     flex-direction: column;
     gap: $spacing-xs;

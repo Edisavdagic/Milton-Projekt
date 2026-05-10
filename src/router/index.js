@@ -6,7 +6,7 @@ import ProjectoverviewView from '../views/ProjectoverView.vue';
 import NotificationsView from '@/views/NotificationsView.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectsStore } from '@/stores/project';
-import CalenderView from '@/views/CalenderView.vue';
+import CalendarView from '@/views/CalendarView.vue';
 import HistoryView from '@/views/HistoryView.vue';
 const router = createRouter({
   history: createWebHistory(),
@@ -52,7 +52,7 @@ const router = createRouter({
         {
           path: 'kalender',
           name: 'calendar',
-          component: CalenderView,
+          component: CalendarView,
         },
         //{
         // path: "historik",
