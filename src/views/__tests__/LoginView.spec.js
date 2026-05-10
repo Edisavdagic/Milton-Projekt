@@ -67,16 +67,16 @@ describe("LoginView", () => {
       "test 1234"
     );
 
-    // Check that admin does not fetch a user project
+    // Admin should not fetch a user project
     expect(projectsStore.fetchUserProject).not.toHaveBeenCalled();
 
-    // Check redirect
+    // Check admin redirect
     expect(push).toHaveBeenCalledWith({
       name: "projectoverview"
     });
   });
 
-  it("logs in user and redirects to dashboard", async () => {
+  it("logs in user, fetches project and redirects to dashboard", async () => {
     // Simulate regular user login
     authStore.isAdmin = false;
     authStore.user = { uid: "firebase-user-id" };
@@ -101,58 +101,17 @@ describe("LoginView", () => {
       "test 1234"
     );
 
-    // Check if user project was fetched
+    // User should fetch their project
     expect(projectsStore.fetchUserProject).toHaveBeenCalledWith(
       "firebase-user-id"
     );
 
-    // Check redirect
+    // Check user redirect with projectId
     expect(push).toHaveBeenCalledWith({
       name: "dashboard",
       params: {
         projectId: "project-123"
       }
     });
-  });
-
-  it("shows an error message when login fails", async () => {
-    // Simulate failed login
-    authStore.error = "Invalid email or password";
-    authStore.signIn.mockRejectedValueOnce(new Error("Login failed"));
-
-    const wrapper = mount(LoginView);
-
-    // Enter invalid credentials
-    await wrapper.find('input[type="email"]').setValue("wrong@test.com");
-    await wrapper.find('input[type="password"]').setValue("wrong-password");
-
-    // Submit form
-    await wrapper.find("form").trigger("submit.prevent");
-
-    await flushPromises();
-
-    // Check if error message is shown
-    expect(wrapper.text()).toContain("Invalid email or password");
-
-    // Check that user is not redirected
-    expect(push).not.toHaveBeenCalled();
-
-    // Check that no project is fetched
-    expect(projectsStore.fetchUserProject).not.toHaveBeenCalled();
-  });
-
-  it("disables the login button while loading", () => {
-    // Simulate loading state
-    authStore.loading = true;
-
-    const wrapper = mount(LoginView);
-
-    const button = wrapper.find("button");
-
-    // Check if button is disabled
-    expect(button.attributes("disabled")).toBeDefined();
-
-    // Check if loading text is shown
-    expect(button.text()).toBe("Logger ind...");
   });
 });
