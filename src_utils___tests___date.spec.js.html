@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/utils/__tests__/date.spec.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,39 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/utils/__tests__/date.spec.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { describe, it, expect } from 'vitest';
+import { formatDate } from '../date';
 
-<header>
-    
+describe('formatDate', () => {
+  it('formats a Date in da-DK short month form', () => {
+    expect(formatDate(new Date('2024-03-15T12:00:00Z'))).toMatch(/15\.\s*mar\.\s*2024/);
+  });
 
-    <h2>Architecture</h2>
-</header>
+  it('accepts a value the Date constructor can parse', () => {
+    expect(formatDate('2024-03-15T12:00:00Z')).toMatch(/15\.\s*mar\.\s*2024/);
+  });
 
-<article>
-    
-</article>
+  it('returns "Ukendt dato" for invalid input', () => {
+    expect(formatDate('not-a-date')).toBe('Ukendt dato');
+    expect(formatDate(undefined)).toBe('Ukendt dato');
+  });
+});
+</code></pre>
+        </article>
+    </section>
 
-</section>
+
+
 
     
     

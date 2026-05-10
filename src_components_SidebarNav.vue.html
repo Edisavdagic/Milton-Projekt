@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/SidebarNav.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,186 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/SidebarNav.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { computed } from 'vue';
+import { useRouter, RouterLink, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
 
-    <h2>Architecture</h2>
-</header>
+const currentProjectId = computed(
+  () => route.params.projectId || projectsStore.currentProjectId || '',
+);
 
-<article>
-    
-</article>
+const isProjectRoute = computed(
+  () =>
+    (currentProjectId.value &amp;&amp; ['dashboard', 'calendar', 'documents', 'history'].includes(route.name)) ||
+    (currentProjectId.value &amp;&amp; route.name === 'notifications'),
+);
 
-</section>
+const isAdminProjectOverview = computed(
+  () => authStore.isAdmin &amp;&amp; route.name === 'projectoverview',
+);
+
+async function logout() {
+  await authStore.signOutUser();
+  router.replace({ name: 'login' });
+}
+&lt;/script>
+
+&lt;template>
+  &lt;aside class="sidebar">
+    &lt;routerLink
+      v-if="currentProjectId"
+      :to="{ name: 'dashboard', params: { projectId: currentProjectId } }"
+    >
+      &lt;div class="sidebar__logo">
+        &lt;div>
+          &lt;img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+        &lt;/div>
+      &lt;/div>
+    &lt;/routerLink>
+    &lt;div v-else class="sidebar__logo">
+      &lt;img class="sidebar__logo-img" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+    &lt;/div>
+
+    &lt;!-- Project Navigation (for users inside a project, including notifications) -->
+    &lt;nav v-if="isProjectRoute" class="sidebar__nav">
+      &lt;!-- Dashboard -->
+      &lt;RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/Home.svg" alt="Hus ikon" />
+        Dashboard
+      &lt;/RouterLink>
+
+      &lt;!-- Calendar -->
+      &lt;RouterLink :to="{ name: 'calendar', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
+        Kalender
+      &lt;/RouterLink>
+
+      &lt;!-- Documents -->
+      &lt;RouterLink :to="{ name: 'documents', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
+        Dokumenter
+      &lt;/RouterLink>
+
+      &lt;!-- History -->
+      &lt;RouterLink
+        :to="{ name: 'history' }"
+        class="item"
+        active-class="active"
+        exact-active-class="active"
+      >
+          &lt;img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
+          Historik
+      &lt;/RouterLink>
+
+      &lt;!-- Profile -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/User.svg" alt="Profil ikon" />
+        Profil
+      &lt;/div>
+
+      &lt;!-- Settings -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
+        Indstillinger
+      &lt;/div>
+    &lt;/nav>
+
+    &lt;!-- Admin Navigation on project overview only -->
+    &lt;nav v-else-if="isAdminProjectOverview" class="sidebar__nav">
+      &lt;!-- Project Overview -->
+      &lt;RouterLink :to="{ name: 'projectoverview' }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/Home.svg" alt="Projektoversigt ikon" />
+        Projektoversigt
+      &lt;/RouterLink>
+
+      &lt;!-- Profile -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/User.svg" alt="Profil ikon" />
+        Profil
+      &lt;/div>
+
+      &lt;!-- Settings -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
+        Indstillinger
+      &lt;/div>
+    &lt;/nav>
+
+    &lt;!-- Regular User Navigation (Project) -->
+    &lt;nav v-else-if="currentProjectId" class="sidebar__nav">
+      &lt;!-- Dashboard -->
+      &lt;RouterLink :to="{ name: 'dashboard', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/Home.svg" alt="Hus ikon" />
+        Dashboard
+      &lt;/RouterLink>
+
+      &lt;!-- Calendar -->
+      &lt;RouterLink :to="{ name: 'calendar', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
+        Kalender
+      &lt;/RouterLink>
+
+      &lt;!-- Documents -->
+      &lt;RouterLink :to="{ name: 'documents', params: { projectId: currentProjectId } }" class="item" active-class="active" exact-active-class="active">
+        &lt;img src="@/assets/icons/File.svg" alt="Dokumenter ikon" />
+        Dokumenter
+      &lt;/RouterLink>
+
+      &lt;!-- History -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/Clock.svg" alt="Historik ikon" />
+        Historik
+      &lt;/div>
+
+      &lt;!-- Profile -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/User.svg" alt="Profil ikon" />
+        Profil
+      &lt;/div>
+
+      &lt;!-- Settings -->
+      &lt;div class="item">
+        &lt;img src="@/assets/icons/Settings.svg" alt="Indstillinger ikon" />
+        Indstillinger
+      &lt;/div>
+    &lt;/nav>
+
+    &lt;!-- Logout -->
+    &lt;div class="sidebar__bottom">
+      &lt;button to="/" type="button" class="item" @click="logout">
+        &lt;img src="@/assets/icons/Log out.svg" alt="Log ud ikon" />
+        Log ud
+      &lt;/button>
+    &lt;/div>
+  &lt;/aside>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/components/sidebarNav';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

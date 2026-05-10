@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/stores/project.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,71 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/stores/project.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { defineStore } from 'pinia';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/services/firebase';
 
-<header>
-    
+export const useProjectsStore = defineStore('projects', {
+  state: () => ({
+    projects: [],
+    currentProject: null,
+    loading: false,
+  }),
 
-    <h2>Architecture</h2>
-</header>
+  getters: {
+    currentProjectId: (state) => state.currentProject?.id ?? null,
+  },
 
-<article>
-    
-</article>
+  actions: {
+    async fetchProjects() {
+      this.loading = true;
+      try {
+        const snapshot = await getDocs(collection(db, 'projects'));
+        this.projects = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
 
-</section>
+    async fetchUserProject(uid) {
+      try {
+        const q = query(collection(db, 'projects'), where('memberUid', 'array-contains', uid));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0];
+          this.currentProject = { id: doc.id, ...doc.data() };
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    setCurrentProject(project) {
+      this.currentProject = project;
+    },
+  },
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

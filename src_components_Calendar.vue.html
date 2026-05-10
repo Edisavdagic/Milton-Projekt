@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/Calendar.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,99 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/Calendar.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="calendar">
+    &lt;div class="calendar__header">
+      &lt;CalendarViewSwitch
+        v-model="view"
+        :options="viewOptions"
+      />
+    &lt;/div>
 
-<header>
-    
+    &lt;CalendarNavigator
+      :label="formattedRange"
+      @next="goToNextPeriod"
+      @previous="goToPreviousPeriod"
+    />
 
-    <h2>Architecture</h2>
-</header>
+    &lt;CalendarWeekView
+      v-if="view === calendarViews.week"
+      :days="weekDays"
+      :events="weekEvents"
+      :loading="milestoneStore.loading"
+      :row-count="weekRowCount"
+    />
 
-<article>
-    
-</article>
+    &lt;CalendarMonthView
+      v-else-if="view === calendarViews.month"
+      :days="monthDays"
+      @select-day="goToWeek"
+    />
 
-</section>
+    &lt;CalendarYearView
+      v-else-if="view === calendarViews.year"
+      :month-names="monthNames"
+      @select-month="goToMonth"
+    />
+  &lt;/div>
+&lt;/template>
+
+&lt;script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import CalendarMonthView from '@/components/calendar/CalendarMonthView.vue';
+import CalendarNavigator from '@/components/calendar/CalendarNavigator.vue';
+import CalendarViewSwitch from '@/components/calendar/CalendarViewSwitch.vue';
+import CalendarWeekView from '@/components/calendar/CalendarWeekView.vue';
+import CalendarYearView from '@/components/calendar/CalendarYearView.vue';
+import { useProjectMilestones } from '@/composables/useProjectMilestones';
+import { useTaskCalendar } from '@/composables/useTaskCalendar';
+
+defineOptions({
+  name: 'ProjectCalendar',
+});
+
+const route = useRoute();
+const projectId = computed(() => route.params.projectId);
+const { milestoneStore } = useProjectMilestones(projectId);
+const tasks = computed(() => milestoneStore.flatTasks);
+
+const {
+  calendarViews,
+  formattedRange,
+  goToMonth,
+  goToNextPeriod,
+  goToPreviousPeriod,
+  goToWeek,
+  monthDays,
+  monthNames,
+  view,
+  viewOptions,
+  weekDays,
+  weekEvents,
+  weekRowCount,
+} = useTaskCalendar(tasks);
+&lt;/script>
+
+&lt;style lang="scss">
+@use "@/assets/styles/components/calendar";
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

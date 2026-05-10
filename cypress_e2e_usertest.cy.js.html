@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>cypress/e2e/usertest.cy.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,49 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">cypress/e2e/usertest.cy.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// https://on.cypress.io/api
 
-<header>
-    
+describe('Login flow', () => {
+  it('viser login siden korrekt', () => {
+    cy.visit('/');
 
-    <h2>Architecture</h2>
-</header>
+    cy.get('input[type="email"]').should('be.visible');
+    cy.get('input[type="password"]').should('be.visible');
+    cy.contains('Log ind').should('be.visible');
+    cy.screenshot();
+  });
+});
 
-<article>
-    
-</article>
+describe('Login som bruger', () => {
+  it('logger ind og redirecter til dashboard', () => {
+    cy.visit('/');
 
-</section>
+    cy.get('input[type="email"]').type('test@test.com');
+    cy.get('input[type="password"]').type('test1234');
+    cy.screenshot();
+
+    cy.contains('Log ind').click();
+
+    // Tjek redirect
+    cy.url().should('include', '/dashboard');
+    cy.screenshot();
+  });
+});</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

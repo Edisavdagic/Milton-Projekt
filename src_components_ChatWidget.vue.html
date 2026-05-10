@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/ChatWidget.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,126 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/ChatWidget.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { computed, ref, watch, onUnmounted } from 'vue';
+import { useChat } from '@/composables/useProjectChat';
+import { useProjectsStore } from '@/stores/project';
+import ChatList from './ChatList.vue';
+import ChatConversation from './ChatConversation.vue';
 
-<header>
-    
+const emit = defineEmits(['close']);
 
-    <h2>Architecture</h2>
-</header>
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  projectId: {
+    type: String,
+    required: true,
+  },
+  currentUser: {
+    type: Object,
+    required: true,
+  },
+});
 
-<article>
-    
-</article>
+const projectsStore = useProjectsStore();
+const { chats, messages, loadChats, loadAllChats, loadMessages, sendMessage, cleanup } = useChat();
 
-</section>
+const selectedChatId = ref(null);
+const newMessage = ref('');
+const isSending = ref(false);
+
+const selectedChat = computed(
+  () => chats.value.find((c) => c.chatId === selectedChatId.value) ?? null,
+);
+
+watch(
+  [() => props.isOpen, () => props.projectId],
+  ([isOpen, projectId]) => {
+    if (!isOpen) return;
+    if (projectId) {
+      const memberUids = projectsStore.currentProject?.memberUid ?? [];
+      loadChats(projectId, memberUids);
+    } else {
+      loadAllChats();
+    }
+  },
+  { immediate: true },
+);
+
+onUnmounted(() => cleanup());
+
+const openChat = (chat) => {
+  selectedChatId.value = chat.chatId;
+  loadMessages(chat.projectId ?? props.projectId, chat.chatId);
+};
+
+const backToList = () => {
+  selectedChatId.value = null;
+};
+
+const handleSend = async () => {
+  if (isSending.value || !selectedChat.value || !newMessage.value.trim()) return;
+  isSending.value = true;
+  const text = newMessage.value;
+  newMessage.value = '';
+  try {
+    const projectId = selectedChat.value.projectId ?? props.projectId;
+    await sendMessage(
+      projectId,
+      selectedChat.value.chatId,
+      text,
+      selectedChat.value.otherUid,
+      selectedChat.value.otherName,
+      selectedChat.value.otherRole,
+    );
+  } finally {
+    isSending.value = false;
+  }
+};
+&lt;/script>
+
+&lt;template>
+  &lt;Transition name="chat-slide">
+    &lt;section v-if="isOpen" class="chat-widget">
+      &lt;button class="chat-widget__close" @click="emit('close')">×&lt;/button>
+
+      &lt;ChatList v-if="!selectedChat" :chats="chats" @open-chat="openChat" />
+
+      &lt;ChatConversation
+        v-else
+        :selected-chat="selectedChat"
+        :messages="messages"
+        v-model="newMessage"
+        :is-sending="isSending"
+        @back="backToList"
+        @send="handleSend"
+      />
+    &lt;/section>
+  &lt;/Transition>
+&lt;/template>
+
+&lt;style lang="scss">
+@use "@/assets/styles/components/chatwidget";
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

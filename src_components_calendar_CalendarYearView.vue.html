@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/calendar/CalendarYearView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,46 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/calendar/CalendarYearView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="calendar__year">
+    &lt;button
+      v-for="(monthName, monthIndex) in monthNames"
+      :key="monthName"
+      type="button"
+      class="calendar__month-box"
+      @click="$emit('select-month', monthIndex + 1)"
+    >
+      {{ monthName }}
+    &lt;/button>
+  &lt;/div>
+&lt;/template>
 
-<header>
-    
+&lt;script setup>
+defineProps({
+  monthNames: {
+    type: Array,
+    required: true,
+  },
+});
 
-    <h2>Architecture</h2>
-</header>
+defineEmits(['select-month']);
+&lt;/script>
+</code></pre>
+        </article>
+    </section>
 
-<article>
-    
-</article>
 
-</section>
+
 
     
     

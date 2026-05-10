@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/calendar/CalendarMonthView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,64 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/calendar/CalendarMonthView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="calendar__month">
+    &lt;button
+      v-for="day in days"
+      :key="day.date"
+      type="button"
+      class="calendar__month-day"
+      :class="{ 'is-today': day.isToday }"
+      @click="$emit('select-day', day.date)"
+    >
+      &lt;span class="date">{{ day.day }}&lt;/span>
 
-<header>
-    
+      &lt;span
+        v-for="event in day.events.slice(0, visibleEventCount)"
+        :key="event.id"
+        class="event small"
+      >
+        {{ event.title }}
+      &lt;/span>
 
-    <h2>Architecture</h2>
-</header>
+      &lt;span
+        v-if="day.events.length > visibleEventCount"
+        class="calendar__more"
+      >
+        +{{ day.events.length - visibleEventCount }} flere
+      &lt;/span>
+    &lt;/button>
+  &lt;/div>
+&lt;/template>
 
-<article>
-    
-</article>
+&lt;script setup>
+const visibleEventCount = 3;
 
-</section>
+defineProps({
+  days: {
+    type: Array,
+    required: true,
+  },
+});
+
+defineEmits(['select-day']);
+&lt;/script>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

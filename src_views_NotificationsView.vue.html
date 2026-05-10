@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/views/NotificationsView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,79 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/views/NotificationsView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>&lt;/script>
 
-<header>
-    
+&lt;!-- TODO: Skal senere renderes dynamisk via notifications som "nice to have funktionalitet"-->
+&lt;template>
+  &lt;section class="section-content notifications-page">
+    &lt;h1>Mine Notifikationer&lt;/h1>
+    &lt;section class="notifications-list">
+      &lt;article class="notification-item">
+        &lt;div class="notification-item__icon">
+          &lt;img src="@/assets/icons/MessageSecond.svg" alt="Besked ikon" />
+        &lt;/div>
 
-    <h2>Architecture</h2>
-</header>
+        &lt;div class="notification-item__text">
+          &lt;h2>Besked fra *Navn*&lt;/h2>
+          &lt;p>Dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
 
-<article>
-    
-</article>
+      &lt;article class="notification-item">
+        &lt;div class="notification-item__icon">
+          &lt;img src="@/assets/icons/MessageSecond.svg" alt="Besked ikon" />
+        &lt;/div>
 
-</section>
+        &lt;div class="notification-item__text">
+          &lt;h2>Besked fra *Navn*&lt;/h2>
+          &lt;p>Dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="notification-item">
+        &lt;div class="notification-item__icon">
+          &lt;img src="@/assets/icons/Home.svg" alt="Projekt ikon" />
+        &lt;/div>
+
+        &lt;div class="notification-item__text">
+          &lt;h2>Du er nu en del af projekt *Adresse*&lt;/h2>
+          &lt;p>Dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="notification-item">
+        &lt;div class="notification-item__icon">
+          &lt;img src="@/assets/icons/Home.svg" alt="Projekt ikon" />
+        &lt;/div>
+
+        &lt;div class="notification-item__text">
+          &lt;h2>Du er blevet inviteret til projekt *Adresse*&lt;/h2>
+          &lt;p>Dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+    &lt;/section>
+  &lt;/section>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/views/notificationsview';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

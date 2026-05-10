@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>cypress/e2e/loginfail.cy.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,37 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">cypress/e2e/loginfail.cy.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>describe('Login fejl', () => {
+  it('viser fejlbesked ved forkert login', () => {
+    cy.visit('/');
 
-<header>
-    
+    cy.get('input[type="email"]').type('forkert@test.dk');
+    cy.get('input[type="password"]').type('forkertkode');
+    cy.screenshot();
 
-    <h2>Architecture</h2>
-</header>
+    cy.contains('Log ind').click();
 
-<article>
-    
-</article>
+    cy.get('.login__error')
+      .should('be.visible')
+      .and('contain', 'Ugyldig e-mail eller adgangskode.');
+      cy.screenshot();
+  });
+});</code></pre>
+        </article>
+    </section>
 
-</section>
+
+
 
     
     

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/DashboardMilestone.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,165 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/DashboardMilestone.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="top-header">
+    &lt;div>
+      &lt;h2>Milepæle&lt;/h2>
+      &lt;p>Få et overblik over processen&lt;/p>
+    &lt;/div>
+    &lt;button v-if="authStore.isAdmin" class="edit-all" @click="toggleAll">
+      &lt;img
+        class="edit-all__icon"
+        src="@/assets/icons/Edit 2.svg"
+        alt="Rediger ikon"
+      />
+      {{ editing ? "Færdig" : "Rediger" }}
+    &lt;/button>
+  &lt;/div>
 
-<header>
-    
+  &lt;p v-if="store.loading">Indlæser milepæle...&lt;/p>
 
-    <h2>Architecture</h2>
-</header>
+  &lt;div v-else class="milestones-wrapper">
+    &lt;div v-for="(column, colIndex) in store.milestones" :key="column.id" class="milestone-column">
+      &lt;div class="header" :class="{ 'header--with-icon': column.icon }">
+        &lt;span v-if="ICONS[column.icon]" class="milestone-icon">
+          &lt;img :src="ICONS[column.icon]" width="18" height="18" :alt="column.icon" />
+        &lt;/span>
+        &lt;div>
+          &lt;h3>{{ column.title }}&lt;/h3>
+          &lt;p v-if="column.subtitle">{{ column.subtitle }}&lt;/p>
+        &lt;/div>
+      &lt;/div>
 
-<article>
-    
-</article>
+      &lt;div
+        v-for="(item, index) in column.items"
+        :key="item.id"
+        class="milestone-item"
+        :class="{ 'milestone-item--editing': editMode[colIndex] }"
+      >
+        &lt;!-- TITLE -->
+        &lt;input
+          v-if="editMode[colIndex]"
+          v-model="item.title"
+          @blur="store.updateTask(item.id, { title: item.title })"
+        />
 
-</section>
+        &lt;span v-else>{{ item.title }}&lt;/span>
+
+        &lt;!-- STATUS -->
+        &lt;select
+          v-if="editMode[colIndex]"
+          :value="item.status"
+          @change="store.updateTask(item.id, { status: $event.target.value })"
+        >
+          &lt;option value="ikke">Ikke begyndt&lt;/option>
+          &lt;option value="igang">I gang&lt;/option>
+          &lt;option value="færdig">Færdig&lt;/option>
+        &lt;/select>
+
+        &lt;span v-else :class="statusClass(item.status)">
+          {{ statusLabel(item.status) }}
+        &lt;/span>
+
+        &lt;!-- DELETE -->
+        &lt;button v-if="editMode[colIndex]" class="delete" @click="remove(colIndex, index)">✕&lt;/button>
+      &lt;/div>
+
+      &lt;!-- ADD -->
+      &lt;button v-if="editMode[colIndex]" class="add" @click="add(colIndex)">+ Tilføj milepæl&lt;/button>
+
+      &lt;div class="progress" :style="{ '--progress': `${store.progress(column.items)}%` }">
+        &lt;span>{{ store.progress(column.items) }}% færdig&lt;/span>
+        &lt;div class="progress-bar">&lt;/div>
+      &lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script setup>
+import { reactive, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectMilestones } from '@/composables/useProjectMilestones';
+import { statusLabel } from '@/utils/calendar';
+import hammerIcon from '@/assets/icons/hammer-solid.png';
+import plugIcon from '@/assets/icons/plug-solid.png';
+import paintRollerIcon from '@/assets/icons/paint-roller-solid.png';
+
+const ICONS = {
+  hammer: hammerIcon,
+  plug: plugIcon,
+  brush: paintRollerIcon,
+};
+
+const route = useRoute();
+const authStore = useAuthStore();
+const projectId = computed(() => route.params.projectId);
+const { milestoneStore: store } = useProjectMilestones(projectId);
+
+/**
+ * Dynamisk editMode baseret på antal kolonner
+ */
+const editMode = reactive([]);
+
+/**
+ * Sync editMode med milestones
+ */
+watch(
+  () => store.milestones,
+  (cols) => {
+    editMode.length = 0;
+    cols.forEach(() => editMode.push(false));
+  },
+  { immediate: true },
+);
+
+/**
+ * Global editing state
+ */
+const editing = computed(() => editMode.every((e) => e));
+
+/**
+ * Toggle alle kolonner
+ */
+const toggleAll = () => {
+  const newState = !editing.value;
+  editMode.forEach((_, i) => (editMode[i] = newState));
+};
+
+/**
+ * Store actions wrappers
+ */
+const remove = (col, index) => {
+  store.removeItem(col, index);
+};
+
+const add = (col) => {
+  store.addItem(col);
+};
+
+const statusClass = (status) => `status ${status}`;
+&lt;/script>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/components/dashboardmilestone';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

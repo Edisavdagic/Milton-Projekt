@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/views/LoginView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,90 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/views/LoginView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+const router = useRouter();
+const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
 
-    <h2>Architecture</h2>
-</header>
+const email = ref('');
+const password = ref('');
+const localError = ref('');
 
-<article>
-    
-</article>
+async function login() {
+  localError.value = '';
 
-</section>
+  try {
+    await authStore.signIn(email.value, password.value);
+
+    if (authStore.isAdmin) {
+      router.push({ name: 'projectoverview' });
+    } else {
+      await projectsStore.fetchUserProject(authStore.user.uid);
+      router.push({ name: 'dashboard', params: { projectId: projectsStore.currentProjectId } });
+    }
+  } catch {
+    localError.value = authStore.error || 'Login mislykkedes. Prøv igen.';
+  }
+}
+&lt;/script>
+
+&lt;template>
+  &lt;div class="login">
+    &lt;div class="login__left">
+      &lt;div class="login__box">
+        &lt;img class="login__logo" src="../assets/img/logo.webp" alt="Milton Huse logo" />
+
+        &lt;form class="login__form" @submit.prevent="login">
+          &lt;input class="login__input" v-model="email" type="email" placeholder="Email" required />
+          &lt;input
+            class="login__input"
+            v-model="password"
+            type="password"
+            placeholder="Adgangskode"
+            required
+          />
+
+          &lt;p v-if="localError" class="login__error">{{ localError }}&lt;/p>
+
+          &lt;button class="login__button" type="submit" :disabled="authStore.loading">
+            {{ authStore.loading ? "Logger ind..." : "Log ind" }}
+          &lt;/button>
+
+          &lt;a href="#" class="login__forgot-password">Glemt adgangskode?&lt;/a>
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
+
+    &lt;div class="login__right">
+      &lt;img src="../assets/img/image-1.webp" alt="Hus" />
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/views/loginview';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

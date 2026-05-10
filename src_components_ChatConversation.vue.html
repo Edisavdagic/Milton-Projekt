@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/ChatConversation.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,106 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/ChatConversation.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+defineProps({
+  selectedChat: {
+    type: Object,
+    required: true,
+  },
+  messages: {
+    type: Array,
+    required: true,
+  },
+  modelValue: {
+    type: String,
+    required: true,
+  },
+  isSending: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-<header>
-    
+const emit = defineEmits(['back', 'send', 'update:modelValue']);
+&lt;/script>
 
-    <h2>Architecture</h2>
-</header>
+&lt;template>
+  &lt;div class="chat-widget__conversation">
+    &lt;header class="chat-widget__conversation-header">
+      &lt;button class="chat-widget__back" @click="emit('back')">‹&lt;/button>
 
-<article>
-    
-</article>
+      &lt;div class="chat-widget__avatar chat-widget__avatar--large">&lt;/div>
 
-</section>
+      &lt;div>
+        &lt;h2>{{ selectedChat.otherName }}&lt;/h2>
+        &lt;p>{{ selectedChat.otherRole === 'admin' ? 'Byggeleder' : 'Bygherre' }}&lt;/p>
+      &lt;/div>
+    &lt;/header>
+
+    &lt;div class="chat-widget__messages">
+      &lt;template v-for="message in messages" :key="message.id">
+        &lt;div v-if="message.type === 'date'" class="chat-widget__date">
+          &lt;span>{{ message.text }}&lt;/span>
+        &lt;/div>
+
+        &lt;div
+          v-else
+          class="chat-widget__message"
+          :class="{
+            'chat-widget__message--me': message.sender === 'me',
+            'chat-widget__message--them': message.sender === 'them',
+          }"
+        >
+          {{ message.text }}
+        &lt;/div>
+      &lt;/template>
+    &lt;/div>
+
+    &lt;div class="chat-widget__composer">
+      &lt;input
+        type="text"
+        placeholder="Aa"
+        :value="modelValue"
+        @input="emit('update:modelValue', $event.target.value)"
+        @keydown.enter.prevent="emit('send')"
+      />
+
+      &lt;div class="chat-widget__composer-actions">
+        &lt;button type="button">
+          &lt;img src="@/assets/icons/Image.svg" alt="Billede ikon" />
+        &lt;/button>
+
+        &lt;button type="button">
+          &lt;img src="@/assets/icons/Mic.svg" alt="Mikrofon ikon" />
+        &lt;/button>
+
+        &lt;button type="button">
+          &lt;img src="@/assets/icons/Paperclip.svg" alt="Vedhæft ikon" />
+        &lt;/button>
+
+        &lt;button type="button" class="chat-widget__send" @click="emit('send')">
+          &lt;img src="@/assets/icons/Send.svg" alt="Send ikon" />
+        &lt;/button>
+      &lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

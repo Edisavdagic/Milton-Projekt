@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/router/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,111 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/router/index.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createRouter, createWebHistory } from 'vue-router';
+import LoginView from '../views/LoginView.vue';
+import DashboardView from '../views/DashboardView.vue';
+import DocumentsView from '../views/DocumentsView.vue';
+import ProjectoverviewView from '../views/ProjectoverView.vue';
+import NotificationsView from '@/views/NotificationsView.vue';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
+import CalendarView from '@/views/CalendarView.vue';
+import HistoryView from '@/views/HistoryView.vue';
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'login',
+      component: LoginView,
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/projektoversigt',
+      name: 'projectoverview',
+      component: ProjectoverviewView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/notifikationer',
+      name: 'notifications',
+      component: NotificationsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/historik',
+      name: 'history',
+      component: HistoryView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/project/:projectId',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: DashboardView,
+        },
+        {
+          path: 'dokumenter',
+          name: 'documents',
+          component: DocumentsView,
+        },
+        {
+          path: 'kalender',
+          name: 'calendar',
+          component: CalendarView,
+        },
+        //{
+        // path: "historik",
+        // name: "history",
+        // component: HistoryView,
+        //},
+      ],
+    },
+  ],
+});
 
-<header>
-    
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore();
+  const projectsStore = useProjectsStore();
 
-    <h2>Architecture</h2>
-</header>
+  await authStore.initAuth();
 
-<article>
-    
-</article>
+  if (authStore.isAuthenticated &amp;&amp; !authStore.isAdmin &amp;&amp; !projectsStore.currentProjectId) {
+    await projectsStore.fetchUserProject(authStore.user.uid);
+  }
 
-</section>
+  if (to.meta.requiresAuth &amp;&amp; !authStore.isAuthenticated) {
+    return { name: 'login' };
+  }
+
+  if (to.meta.guestOnly &amp;&amp; authStore.isAuthenticated) {
+    if (authStore.isAdmin) return { name: 'projectoverview' };
+    return { name: 'dashboard', params: { projectId: projectsStore.currentProjectId } };
+  }
+
+  return true;
+});
+
+export default router;
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

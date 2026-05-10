@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/TopbarNav.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,103 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/TopbarNav.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { computed, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import ChatWidget from '@/components/ChatWidget.vue';
 
-<header>
-    
+const authStore = useAuthStore();
+const router = useRouter();
+const route = useRoute();
+const isChatOpen = ref(false);
 
-    <h2>Architecture</h2>
-</header>
+const showBackToProjectOverview = computed(
+  () =>
+    authStore.isAdmin &amp;&amp;
+    ['dashboard', 'calendar', 'documents', 'notifications', 'history'].includes(route.name),
+);
 
-<article>
-    
-</article>
+const goToProjectOverview = () => {
+  router.push({ name: 'projectoverview' });
+};
 
-</section>
+const goToNotifications = () => {
+  router.push({ name: 'notifications' });
+};
+
+defineProps({
+  projectAddress: {
+    type: String,
+    required: true,
+  },
+  currentUser: {
+    type: Object,
+    required: true,
+  },
+});
+&lt;/script>
+
+&lt;template>
+  &lt;header class="topbarNav">
+    &lt;div class="topbarNav__address-pill">
+      &lt;button
+        v-if="showBackToProjectOverview"
+        class="topbarNav__back"
+        @click="goToProjectOverview"
+        type="button"
+      >
+        &lt;img src="@/assets/icons/Arrow.svg" alt="Tilbage til projektoverview" />
+      &lt;/button>
+      &lt;h4 class="topbarNav__address">{{ projectAddress }}&lt;/h4>
+    &lt;/div>
+
+    &lt;div class="topbarNav__actions">
+      &lt;div class="topbarNav__icons">
+        &lt;button class="topbarNav__icon-button" @click="isChatOpen = !isChatOpen">
+          &lt;img src="@/assets/icons/Message.svg" alt="Besked ikon" />
+        &lt;/button>
+        &lt;button class="topbarNav__icon-button" @click="goToNotifications">
+          &lt;img src="@/assets/icons/Notification.svg" alt="Notifikation ikon" />
+        &lt;/button>
+        &lt;img src="@/assets/icons/Profile.svg" alt="Profil ikon" />
+      &lt;/div>
+
+      &lt;div class="topbarNav__user">
+        &lt;div class="topbarNav__user-meta">
+          &lt;span class="topbarNav__user-name">{{ currentUser.name }}&lt;/span>
+          &lt;span class="topbarNav__user-email">{{ currentUser.email }}&lt;/span>
+        &lt;/div>
+        &lt;div class="topbarNav__language-switch">
+          &lt;img src="@/assets/icons/Globe.svg" alt="Sprog ikon" />
+          &lt;span>Sprog&lt;/span>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+
+    &lt;ChatWidget :is-open="isChatOpen" @close="isChatOpen = false" />
+  &lt;/header>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/components/topbarNav';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

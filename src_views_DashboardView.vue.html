@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/views/DashboardView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,49 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/views/DashboardView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { computed } from 'vue';
+import DashboardGallery from '@/components/DashboardGallery.vue';
+import DashboardMilestone from '@/components/DashboardMilestone.vue';
+import DashboardTaskList from '@/components/DashboardTaskList.vue';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+const projectsStore = useProjectsStore();
+const projectStatus = computed(() => projectsStore.currentProject?.statusText ?? '');
+&lt;/script>
 
-    <h2>Architecture</h2>
-</header>
+&lt;template>
+  &lt;section class="section-content dashboard">
+    &lt;div class="dashboard__top">
+      &lt;h1 class="dashboard__title">Dashboard&lt;/h1>
+      &lt;span v-if="projectStatus" class="dashboard__status"> Status: {{ projectStatus }} &lt;/span>
+    &lt;/div>
 
-<article>
-    
-</article>
+    &lt;DashboardGallery />
+    &lt;DashboardMilestone />
+    &lt;DashboardTaskList />
+  &lt;/section>
+&lt;/template>
 
-</section>
+&lt;style scoped lang="scss">
+@use '@/assets/styles/views/dashboardview';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

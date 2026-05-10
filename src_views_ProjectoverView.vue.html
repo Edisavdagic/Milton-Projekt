@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/views/ProjectoverView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,196 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/views/ProjectoverView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { onMounted, computed, ref } from 'vue';
+import ProjectCard from '@/components/ProjectCard.vue';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+const projectsStore = useProjectsStore();
+const search = ref('');
+const statusFilter = ref('all');
+const sortOrder = ref('newest');
 
-    <h2>Architecture</h2>
-</header>
+onMounted(() => {
+  projectsStore.fetchProjects();
+  projectsStore.setCurrentProject(null);
+});
 
-<article>
-    
-</article>
+const filterProjects = computed(() => {
+  const term = search.value.toLowerCase().trim();
 
-</section>
+  return projectsStore.projects
+    .filter((project) => {
+      if (statusFilter.value === 'active') return project.isActive;
+      if (statusFilter.value === 'completed') return !project.isActive;
+      return true;
+    })
+    .filter((project) => {
+      if (!term) return true;
+      return [project.name, project.projectType, project.siteManagerName, project.description]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(term));
+    })
+    .sort((a, b) => {
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+      if (sortOrder.value === 'newest') {
+        return bTime - aTime;
+      }
+
+      return aTime - bTime;
+    });
+});
+
+const activeProjects = computed(() =>
+  filterProjects.value.filter((project) => project.isActive),
+);
+
+const completedProjects = computed(() =>
+  filterProjects.value.filter((project) => !project.isActive),
+);
+
+function setStatusFilter(value) {
+  statusFilter.value = value;
+}
+
+function setSortOrder(value) {
+  sortOrder.value = value;
+}
+
+function editProject(project) {
+  console.log(project);
+}
+
+function showHistory(project) {
+  console.log(project);
+}
+&lt;/script>
+
+&lt;template>
+  &lt;section class="projects-overview">
+    &lt;div class="projects-overview__top">
+      &lt;h1 class="projects-overview__title">Projekt Oversigt&lt;/h1>
+
+      &lt;div class="projects-overview__controls">
+        &lt;div class="projects-overview__search">
+          &lt;input
+            v-model="search"
+            type="text"
+            placeholder="Search"
+          />
+          &lt;img
+            class="projects-overview__search-icon"
+            src="@/assets/icons/Search.svg"
+            alt="Søge ikon"
+          />
+        &lt;/div>
+
+        &lt;div class="projects-overview__filters">
+          &lt;button
+            type="button"
+            :class="[
+              'projects-overview__chip',
+              { 'projects-overview__chip--active': statusFilter === 'active' }
+            ]"
+            @click="setStatusFilter('active')"
+          >
+            Aktive
+          &lt;/button>
+
+          &lt;button
+            type="button"
+            :class="[
+              'projects-overview__chip',
+              { 'projects-overview__chip--active': statusFilter === 'completed' }
+            ]"
+            @click="setStatusFilter('completed')"
+          >
+            Afsluttet
+          &lt;/button>
+
+          &lt;button
+            type="button"
+            :class="[
+              'projects-overview__chip',
+              { 'projects-overview__chip--active': sortOrder === 'newest' }
+            ]"
+            @click="setSortOrder('newest')"
+          >
+            Nyeste
+          &lt;/button>
+
+          &lt;button
+            type="button"
+            :class="[
+              'projects-overview__chip',
+              { 'projects-overview__chip--active': sortOrder === 'oldest' }
+            ]"
+            @click="setSortOrder('oldest')"
+          >
+            Ældste
+          &lt;/button>
+        &lt;/div>
+
+        &lt;button class="projects-overview__new-button">
+          &lt;img
+            class="projects-overview__new-button-icon"
+            src="@/assets/icons/Home 2.svg"
+            alt="Hus ikon"
+          />
+          Nyt Projekt
+        &lt;/button>
+      &lt;/div>
+    &lt;/div>
+
+    &lt;div class="projects-overview__section">
+      &lt;h2 class="projects-overview__section-title">Aktive&lt;/h2>
+      &lt;div class="projects-overview__list">
+        &lt;ProjectCard
+          v-for="project in activeProjects"
+          :key="project.id"
+          :project="project"
+          @edit-project="editProject"
+          @show-history="showHistory"
+        />
+      &lt;/div>
+    &lt;/div>
+
+    &lt;div class="projects-overview__section">
+      &lt;h2 class="projects-overview__section-title">Afsluttet&lt;/h2>
+      &lt;div class="projects-overview__list">
+        &lt;ProjectCard
+          v-for="project in completedProjects"
+          :key="project.id"
+          :project="project"
+          @edit-project="editProject"
+          @show-history="showHistory"
+        />
+      &lt;/div>
+    &lt;/div>
+  &lt;/section>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/views/projectoverview';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

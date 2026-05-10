@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/ChatList.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,66 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/ChatList.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+defineProps({
+  chats: {
+    type: Array,
+    required: true,
+  },
+});
 
-<header>
-    
+const emit = defineEmits(['open-chat']);
+&lt;/script>
 
-    <h2>Architecture</h2>
-</header>
+&lt;template>
+  &lt;div class="chat-widget__list-view">
+    &lt;h2 class="chat-widget__title">Beskeder&lt;/h2>
 
-<article>
-    
-</article>
+    &lt;div class="chat-widget__search">
+      &lt;input type="text" placeholder="Søg i beskeder" />
+      &lt;img src="@/assets/icons/Search.svg" alt="Søge ikon" />
+    &lt;/div>
 
-</section>
+    &lt;div class="chat-widget__tabs">
+      &lt;button class="chat-widget__tab chat-widget__tab--active">Alle&lt;/button>
+      &lt;button class="chat-widget__tab">Ulæste&lt;/button>
+    &lt;/div>
+
+    &lt;button
+      v-for="chat in chats"
+      :key="chat.chatId"
+      class="chat-widget__person"
+      @click="emit('open-chat', chat)"
+    >
+      &lt;div class="chat-widget__avatar">&lt;/div>
+
+      &lt;div class="chat-widget__person-info">
+        &lt;h3>{{ chat.otherName }}&lt;/h3>
+        &lt;p>{{ chat.lastMessage }}&lt;/p>
+      &lt;/div>
+
+      &lt;span>{{
+        chat.lastMessageAt?.toDate()?.toLocaleDateString('da-DK') ?? 'Start en samtale'
+      }}&lt;/span>
+    &lt;/button>
+  &lt;/div>
+&lt;/template>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

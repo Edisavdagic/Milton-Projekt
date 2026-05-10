@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/utils/date.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,35 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/utils/date.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>export function formatDate(value) {
+  const date = value instanceof Date ? value : new Date(value);
 
-<header>
-    
+  if (Number.isNaN(date.getTime())) {
+    return 'Ukendt dato';
+  }
 
-    <h2>Architecture</h2>
-</header>
+  return new Intl.DateTimeFormat('da-DK', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+}
+</code></pre>
+        </article>
+    </section>
 
-<article>
-    
-</article>
 
-</section>
+
 
     
     

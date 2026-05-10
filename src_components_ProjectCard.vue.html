@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/ProjectCard.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,83 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/ProjectCard.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { useRouter } from 'vue-router';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+defineProps({
+  project: {
+    type: Object,
+    required: true,
+  },
+});
 
-    <h2>Architecture</h2>
-</header>
+const emit = defineEmits(['edit-project', 'show-history']);
+const router = useRouter();
+const projectsStore = useProjectsStore();
 
-<article>
-    
-</article>
+function openDashboard(project) {
+  projectsStore.setCurrentProject(project);
+  router.push({ name: 'dashboard', params: { projectId: project.id } });
+}
+&lt;/script>
 
-</section>
+&lt;template>
+  &lt;article class="project-item" @click="openDashboard(project)">
+    &lt;img class="project-item__img" :src="project.imageUrl" :alt="project.name" />
+
+    &lt;div class="project-item__info">
+      &lt;div class="project-item__title">
+        &lt;h3>{{ project.name }}&lt;/h3>
+
+        &lt;span v-if="project.notificationsCount" class="notice">
+          {{ project.notificationsCount }} ny notifikation
+        &lt;/span>
+      &lt;/div>
+
+      &lt;div class="project-item__tags">
+        &lt;span>{{ project.projectType }}&lt;/span>
+        &lt;span>Byggeleder: {{ project.siteManagerName }}&lt;/span>
+      &lt;/div>
+
+      &lt;p>{{ project.description }}&lt;/p>
+
+      &lt;span class="status"> Status: {{ project.statusText }} &lt;/span>
+    &lt;/div>
+
+    &lt;div class="project-item__buttons">
+      &lt;button v-if="project.isActive" type="button" @click.stop="emit('edit-project', project)">
+        &lt;img src="@/assets/icons/Edit.svg" alt="Edit icon" />
+        Rediger
+      &lt;/button>
+
+      &lt;button type="button" class="history-btn" @click.stop="emit('show-history', project)">
+        &lt;img src="@/assets/icons/Eye.svg" alt="Eye icon" />
+        Historik
+      &lt;/button>
+    &lt;/div>
+  &lt;/article>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/components/projectCard';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

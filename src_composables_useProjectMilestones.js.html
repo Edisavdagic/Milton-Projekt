@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/composables/useProjectMilestones.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,45 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/composables/useProjectMilestones.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { watch } from 'vue';
+import { useMilestoneStore } from '@/stores/milestones';
 
-<header>
-    
+export function useProjectMilestones(projectId) {
+  const milestoneStore = useMilestoneStore();
 
-    <h2>Architecture</h2>
-</header>
+  async function fetchProjectMilestones(id) {
+    if (!id) {
+      return;
+    }
 
-<article>
-    
-</article>
+    if (milestoneStore.projectId !== id || milestoneStore.milestones.length === 0) {
+      await milestoneStore.fetchMilestones(id);
+    }
+  }
 
-</section>
+  watch(projectId, fetchProjectMilestones, { immediate: true });
+
+  return {
+    milestoneStore,
+    fetchProjectMilestones,
+  };
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

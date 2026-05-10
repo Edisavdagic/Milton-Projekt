@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/views/HistoryView.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,168 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/views/HistoryView.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>&lt;/script>
 
-<header>
-    
+&lt;template>
+  &lt;section class="section-content history-page">
+    &lt;h1>Historik&lt;/h1>
 
-    <h2>Architecture</h2>
-</header>
+    &lt;div class="history-page__controls">
+      &lt;div class="history-page__search">
+        &lt;input type="text" placeholder="Search" />
+        &lt;img class="history-page__search-icon" src="@/assets/icons/Search.svg" alt="Søge ikon" />
+      &lt;/div>
 
-<article>
-    
-</article>
+      &lt;div class="history-page__filters">
+        &lt;button class="history-page__chip history-page__chip--active" type="button">Alle&lt;/button>
 
-</section>
+        &lt;button class="history-page__chip" type="button">Ændringer&lt;/button>
+
+        &lt;button class="history-page__chip" type="button">Tilføjelser&lt;/button>
+
+        &lt;button class="history-page__chip" type="button">Dokumentation&lt;/button>
+      &lt;/div>
+    &lt;/div>
+
+    &lt;section class="history-group">
+      &lt;h2>I dag&lt;/h2>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Upload.svg" alt="Tilføj ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>Billede Tilføjet&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Edit.svg" alt="Rediger ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>1 Fil ændret&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Check square.svg" alt="Tjek ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>Dokumentation godkendt&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Send.svg" alt="Send ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>Dokumentation sendt&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+    &lt;/section>
+
+    &lt;section class="history-group">
+      &lt;h2>I går&lt;/h2>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Upload.svg" alt="Tilføj ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>3 Filer tilføjet&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Calendar.svg" alt="Kalender ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>Tidsplan opdateret&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Edit.svg" alt="Rediger ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>2 Opgaver rettet&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Upload.svg" alt="Tilføj ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>1 3D fil opdateret&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Upload.svg" alt="Tilføj ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>1 3D fil tilføjet&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+
+      &lt;article class="history-item">
+        &lt;div class="history-item__icon">
+          &lt;img src="@/assets/icons/Edit.svg" alt="Rediger ikon" />
+        &lt;/div>
+
+        &lt;div class="history-item__text">
+          &lt;h3>1 Fil ændret&lt;/h3>
+          &lt;p>Ansvarlig &amp; dato&lt;/p>
+        &lt;/div>
+      &lt;/article>
+    &lt;/section>
+  &lt;/section>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/views/historyview';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

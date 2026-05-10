@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/components/DashboardTaskList.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,224 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/components/DashboardTaskList.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div class="task-list">
+    &lt;h2>Opgaver&lt;/h2>
+    &lt;p>Dyk ned i detaljerne for hver opgave&lt;/p>
 
-<header>
-    
+    &lt;!-- CONTROLS -->
+    &lt;div class="controls">
+      &lt;input v-model="search" placeholder="Søg opgaver..." />
 
-    <h2>Architecture</h2>
-</header>
+      &lt;select v-model="filter">
+        &lt;option value="">Alle&lt;/option>
+        &lt;option value="ikke">Ikke begyndt&lt;/option>
+        &lt;option value="igang">I gang&lt;/option>
+        &lt;option value="færdig">Færdig&lt;/option>
+      &lt;/select>
 
-<article>
-    
-</article>
+      &lt;button
+        v-if="authStore.isAdmin"
+        class="edit-all"
+        type="button"
+        @click="editDetails = !editDetails"
+      >
+      &lt;img
+          class="edit-all__icon"
+          src="@/assets/icons/Edit 2.svg"
+          alt="Rediger ikon"
+      />
 
-</section>
+        {{ editDetails ? "Færdig" : "Rediger" }}
+      &lt;/button>
+    &lt;/div>
+
+    &lt;!-- LIST -->
+    &lt;div class="list">
+      &lt;div
+        v-for="task in filteredTasks"
+        :key="task.id"
+        class="task"
+      >
+        &lt;div class="left">
+
+          &lt;!-- TITLE -->
+          &lt;div class="text">{{ task.title }}&lt;/div>
+          &lt;div class="column">{{ task.column }}&lt;/div>
+
+          &lt;!-- DETAILS -->
+          &lt;div class="details">
+
+            &lt;!-- START DATE -->
+            &lt;input
+              v-if="editDetails"
+              type="date"
+              :value="task.startDate"
+              @input="store.updateStartDate(task.id, $event.target.value)"
+            />
+            &lt;span v-else-if="task.startDate">
+              Startet: {{ task.startDate }}
+            &lt;/span>
+
+            &lt;!-- END DATE -->
+            &lt;input
+              v-if="editDetails"
+              type="date"
+              :value="task.endDate"
+              @input="store.updateEndDate(task.id, $event.target.value)"
+            />
+            &lt;span v-else-if="task.endDate">
+              Afsluttet: {{ task.endDate }}
+            &lt;/span>
+
+            &lt;!-- ACTORS -->
+            &lt;div
+              v-if="editDetails"
+              class="actor-editor"
+            >
+              &lt;div
+                v-if="actorList(task.actors).length"
+                class="actor-chips"
+                aria-label="Aktører"
+              >
+                &lt;span
+                  v-for="(actor, actorIndex) in actorList(task.actors)"
+                  :key="`${task.id}-${actorIndex}-${actor}`"
+                  class="actor-chip"
+                >
+                  {{ actor }}
+                  &lt;button
+                    type="button"
+                    class="actor-remove"
+                    :aria-label="`Fjern ${actor}`"
+                    @click="removeActor(task, actorIndex)"
+                  >
+                    x
+                  &lt;/button>
+                &lt;/span>
+              &lt;/div>
+
+              &lt;form
+                class="actor-add"
+                @submit.prevent="addActor(task)"
+              >
+                &lt;input
+                  v-model="actorDrafts[task.id]"
+                  placeholder="Tilføj aktør"
+                />
+                &lt;button type="submit">Tilføj&lt;/button>
+              &lt;/form>
+            &lt;/div>
+            &lt;span
+              v-else-if="actorList(task.actors).length"
+              class="actor-summaries"
+            >
+              &lt;span
+                v-for="actor in actorList(task.actors)"
+                :key="`${task.id}-${actor}`"
+                class="actor-summary"
+              >
+                {{ actor }}
+              &lt;/span>
+            &lt;/span>
+
+          &lt;/div>
+        &lt;/div>
+
+        &lt;!-- STATUS -->
+        &lt;div :class="['status', task.status]">
+          {{ statusLabel(task.status) }}
+        &lt;/div>
+      &lt;/div>
+
+      &lt;div v-if="filteredTasks.length === 0" class="empty">
+        Ingen opgaver matcher din søgning
+      &lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script setup>
+import { computed, reactive, ref } from 'vue';
+import { useMilestoneStore } from '@/stores/milestones';
+import { useAuthStore } from '@/stores/auth';
+import { actorList, statusLabel } from '@/utils/calendar';
+
+const store = useMilestoneStore();
+const authStore = useAuthStore();
+
+/* STATE (UI only) */
+const search = ref('');
+const filter = ref('');
+const editDetails = ref(false);
+const actorDrafts = reactive({});
+
+/* DATA fra store */
+const tasks = computed(() => store.flatTasks);
+
+const addActor = async (task) => {
+  const actor = actorDrafts[task.id]?.trim();
+
+  if (!actor) {
+    return;
+  }
+
+  const actors = actorList(task.actors);
+  const actorExists = actors.some(
+    (currentActor) => currentActor.toLowerCase() === actor.toLowerCase(),
+  );
+
+  if (!actorExists) {
+    await store.updateActors(task.id, [...actors, actor]);
+  }
+
+  actorDrafts[task.id] = '';
+};
+
+const removeActor = async (task, actorIndex) => {
+  const actors = actorList(task.actors).filter((_, index) => index !== actorIndex);
+  await store.updateActors(task.id, actors);
+};
+
+/* FILTER */
+const filteredTasks = computed(() => {
+  return tasks.value.filter((t) => {
+    const matchesFilter =
+      !filter.value || t.status === filter.value;
+
+    const searchableText = [
+      t.title,
+      t.column,
+      ...actorList(t.actors),
+    ].join(' ').toLowerCase();
+
+    const matchesSearch = searchableText.includes(search.value.toLowerCase());
+
+    return matchesFilter &amp;&amp; matchesSearch;
+  });
+});
+
+&lt;/script>
+
+&lt;style scoped lang="scss">
+@use '@/assets/styles/components/dashboardtasklist';
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

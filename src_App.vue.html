@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/App.vue - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,94 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/App.vue</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;script setup>
+import { computed } from 'vue';
+import { RouterView } from 'vue-router';
+import SidebarNav from '@/components/SidebarNav.vue';
+import TopbarNav from '@/components/TopbarNav.vue';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectsStore } from '@/stores/project';
 
-<header>
-    
+const authStore = useAuthStore();
+const projectsStore = useProjectsStore();
 
-    <h2>Architecture</h2>
-</header>
+const user = computed(() => ({
+  name: authStore.profile?.name || 'Gæst',
+  email: authStore.user?.email || 'Ikke logget ind',
+}));
 
-<article>
-    
-</article>
+const projectName = computed(() => projectsStore.currentProject?.name || '');
+const projectId = computed(() => projectsStore.currentProject?.id || '');
+&lt;/script>
 
-</section>
+&lt;template>
+  &lt;div class="app">
+    &lt;!-- Fixed sidebar -->
+    &lt;SidebarNav v-if="authStore.authReady &amp;&amp; authStore.isAuthenticated" />
+
+    &lt;!-- Main area -->
+    &lt;div
+      :class="[
+        'app__main',
+        { 'app__main--with-sidebar': authStore.authReady &amp;&amp; authStore.isAuthenticated },
+      ]"
+    >
+      &lt;!-- Topbar -->
+      &lt;TopbarNav
+        v-if="authStore.authReady &amp;&amp; authStore.isAuthenticated"
+        :projectAddress="projectName"
+        :project-id="projectId"
+        :current-user="user"
+      />
+
+      &lt;!-- Page content -->
+      &lt;main class="content">
+        &lt;RouterView />
+      &lt;/main>
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;style scoped lang="scss">
+.app {
+  min-height: 100vh;
+}
+
+/* Everything except sidebar */
+.app__main {
+  margin-left: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__main--with-sidebar {
+  margin-left: 260px;
+}
+
+/* Main page area */
+.content {
+  flex: 1;
+  box-sizing: border-box;
+  width: 100%;
+}
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     

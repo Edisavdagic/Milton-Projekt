@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Tutorial: Architecture - Documentation</title>
+    <title>src/main.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,22 +35,41 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Architecture</h1>
+    <h1 class="page-title">src/main.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import './assets/main.scss';
 
-<header>
-    
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-    <h2>Architecture</h2>
-</header>
+import App from './App.vue';
+import router from './router';
+import { useAuthStore } from '@/stores/auth';
 
-<article>
-    
-</article>
+const app = createApp(App);
+const pinia = createPinia();
 
-</section>
+app.use(pinia);
+app.use(router);
+
+const authStore = useAuthStore(pinia);
+await authStore.initAuth();
+
+app.mount('#app');
+</code></pre>
+        </article>
+    </section>
+
+
+
 
     
     
