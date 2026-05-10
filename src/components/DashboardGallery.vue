@@ -24,6 +24,8 @@
       @change="handleFiles"
     />
 
+    <p v-if="error" class="gallery__error">{{ error }}</p>
+
     <div class="gallery">
       <div v-for="image in images" :key="image.id" class="card">
         <img :src="image.src" :alt="image.name || 'Uploaded image'" />
@@ -54,6 +56,7 @@ const { images, uploading, loadImages, addImage, removeImage, cleanup } = useIma
 
 const editing = ref(false);
 const fileInput = ref(null);
+const error = ref('');
 const maxSize = 5 * 1024 * 1024;
 
 watch(projectId, (id) => loadImages(id), { immediate: true });
@@ -66,16 +69,15 @@ const toggleEdit = () => {
 
 // upload handler
 const handleFiles = async (event) => {
+  error.value = '';
   const files = Array.from(event.target.files ?? []);
   const validFiles = [];
 
   files.forEach((file) => {
-    // check if it's an image
     if (!file.type.startsWith('image/')) return;
 
-    // check file size
     if (file.size > maxSize) {
-      alert(`"${file.name}" er for stort (max 5MB)`);
+      error.value = `"${file.name}" er for stort (max 5 MB).`;
       return;
     }
 
@@ -85,18 +87,18 @@ const handleFiles = async (event) => {
   try {
     await Promise.all(validFiles.map((file) => addImage(file)));
   } catch {
-    alert('Billedet kunne ikke uploades. Prøv igen.');
+    error.value = 'Billedet kunne ikke uploades. Prøv igen.';
   }
 
-  // reset input
   if (fileInput.value) fileInput.value.value = '';
 };
 
 const handleRemoveImage = async (id) => {
+  error.value = '';
   try {
     await removeImage(id);
   } catch {
-    alert('Billedet kunne ikke slettes. Prøv igen.');
+    error.value = 'Billedet kunne ikke slettes. Prøv igen.';
   }
 };
 </script>
