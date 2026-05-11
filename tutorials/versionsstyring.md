@@ -120,7 +120,7 @@ I Milton-projektet bruges Git af følgende grunde:
 
 Git arbejder med tre logiske områder. En fil bevæger sig mellem dem afhængigt af hvilken kommando man kører:
 
-```
+```text
 ┌──────────────────┐   git add    ┌──────────────┐   git commit   ┌──────────────┐
 │ Working          │ ───────────► │ Staging      │ ─────────────► │ Repository   │
 │ Directory        │              │ Area (Index) │                │ (.git)       │
@@ -161,7 +161,7 @@ I praksis bruger man oftest de første 7 tegn (`3182816`), som er nok til entydi
 - En **branch** er teknisk set bare en pointer (et navn) der peger på en specifik commit. Når du committer, flytter branchen sig frem til det nye commit.
 - **Tags** er navngivne pegere der ikke flytter sig (fx `v1.0.0`).
 
-```
+```text
   main ─────► c3 ◄── HEAD
               │
               ▼
@@ -334,7 +334,7 @@ Når du vil samle to udviklingslinjer, har du to muligheder:
 
 **Merge** bevarer historikken som den var og laver en *merge-commit*:
 
-```
+```text
 A---B---C---M  (main)
      \     /
       D---E    (kort-feature)
@@ -342,7 +342,7 @@ A---B---C---M  (main)
 
 **Rebase** flytter dine commits til toppen af mål-branchen og giver lineær historik:
 
-```
+```text
 A---B---C---D'---E'  (main efter rebase + fast-forward)
 ```
 
@@ -359,7 +359,7 @@ A---B---C---D'---E'  (main efter rebase + fast-forward)
 
 I commit-historikken kan man se et af de få tilfælde, hvor vi brød ud i en branch:
 
-```
+```text
 *   Merge branch 'kalenderRef'
 |\
 | * refactor(calendar): rename components and update styles

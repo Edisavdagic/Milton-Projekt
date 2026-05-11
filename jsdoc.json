@@ -1,8 +1,9 @@
 {
-  "plugins": ["./scripts/jsdoc-include-all.cjs"],
+  "plugins": [],
   "source": {
-    "include": ["src"],
-    "includePattern": ".+\\.(js|vue)$"
+    "include": ["src/utils", "src/composables", "src/stores"],
+    "exclude": ["src/utils/__tests__"],
+    "includePattern": ".+\\.(js)$"
   },
   "opts": {
     "destination": "./docs",

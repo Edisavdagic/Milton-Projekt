@@ -24,13 +24,13 @@ function mapAuthError(err) {
 
 /**
  * @typedef {Object} AuthStore
- * @property {*} user
- * @property {*} role
- * @property {*} isAdmin
- * @property {*} authReady
- * @property {*} loading
- * @property {*} error
- * @property {*} isAuthenticated
+ * @property {FirebaseUser | null} user
+ * @property {UserRole} role
+ * @property {boolean} isAdmin
+ * @property {boolean} authReady
+ * @property {boolean} loading
+ * @property {string | null} error
+ * @property {boolean} isAuthenticated
  * @property {Function} clearError
  * @property {Function} initAuth
  * @property {Function} signIn
@@ -43,14 +43,14 @@ function mapAuthError(err) {
  * @returns {AuthStore}
  */
 export const useAuthStore = defineStore('auth', () => {
-  /** @type {*} */
+  /** @type {FirebaseUser | null} */
   const user = ref(null);
-  /** @type {*} */
+  /** @type {UserRole} */
   const role = ref(null);
   const profile = ref(null);
   const authReady = ref(false);
   const loading = ref(false);
-  /** @type {*} */
+  /** @type {string | null} */
   const error = ref(null);
 
   /** @type {FirebaseUnsubscribe | null} */
@@ -81,7 +81,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
-   * Fetches the role for a user from Firestore Users/{uid}.
+   * Initializes the Firebase auth state listener and resolves with the current user.
+   * Subsequent calls return the same promise without re-attaching the listener.
    *
    * @returns {Promise<FirebaseUser | null>}
    */

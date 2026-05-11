@@ -71,7 +71,7 @@ export function useChat() {
    * profiles once and then keeps `chats` in sync via a real-time listener.
    *
    * @param {string} projectId - Firestore project document ID.
-   * @param {string[]} memberUids - UIDs of all project members (including the current user).
+   * @param {Array.<string>} memberUids - UIDs of all project members (including the current user).
    * @returns {Promise<void>}
    */
   async function loadChats(projectId, memberUids) {
@@ -282,7 +282,7 @@ export function useChat() {
  * Inserts {@link DateSeparator} entries between messages that fall on different calendar days.
  *
  * @param {MessageEntry[]} msgs - Chronologically ordered message list.
- * @returns {Array.<(MessageEntry|DateSeparator)>}
+ * @returns {Array.<(MessageEntry | DateSeparator)>}
  */
 function injectDateSeparators(msgs) {
   const result = [];
