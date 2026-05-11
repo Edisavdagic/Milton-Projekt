@@ -1,5 +1,19 @@
 # Test
 
+## Indholdsfortegnelse
+
+1. [Hvad er unit testing?](#hvad-er-unit-testing)
+2. [Unit testing-principper](#unit-testing-principper)
+3. [Unit tests i projektet](#unit-tests-i-projektet)
+4. [Test-Driven Development (TDD)](#tdd)
+5. [End-to-End (E2E) testing](#e2e-testing)
+6. [Unit tests vs. E2E tests](#unit-vs-e2e)
+7. [Kørsel af tests](#koersel-af-tests)
+
+---
+
+<a name="hvad-er-unit-testing"></a>
+
 ## Hvad er unit testing?
 
 Unit testing er test af **individuelle funktioner eller komponenter i isolation** — adskilt fra resten af systemet. Målet er at verificere at én enhed opfører sig præcis som forventet for et givet input.
@@ -13,6 +27,8 @@ Unit testing er test af **individuelle funktioner eller komponenter i isolation*
 
 ---
 
+<a name="unit-testing-principper"></a>
+
 ## Unit testing-principper
 
 | Princip | Beskrivelse |
@@ -24,6 +40,8 @@ Unit testing er test af **individuelle funktioner eller komponenter i isolation*
 | **Uafhængig** | Tests afhænger ikke af hinanden og kan køres i vilkårlig rækkefølge |
 
 ---
+
+<a name="unit-tests-i-projektet"></a>
 
 ## Unit tests i projektet
 
@@ -128,6 +146,8 @@ it('logs in admin and redirects to projectoverview', async () => {
 
 ---
 
+<a name="tdd"></a>
+
 ## Test-Driven Development (TDD)
 
 TDD er en udviklingsmetode hvor tests skrives **før** koden. Cyklussen er:
@@ -151,6 +171,8 @@ TDD er en udviklingsmetode hvor tests skrives **før** koden. Cyklussen er:
 Da `actorList` og `statusLabel` blev udtrukket fra komponenterne til `src/utils/calendar.js`, var testene i `calendar.spec.js` allerede på plads. De bekræftede at adfærden var uændret efter flytningen — det er TDD's refactor-trin i praksis.
 
 ---
+
+<a name="e2e-testing"></a>
 
 ## End-to-End (E2E) testing
 
@@ -228,6 +250,8 @@ Et kritisk edge case: hvad sker der når login fejler? Testen verificerer at fej
 
 ---
 
+<a name="unit-vs-e2e"></a>
+
 ## Unit tests vs. E2E tests
 
 | | Unit tests | E2E tests |
@@ -242,6 +266,8 @@ Et kritisk edge case: hvad sker der når login fejler? Testen verificerer at fej
 Tommelfingerregel: skriv mange unit tests til logik og komponenter, og færre E2E tests til de vigtigste brugerflows. E2E tests er dyre at køre og vedligeholde, men uerstattelige til at verificere at alt spiller sammen.
 
 ---
+
+<a name="koersel-af-tests"></a>
 
 ## Kørsel af tests
 

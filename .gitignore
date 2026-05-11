@@ -40,3 +40,6 @@ __screenshots__/
 *.timestamp-*-*.mjs
 .env
 *.cache
+
+# Local-only exam notes
+tutorials/versionsstyring-eksamen.md

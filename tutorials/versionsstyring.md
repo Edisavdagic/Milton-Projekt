@@ -6,21 +6,22 @@ Dette dokument er en omfattende gennemgang af versionsstyring med Git i forbinde
 
 ## Indholdsfortegnelse
 
-1. [Hvad er versionsstyring?](#1-hvad-er-versionsstyring)
-2. [Hvorfor bruge versionsstyring?](#2-hvorfor-bruge-versionsstyring)
-3. [Typer af versionsstyringssystemer](#3-typer-af-versionsstyringssystemer)
-4. [Hvorfor valgte vi Git?](#4-hvorfor-valgte-vi-git)
-5. [Gits arkitektur og nøglekoncepter](#5-gits-arkitektur-og-nøglekoncepter)
-6. [Grundlæggende Git-kommandoer](#6-grundlæggende-git-kommandoer)
-7. [Commit-beskeder – god praksis](#7-commit-beskeder--god-praksis)
-8. [Branching i Git](#8-branching-i-git)
-9. [Branch-strategier](#9-branch-strategier)
-10. [Remote repositories](#10-remote-repositories)
-11. [Konflikthåndtering](#11-konflikthåndtering)
-12. [Praktisk Git-workflow i Milton-projektet](#12-praktisk-git-workflow-i-milton-projektet)
-13. [Eksamensoverblik](#13-eksamensoverblik)
+1. [Hvad er versionsstyring?](#hvad-er-versionsstyring)
+2. [Hvorfor bruge versionsstyring?](#hvorfor-bruge-versionsstyring)
+3. [Typer af versionsstyringssystemer](#typer-af-vcs)
+4. [Hvorfor valgte vi Git?](#hvorfor-git)
+5. [Gits arkitektur og nøglekoncepter](#gits-arkitektur)
+6. [Grundlæggende Git-kommandoer](#git-kommandoer)
+7. [Commit-beskeder – god praksis](#commit-beskeder)
+8. [Branching i Git](#branching)
+9. [Branch-strategier](#branch-strategier)
+10. [Remote repositories](#remote-repositories)
+11. [Konflikthåndtering](#konflikter)
+12. [Praktisk Git-workflow i Milton-projektet](#workflow)
 
 ---
+
+<a name="hvad-er-versionsstyring"></a>
 
 ## 1. Hvad er versionsstyring?
 
@@ -37,6 +38,8 @@ Versionsstyring kan på et abstrakt niveau betragtes som en *tidsmaskine for kil
 I Milton-projektet anvendes Git som versionsstyringssystem sammen med GitHub som remote-platform.
 
 ---
+
+<a name="hvorfor-bruge-versionsstyring"></a>
 
 ## 2. Hvorfor bruge versionsstyring?
 
@@ -60,6 +63,8 @@ I Milton-projektet er versionsstyring kernen i hele udviklingsflowet:
 Versionsstyring er altså ikke kun "et sted hvor koden ligger" – det er fundamentet for samarbejde, kvalitetssikring og automatisering.
 
 ---
+
+<a name="typer-af-vcs"></a>
 
 ## 3. Typer af versionsstyringssystemer
 
@@ -101,6 +106,8 @@ Hver klient har en **fuld kopi** af hele repositoriet inkl. historik.
 
 ---
 
+<a name="hvorfor-git"></a>
+
 ## 4. Hvorfor valgte vi Git?
 
 I Milton-projektet bruges Git af følgende grunde:
@@ -113,6 +120,8 @@ I Milton-projektet bruges Git af følgende grunde:
 6. **Værktøjsstøtte** i VS Code, IntelliJ og kommandolinje gør hverdagen lettere.
 
 ---
+
+<a name="gits-arkitektur"></a>
 
 ## 5. Gits arkitektur og nøglekoncepter
 
@@ -172,6 +181,8 @@ I praksis bruger man oftest de første 7 tegn (`3182816`), som er nok til entydi
 ```
 
 ---
+
+<a name="git-kommandoer"></a>
 
 ## 6. Grundlæggende Git-kommandoer
 
@@ -239,6 +250,8 @@ git fetch                # Hent remote-ændringer uden at merge
 
 ---
 
+<a name="commit-beskeder"></a>
+
 ## 7. Commit-beskeder – god praksis
 
 En god commit-besked gør det muligt at forstå *hvorfor* en ændring blev lavet, selv flere måneder senere. Det er især vigtigt i en trunk-based model, hvor commits er den primære enhed af integration – ikke pull requests med lange beskrivelser.
@@ -296,6 +309,8 @@ final commit
 - Onboarding af nye udviklere bliver lettere – historikken fortæller projektets udvikling.
 
 ---
+
+<a name="branching"></a>
 
 ## 8. Branching i Git
 
@@ -372,6 +387,8 @@ I commit-historikken kan man se et af de få tilfælde, hvor vi brød ud i en br
 Kalender-refaktoreringen var stor nok til at fortjene sin egen branch, men resten af historikken viser typiske trunk-based commits direkte på `main`.
 
 ---
+
+<a name="branch-strategier"></a>
 
 ## 9. Branch-strategier
 
@@ -452,6 +469,8 @@ Som GitHub Flow, men med **environment branches** (`pre-production`, `production
 
 ---
 
+<a name="remote-repositories"></a>
+
 ## 10. Remote repositories
 
 ### 10.1 Hvad er et remote?
@@ -512,6 +531,8 @@ Pointen: Næsten alt arbejde foregår lokalt. Først ved `push` deler du noget m
 
 ---
 
+<a name="konflikter"></a>
+
 ## 11. Konflikthåndtering
 
 En **merge-konflikt** opstår, når Git ikke automatisk kan kombinere to ændringer – fx hvis to udviklere har ændret samme linje i samme fil. I trunk-based ses konflikter typisk når man `git pull --rebase`'er før push.
@@ -556,6 +577,8 @@ git rebase --abort       # Afbryd igangværende rebase
 - **Modularisering** – hvis hvert modul har sin egen fil, rammer to udviklere sjældent samme linje.
 
 ---
+
+<a name="workflow"></a>
 
 ## 12. Praktisk Git-workflow i Milton-projektet
 
@@ -656,66 +679,6 @@ git push
 ```
 
 Den korte iterationstid er kun mulig, fordi `main` altid er deployable og CI/CD er på plads.
-
----
-
-## 13. Eksamensoverblik
-
-### 13.1 Centrale begreber (kunne forklares mundtligt)
-
-- **VCS-typer**: Local, Centralized, Distributed.
-- **De tre faser**: Working Directory → Staging → Repository.
-- **Snapshot vs. diff**: Git gemmer snapshots, ikke patches.
-- **Hash**: SHA-1 identifikator, gør historikken uforanderlig.
-- **Branch**: Bare en pointer; billig at oprette og slette.
-- **Merge vs. rebase**: Bevar historik vs. lineariser historik.
-- **Konflikt**: Når Git ikke kan auto-merge – løses manuelt.
-- **Trunk-based**: Kort levetid på branches, hyppig integration, CI/CD som sikkerhedsnet.
-
-### 13.2 Kommandoer du bør kunne forklare
-
-| Kommando | Hvad gør den? |
-|----------|---------------|
-| `git init` | Opretter et nyt repo |
-| `git clone` | Henter et remote repo lokalt |
-| `git status` | Viser tilstanden af working dir og staging |
-| `git add` | Flytter ændringer til staging |
-| `git restore` | Fortryd ændringer / un-stage |
-| `git commit` | Opretter et snapshot i repository |
-| `git log` | Viser historikken |
-| `git diff` | Viser ændringer |
-| `git branch` / `git switch` | Håndter branches |
-| `git merge` | Slår to branches sammen |
-| `git pull --rebase` | Hent og rebase – holder historik lineær |
-| `git push` | Send commits til remote |
-| `git fetch` | Hent uden at merge |
-
-### 13.3 Eksempel-spørgsmål og hvordan man kan svare
-
-**"Hvad sker der teknisk når du laver et commit?"**
-→ Forklar staging area, blob/tree/commit-objekter, SHA-1, og at branchens pointer flyttes frem.
-
-**"Hvorfor er Git distribueret?"**
-→ Hver klient har en fuld kopi → offline-arbejde, robusthed, ingen single point of failure. Modsætningen er CVCS som SVN.
-
-**"Hvilken branch-strategi bruger I, og hvorfor?"**
-→ Trunk-based development. Vi committer primært direkte til `main`, holder commits små og fokuserede, og lader GitHub Actions køre lint + unit + e2e som sikkerhedsnet. Større refaktoreringer (fx kalender-refaktoreringen på `kalenderRef`-branchen) får dog en kort branch for at muliggøre eksplicit code review. Strategien passer fordi gruppen er lille, deployment er kontinuerlig til Firebase Hosting, og vi har stærk testautomatisering.
-
-**"Hvorfor er gode commit-beskeder vigtige?"**
-→ De er dokumentation for fremtidige udviklere, gør code review og `git bisect` brugbar, og hjælper med onboarding. I trunk-based er commit-beskeder ekstra vigtige, fordi commits er den primære integrationsenhed – ikke pull requests med lange beskrivelser.
-
-**"Hvordan løser I konflikter?"**
-→ Konflikt-markører i filen → manuelt redigere → `git add` → `git commit` / `git rebase --continue`. Forebyggelse: `git pull --rebase` ofte, små commits, modulær kode.
-
-**"Hvad er forskellen på merge og rebase?"**
-→ Merge bevarer historikken som en graf med en merge-commit. Rebase flytter commits og giver en lineær historik. Rebase må ikke bruges på commits, der allerede er delt med andre, fordi det ændrer hashes.
-
-### 13.4 Tips til eksamensafholdelse
-
-- **Tegn modellen** – HEAD, branches, commits som et træ er meget lettere at forklare visuelt end verbalt.
-- **Brug konkrete eksempler** – fx `kalenderRef`-branchen og de daglige direct-to-main commits fra Milton-projektet.
-- **Vær ærlig om trade-offs** – ingen branch-strategi er "rigtig"; det handler om kontekst. Forklar hvorfor trunk-based passer til *vores* situation, men ikke nødvendigvis til et stort enterprise-projekt.
-- **Kobl Git til CI/CD** – det viser at du forstår hvorfor versionsstyring er fundamentet for moderne udvikling, ikke en isoleret disciplin. Trunk-based er kun forsvarligt på grund af automatiseret test.
 
 ---
 

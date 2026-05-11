@@ -1,5 +1,18 @@
 # Kodekvalitet og Refaktorering
 
+## Indholdsfortegnelse
+
+1. [Hvad er refaktorering?](#hvad-er-refaktorering)
+2. [Code Smells](#code-smells)
+3. [Refaktorering — Best Practices](#best-practices)
+4. [Clean Code-principper](#clean-code)
+5. [Selvdokumenterende kode](#selvdokumenterende-kode)
+6. [Sammenhæng: Refaktorering og tests](#refaktorering-og-tests)
+
+---
+
+<a name="hvad-er-refaktorering"></a>
+
 ## Hvad er refaktorering?
 
 Refaktorering er processen med at forbedre eksisterende kode **uden at ændre dens eksterne adfærd**. Tænk på det som at renovere et hus uden at ændre grundplanen — strukturen bliver bedre, men funktionaliteten forbliver den samme.
@@ -12,6 +25,8 @@ Refaktorering er processen med at forbedre eksisterende kode **uden at ændre de
 - Gør koden mere fleksibel og genanvendelig
 
 ---
+
+<a name="code-smells"></a>
 
 ## Code Smells
 
@@ -106,6 +121,8 @@ export const useProjectsStore = defineStore('projects', () => {
 
 ---
 
+<a name="best-practices"></a>
+
 ## Refaktorering — Best Practices
 
 ### Boy Scout-reglen
@@ -142,6 +159,8 @@ it('normalizes actors from arrays and comma-separated strings', () => {
 Testen kørte grønt både før og efter refaktoreringen — det er beviset på at adfærden ikke ændrede sig.
 
 ---
+
+<a name="clean-code"></a>
 
 ## Clean Code-principper
 
@@ -209,6 +228,8 @@ export function useProjectMilestones(projectId) {
 
 ---
 
+<a name="selvdokumenterende-kode"></a>
+
 ## Selvdokumenterende kode
 
 God kode læses og forstås uden forklarende kommentarer. Det opnås ved velvalgte navne.
@@ -251,6 +272,8 @@ const end = startsBeforeEnd ? secondDate : firstDate;
 Kommentarer bør forklare **hvorfor**, ikke **hvad** — koden selv viser hvad der sker. Brug kommentarer til skjulte begrænsninger, workarounds eller ikke-åbenlyse algoritmiske valg.
 
 ---
+
+<a name="refaktorering-og-tests"></a>
 
 ## Sammenhæng: Refaktorering og tests
 

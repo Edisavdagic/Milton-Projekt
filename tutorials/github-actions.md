@@ -1,5 +1,21 @@
 # GitHub Actions
 
+## Indholdsfortegnelse
+
+1. [Hvad er GitHub Actions?](#hvad-er-github-actions)
+2. [Komponenter i GitHub Actions](#komponenter)
+3. [Projektets workflows](#projektets-workflows)
+4. [`ci.yml` — Tests](#ci-yml)
+5. [`docs.yml` — Publicer dokumentation](#docs-yml)
+6. [`firebase-hosting-merge.yml` — Deploy til produktion](#merge-yml)
+7. [`firebase-hosting-pull-request.yml` — Preview ved pull request](#pr-yml)
+8. [Den samlede pipeline](#den-samlede-pipeline)
+9. [Secrets](#secrets)
+
+---
+
+<a name="hvad-er-github-actions"></a>
+
 ## Hvad er GitHub Actions?
 
 GitHub Actions er en **built-in CI/CD-platform** i GitHub, der gør det muligt at automatisere opgaver som en reaktion på hændelser i et repository. I stedet for at køre tests manuelt eller deploye ved hjælp af separate værktøjer, sker det hele automatisk — hver gang der pushes kode eller åbnes et pull request.
@@ -12,6 +28,8 @@ GitHub Actions er en **built-in CI/CD-platform** i GitHub, der gør det muligt a
 - Giver hurtig feedback til udviklere om fejl
 
 ---
+
+<a name="komponenter"></a>
 
 ## Komponenter i GitHub Actions
 
@@ -28,6 +46,8 @@ Et workflow er sammensat af flere lag:
 
 ---
 
+<a name="projektets-workflows"></a>
+
 ## Projektets workflows
 
 Projektet har fire workflow-filer i `.github/workflows/`. Tilsammen udgør de en komplet CI/CD-pipeline:
@@ -41,6 +61,8 @@ Projektet har fire workflow-filer i `.github/workflows/`. Tilsammen udgør de en
 ```
 
 ---
+
+<a name="ci-yml"></a>
 
 ## `ci.yml` — Tests
 
@@ -108,6 +130,8 @@ Applikationen bruger Firebase, og Vite kræver disse variabler på build-tidspun
 
 ---
 
+<a name="docs-yml"></a>
+
 ## `docs.yml` — Publicer dokumentation
 
 Denne workflow bygger JSDoc-dokumentationen og publicerer den til GitHub Pages hver gang der merges til `main`.
@@ -147,6 +171,8 @@ jobs:
 `GITHUB_TOKEN` er et automatisk genereret token som GitHub stiller til rådighed — der er ikke behov for at oprette det manuelt.
 
 ---
+
+<a name="merge-yml"></a>
 
 ## `firebase-hosting-merge.yml` — Deploy til produktion
 
@@ -194,6 +220,8 @@ if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
 ---
 
+<a name="pr-yml"></a>
+
 ## `firebase-hosting-pull-request.yml` — Preview ved pull request
 
 Denne workflow deployer en midlertidig **preview-version** af applikationen direkte til et pull request. Det gør det muligt at se og teste ændringer i et rigtigt miljø, inden de merges.
@@ -235,6 +263,8 @@ Da `channelId` ikke er sat (i modsætning til merge-workflowet), deployes der ti
 
 ---
 
+<a name="den-samlede-pipeline"></a>
+
 ## Den samlede pipeline
 
 Sammenhængen mellem de fire workflows ser sådan ud for et typisk pull request:
@@ -260,6 +290,8 @@ PR merges til main
 Tests er dermed en **obligatorisk port** foran produktion — det er ikke muligt at deploye uden at passere igennem dem.
 
 ---
+
+<a name="secrets"></a>
 
 ## Secrets
 
