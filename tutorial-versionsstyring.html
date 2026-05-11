@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Tutorial: versionsstyring - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-src_App.html">src/App</a></li><li><a href="module-src_components_Calendar.html">src/components/Calendar</a></li><li><a href="module-src_components_ChatConversation.html">src/components/ChatConversation</a></li><li><a href="module-src_components_ChatList.html">src/components/ChatList</a></li><li><a href="module-src_components_ChatWidget.html">src/components/ChatWidget</a><ul class='methods'><li data-type='method'><a href="module-src_components_ChatWidget.html#~backToList">backToList</a></li><li data-type='method'><a href="module-src_components_ChatWidget.html#~handleSend">handleSend</a></li><li data-type='method'><a href="module-src_components_ChatWidget.html#~openChat">openChat</a></li></ul></li><li><a href="module-src_components_DashboardGallery.html">src/components/DashboardGallery</a><ul class='methods'><li data-type='method'><a href="module-src_components_DashboardGallery.html#~handleFiles">handleFiles</a></li><li data-type='method'><a href="module-src_components_DashboardGallery.html#~handleRemoveImage">handleRemoveImage</a></li><li data-type='method'><a href="module-src_components_DashboardGallery.html#~toggleEdit">toggleEdit</a></li></ul></li><li><a href="module-src_components_DashboardMilestone.html">src/components/DashboardMilestone</a><ul class='methods'><li data-type='method'><a href="module-src_components_DashboardMilestone.html#~add">add</a></li><li data-type='method'><a href="module-src_components_DashboardMilestone.html#~remove">remove</a></li><li data-type='method'><a href="module-src_components_DashboardMilestone.html#~statusClass">statusClass</a></li><li data-type='method'><a href="module-src_components_DashboardMilestone.html#~toggleAll">toggleAll</a></li></ul></li><li><a href="module-src_components_DashboardTaskList.html">src/components/DashboardTaskList</a><ul class='methods'><li data-type='method'><a href="module-src_components_DashboardTaskList.html#~addActor">addActor</a></li><li data-type='method'><a href="module-src_components_DashboardTaskList.html#~removeActor">removeActor</a></li></ul></li><li><a href="module-src_components_ProjectCard.html">src/components/ProjectCard</a><ul class='methods'><li data-type='method'><a href="module-src_components_ProjectCard.html#~openDashboard">openDashboard</a></li></ul></li><li><a href="module-src_components_SidebarNav.html">src/components/SidebarNav</a><ul class='methods'><li data-type='method'><a href="module-src_components_SidebarNav.html#~logout">logout</a></li></ul></li><li><a href="module-src_components_TopbarNav.html">src/components/TopbarNav</a><ul class='methods'><li data-type='method'><a href="module-src_components_TopbarNav.html#~goToNotifications">goToNotifications</a></li><li data-type='method'><a href="module-src_components_TopbarNav.html#~goToProjectOverview">goToProjectOverview</a></li></ul></li><li><a href="module-src_components_UploadModal.html">src/components/UploadModal</a><ul class='methods'><li data-type='method'><a href="module-src_components_UploadModal.html#~cancel">cancel</a></li><li data-type='method'><a href="module-src_components_UploadModal.html#~confirm">confirm</a></li></ul></li><li><a href="module-src_components_calendar_CalendarMonthView.html">src/components/calendar/CalendarMonthView</a></li><li><a href="module-src_components_calendar_CalendarNavigator.html">src/components/calendar/CalendarNavigator</a></li><li><a href="module-src_components_calendar_CalendarViewSwitch.html">src/components/calendar/CalendarViewSwitch</a></li><li><a href="module-src_components_calendar_CalendarWeekView.html">src/components/calendar/CalendarWeekView</a><ul class='methods'><li data-type='method'><a href="module-src_components_calendar_CalendarWeekView.html#~getColumnStyle">getColumnStyle</a></li><li data-type='method'><a href="module-src_components_calendar_CalendarWeekView.html#~getEventStyle">getEventStyle</a></li></ul></li><li><a href="module-src_components_calendar_CalendarYearView.html">src/components/calendar/CalendarYearView</a></li><li><a href="module-src_composables___tests___useDocuments-spec.html">src/composables/__tests__/useDocuments-spec</a><ul class='methods'><li data-type='method'><a href="module-src_composables___tests___useDocuments-spec.html#~makeDocSnapshot">makeDocSnapshot</a></li></ul></li><li><a href="module-src_composables_useDocuments.html">src/composables/useDocuments</a><ul class='methods'><li data-type='method'><a href="module-src_composables_useDocuments.html#~loadDocuments">loadDocuments</a></li><li data-type='method'><a href="module-src_composables_useDocuments.html#~toDocument">toDocument</a></li><li data-type='method'><a href="module-src_composables_useDocuments.html#~uploadDocument">uploadDocument</a></li><li data-type='method'><a href="module-src_composables_useDocuments.html#~useDocuments">useDocuments</a></li></ul></li><li><a href="module-src_composables_useImages.html">src/composables/useImages</a><ul class='methods'><li data-type='method'><a href="module-src_composables_useImages.html#~addImage">addImage</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~cleanup">cleanup</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~getProjectId">getProjectId</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~imageCollection">imageCollection</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~loadImages">loadImages</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~normalizeProjectId">normalizeProjectId</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~removeImage">removeImage</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~sanitizeFileName">sanitizeFileName</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~toImage">toImage</a></li><li data-type='method'><a href="module-src_composables_useImages.html#~useImages">useImages</a></li></ul></li><li><a href="module-src_composables_useProjectChat.html">src/composables/useProjectChat</a><ul class='methods'><li data-type='method'><a href="module-src_composables_useProjectChat.html#~cleanup">cleanup</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~injectDateSeparators">injectDateSeparators</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~loadAllChats">loadAllChats</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~loadChats">loadChats</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~loadMessages">loadMessages</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~sendMessage">sendMessage</a></li><li data-type='method'><a href="module-src_composables_useProjectChat.html#~useChat">useChat</a></li></ul></li><li><a href="module-src_composables_useProjectMilestones.html">src/composables/useProjectMilestones</a><ul class='methods'><li data-type='method'><a href="module-src_composables_useProjectMilestones.html#~fetchProjectMilestones">fetchProjectMilestones</a></li><li data-type='method'><a href="module-src_composables_useProjectMilestones.html#~useProjectMilestones">useProjectMilestones</a></li></ul></li><li><a href="module-src_composables_useTaskCalendar.html">src/composables/useTaskCalendar</a><ul class='methods'><li data-type='method'><a href="module-src_composables_useTaskCalendar.html#~goToMonth">goToMonth</a></li><li data-type='method'><a href="module-src_composables_useTaskCalendar.html#~goToNextPeriod">goToNextPeriod</a></li><li data-type='method'><a href="module-src_composables_useTaskCalendar.html#~goToPreviousPeriod">goToPreviousPeriod</a></li><li data-type='method'><a href="module-src_composables_useTaskCalendar.html#~goToWeek">goToWeek</a></li><li data-type='method'><a href="module-src_composables_useTaskCalendar.html#~useTaskCalendar">useTaskCalendar</a></li></ul></li><li><a href="module-src_main.html">src/main</a></li><li><a href="module-src_router_index.html">src/router/index</a></li><li><a href="module-src_services_firebase.html">src/services/firebase</a></li><li><a href="module-src_stores_auth.html">src/stores/auth</a><ul class='methods'><li data-type='method'><a href="module-src_stores_auth.html#~clearError">clearError</a></li><li data-type='method'><a href="module-src_stores_auth.html#~fetchUserData">fetchUserData</a></li><li data-type='method'><a href="module-src_stores_auth.html#~initAuth">initAuth</a></li><li data-type='method'><a href="module-src_stores_auth.html#~mapAuthError">mapAuthError</a></li><li data-type='method'><a href="module-src_stores_auth.html#~signIn">signIn</a></li><li data-type='method'><a href="module-src_stores_auth.html#~signOutUser">signOutUser</a></li></ul></li><li><a href="module-src_stores_milestones.html">src/stores/milestones</a><ul class='methods'><li data-type='method'><a href="module-src_stores_milestones.html#~addItem">addItem</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~fetchMilestones">fetchMilestones</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~progress">progress</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~removeItem">removeItem</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~toDateString">toDateString</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~updateActors">updateActors</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~updateEndDate">updateEndDate</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~updateItem">updateItem</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~updateStartDate">updateStartDate</a></li><li data-type='method'><a href="module-src_stores_milestones.html#~updateTask">updateTask</a></li></ul></li><li><a href="module-src_stores_project.html">src/stores/project</a><ul class='methods'><li data-type='method'><a href="module-src_stores_project.html#~fetchProjects">fetchProjects</a></li><li data-type='method'><a href="module-src_stores_project.html#~fetchUserProject">fetchUserProject</a></li><li data-type='method'><a href="module-src_stores_project.html#~setCurrentProject">setCurrentProject</a></li></ul></li><li><a href="module-src_utils___tests___calendar-spec.html">src/utils/__tests__/calendar-spec</a></li><li><a href="module-src_utils___tests___date-spec.html">src/utils/__tests__/date-spec</a></li><li><a href="module-src_utils___tests___file-spec.html">src/utils/__tests__/file-spec</a></li><li><a href="module-src_utils_calendar.html">src/utils/calendar</a><ul class='methods'><li data-type='method'><a href="module-src_utils_calendar.html#~actorList">actorList</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createEventsByDate">createEventsByDate</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createMonthDays">createMonthDays</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createTaskEvent">createTaskEvent</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createTaskEvents">createTaskEvents</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createWeekDays">createWeekDays</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~createWeekEvents">createWeekEvents</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~formatCalendarRange">formatCalendarRange</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~formatDate">formatDate</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~formatDateRange">formatDateRange</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~formatEventPeriod">formatEventPeriod</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~parseCalendarDate">parseCalendarDate</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~shiftCalendarDate">shiftCalendarDate</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~startOfWorkWeek">startOfWorkWeek</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~statusLabel">statusLabel</a></li><li data-type='method'><a href="module-src_utils_calendar.html#~weekRowCount">weekRowCount</a></li></ul></li><li><a href="module-src_utils_file.html">src/utils/file</a><ul class='methods'><li data-type='method'><a href="module-src_utils_file.html#~getFileExtension">getFileExtension</a></li><li data-type='method'><a href="module-src_utils_file.html#~getTypeDetails">getTypeDetails</a></li></ul></li><li><a href="module-src_views_CalendarView.html">src/views/CalendarView</a></li><li><a href="module-src_views_DashboardView.html">src/views/DashboardView</a></li><li><a href="module-src_views_DocumentsView.html">src/views/DocumentsView</a><ul class='methods'><li data-type='method'><a href="module-src_views_DocumentsView.html#~cancelUpload">cancelUpload</a></li><li data-type='method'><a href="module-src_views_DocumentsView.html#~confirmUpload">confirmUpload</a></li><li data-type='method'><a href="module-src_views_DocumentsView.html#~onFileChosen">onFileChosen</a></li></ul></li><li><a href="module-src_views_HistoryView.html">src/views/HistoryView</a></li><li><a href="module-src_views_LoginView.html">src/views/LoginView</a><ul class='methods'><li data-type='method'><a href="module-src_views_LoginView.html#~login">login</a></li></ul></li><li><a href="module-src_views_NotificationsView.html">src/views/NotificationsView</a></li><li><a href="module-src_views_ProjectoverView.html">src/views/ProjectoverView</a><ul class='methods'><li data-type='method'><a href="module-src_views_ProjectoverView.html#~editProject">editProject</a></li><li data-type='method'><a href="module-src_views_ProjectoverView.html#~setSortOrder">setSortOrder</a></li><li data-type='method'><a href="module-src_views_ProjectoverView.html#~setStatusFilter">setStatusFilter</a></li><li data-type='method'><a href="module-src_views_ProjectoverView.html#~showHistory">showHistory</a></li></ul></li><li><a href="module-src_views___tests___DocumentsView-spec.html">src/views/__tests__/DocumentsView-spec</a><ul class='methods'><li data-type='method'><a href="module-src_views___tests___DocumentsView-spec.html#~makeDoc">makeDoc</a></li></ul></li><li><a href="module-src_views___tests___LoginView-spec.html">src/views/__tests__/LoginView-spec</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-architecture.html">Architecture</a></li><li><a href="tutorial-versionsstyring.html">versionsstyring</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: versionsstyring</h1>
+    
+
+    <section>
+
+<header>
+    
+
+    <h2>versionsstyring</h2>
+</header>
+
+<article>
+    <h1>Versionsstyring med Git</h1>
+<p>Dette dokument er en omfattende gennemgang af versionsstyring med Git i forbindelse med Milton-projektet. Det dækker både teori, praksis og refleksion, og er skrevet med henblik på både daglig brug og eksamensforberedelse.</p>
+<hr>
+<h2>Indholdsfortegnelse</h2>
+<ol>
+<li><a href="#1-hvad-er-versionsstyring">Hvad er versionsstyring?</a></li>
+<li><a href="#2-hvorfor-bruge-versionsstyring">Hvorfor bruge versionsstyring?</a></li>
+<li><a href="#3-typer-af-versionsstyringssystemer">Typer af versionsstyringssystemer</a></li>
+<li><a href="#4-hvorfor-valgte-vi-git">Hvorfor valgte vi Git?</a></li>
+<li><a href="#5-gits-arkitektur-og-n%C3%B8glekoncepter">Gits arkitektur og nøglekoncepter</a></li>
+<li><a href="#6-grundl%C3%A6ggende-git-kommandoer">Grundlæggende Git-kommandoer</a></li>
+<li><a href="#7-commit-beskeder--god-praksis">Commit-beskeder – god praksis</a></li>
+<li><a href="#8-branching-i-git">Branching i Git</a></li>
+<li><a href="#9-branch-strategier">Branch-strategier</a></li>
+<li><a href="#10-remote-repositories">Remote repositories</a></li>
+<li><a href="#11-konflikth%C3%A5ndtering">Konflikthåndtering</a></li>
+<li><a href="#12-praktisk-git-workflow-i-milton-projektet">Praktisk Git-workflow i Milton-projektet</a></li>
+<li><a href="#13-eksamensoverblik">Eksamensoverblik</a></li>
+</ol>
+<hr>
+<h2>1. Hvad er versionsstyring?</h2>
+<p><strong>Versionsstyring</strong> (engelsk: <em>Version Control System</em> – VCS) er et system, der registrerer ændringer i filer over tid, så man senere kan:</p>
+<ul>
+<li>Se hvad der er ændret, hvornår og af hvem.</li>
+<li>Vende tilbage til en tidligere version (rollback).</li>
+<li>Sammenligne versioner med hinanden (diff).</li>
+<li>Arbejde flere på den samme kodebase uden at overskrive hinandens arbejde.</li>
+<li>Eksperimentere med nye idéer uden at ødelægge den fungerende kode.</li>
+</ul>
+<p>Versionsstyring kan på et abstrakt niveau betragtes som en <em>tidsmaskine for kildekode</em>. Hver ændring bliver gemt som en &quot;snapshot&quot; af projektet, og man kan til enhver tid bevæge sig tilbage og frem mellem snapshots.</p>
+<p>I Milton-projektet anvendes Git som versionsstyringssystem sammen med GitHub som remote-platform.</p>
+<hr>
+<h2>2. Hvorfor bruge versionsstyring?</h2>
+<p>Versionsstyring løser en række konkrete problemer i softwareudvikling:</p>
+<table>
+<thead>
+<tr>
+<th>Problem uden versionsstyring</th>
+<th>Løsning med Git</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>To udviklere overskriver hinandens kode i en delt mappe</td>
+<td>Distribueret historik – hver udvikler arbejder lokalt og samles via merges</td>
+</tr>
+<tr>
+<td>Filer som <code>index_final_v2_RIGTIG_FINAL.html</code></td>
+<td>Én fil, en historik af versioner via commits</td>
+</tr>
+<tr>
+<td>Svært at finde ud af, hvornår en bug blev introduceret</td>
+<td><code>git log</code>, <code>git blame</code> og <code>git bisect</code></td>
+</tr>
+<tr>
+<td>Et eksperiment ødelægger den fungerende kode</td>
+<td>Lokal commit kan altid rulles tilbage</td>
+</tr>
+<tr>
+<td>Ingen backup hvis harddisken dør</td>
+<td>Remote repository på GitHub fungerer som distribueret backup</td>
+</tr>
+<tr>
+<td>Manuel deployment med risiko for fejl</td>
+<td>CI/CD reagerer automatisk på <code>push</code>-events</td>
+</tr>
+</tbody>
+</table>
+<p>I Milton-projektet er versionsstyring kernen i hele udviklingsflowet:</p>
+<ul>
+<li>Vi arbejder primært trunk-based mod <code>main</code>, så integration sker hyppigt.</li>
+<li>GitHub Actions kører lint, unit tests og e2e-tests automatisk på hver push og pull request.</li>
+<li><code>main</code>-branchen deployes til Firebase Hosting via en CI/CD-pipeline.</li>
+</ul>
+<p>Versionsstyring er altså ikke kun &quot;et sted hvor koden ligger&quot; – det er fundamentet for samarbejde, kvalitetssikring og automatisering.</p>
+<hr>
+<h2>3. Typer af versionsstyringssystemer</h2>
+<p>Versionsstyringssystemer har udviklet sig gennem flere generationer.</p>
+<h3>3.1 Local VCS</h3>
+<p>Den simpleste form. Hele historikken ligger lokalt på én maskine.</p>
+<ul>
+<li>Eksempel: <strong>RCS</strong> (Revision Control System).</li>
+<li>Hver fil har sin egen historik gemt i en lokal database.</li>
+<li><strong>Ulemper:</strong> Ingen samarbejde, ingen backup hvis disken dør, ingen distribuering.</li>
+</ul>
+<h3>3.2 Centraliseret VCS (CVCS)</h3>
+<p>Én central server holder den autoritative kopi, og klienter henter den seneste version.</p>
+<ul>
+<li>Eksempler: <strong>SVN</strong> (Subversion), <strong>CVS</strong>.</li>
+<li>Alle ændringer skal igennem den centrale server.</li>
+<li><strong>Fordele:</strong> Simpel mental model, lettere adgangsstyring.</li>
+<li><strong>Ulemper:</strong>
+<ul>
+<li>Hvis serveren går ned, kan man hverken committe eller hente historik.</li>
+<li>Begrænset offline-arbejde – man har ikke historikken lokalt.</li>
+<li>Single point of failure.</li>
+</ul>
+</li>
+</ul>
+<h3>3.3 Distribueret VCS (DVCS)</h3>
+<p>Hver klient har en <strong>fuld kopi</strong> af hele repositoriet inkl. historik.</p>
+<ul>
+<li>Eksempler: <strong>Git</strong>, <strong>Mercurial</strong>.</li>
+<li>Man kan committe, branche, merge og se historik <strong>offline</strong>.</li>
+<li>Synkronisering med andre sker via <code>push</code>/<code>pull</code> mod et remote.</li>
+<li><strong>Fordele:</strong>
+<ul>
+<li>Robusthed – serveren er ikke et single point of failure.</li>
+<li>Hurtighed – operationer sker lokalt.</li>
+<li>Fleksibilitet – mange workflows muliggøres (fx pull requests, fork-baserede flows).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Eksamenstip:</strong> Forklar at Git ikke kræver netforbindelse for at virke, fordi hele historikken ligger lokalt. Det er en <em>fundamental</em> forskel fra SVN.</p>
+</blockquote>
+<hr>
+<h2>4. Hvorfor valgte vi Git?</h2>
+<p>I Milton-projektet bruges Git af følgende grunde:</p>
+<ol>
+<li><strong>De-facto standard</strong> i moderne webudvikling – alle gruppemedlemmer kender det.</li>
+<li><strong>Distribueret arkitektur</strong> giver robusthed og offline-arbejde.</li>
+<li><strong>Hurtig branching og merging</strong> muliggør den trunk-based model, vi arbejder i.</li>
+<li><strong>GitHub-integration</strong> giver gratis hosting af remote repository, pull requests, code review og issues.</li>
+<li><strong>GitHub Actions</strong> kører CI/CD direkte oven på Git-events (push, pull_request).</li>
+<li><strong>Værktøjsstøtte</strong> i VS Code, IntelliJ og kommandolinje gør hverdagen lettere.</li>
+</ol>
+<hr>
+<h2>5. Gits arkitektur og nøglekoncepter</h2>
+<h3>5.1 De tre faser</h3>
+<p>Git arbejder med tre logiske områder. En fil bevæger sig mellem dem afhængigt af hvilken kommando man kører:</p>
+<pre class="prettyprint source"><code>┌──────────────────┐   git add    ┌──────────────┐   git commit   ┌──────────────┐
+│ Working          │ ───────────► │ Staging      │ ─────────────► │ Repository   │
+│ Directory        │              │ Area (Index) │                │ (.git)       │
+│ (dine filer)     │ ◄─────────── │              │ ◄───────────── │              │
+└──────────────────┘ git restore  └──────────────┘  git reset     └──────────────┘
+</code></pre>
+<ul>
+<li><strong>Working Directory:</strong> Dine filer som de ser ud lige nu på disken. Her redigerer du i editoren.</li>
+<li><strong>Staging Area (Index):</strong> En &quot;kladde&quot; af det næste commit. Her vælger du <em>præcis</em> hvilke ændringer der skal med.</li>
+<li><strong>Repository (.git-mappen):</strong> Selve historikken – alle commits, branches, tags m.m.</li>
+</ul>
+<p><strong>Hvorfor en staging area?</strong> Den giver dig mulighed for at lave commits, der hver især har ét logisk formål, selvom dit working directory indeholder mange forskellige ændringer. Du kan fx tilføje rettelser til to forskellige områder og committe dem hver for sig.</p>
+<h3>5.2 Commits som snapshots</h3>
+<p>Hver commit i Git er et <strong>snapshot</strong> af hele projektet på det tidspunkt, <em>ikke</em> en liste af diffs. Internt optimerer Git ved at genbruge uændrede filer (via SHA-1 indholdsadressering), men den mentale model er:</p>
+<blockquote>
+<p>En commit = &quot;Sådan så projektet ud, dengang.&quot;</p>
+</blockquote>
+<p>Hver commit indeholder:</p>
+<ul>
+<li>Et <strong>snapshot</strong> af alle filer (referencer til indhold via hashes).</li>
+<li>En <strong>forfatter</strong> og <strong>committer</strong> (med navn, email og tidsstempel).</li>
+<li>En <strong>besked</strong> der forklarer hvorfor ændringen blev lavet.</li>
+<li>En reference til <strong>parent-commit(s)</strong> – normalt én, men to ved en merge-commit.</li>
+</ul>
+<h3>5.3 Hashes som unikke identifikatorer</h3>
+<p>Hver commit har en <strong>SHA-1 hash</strong>, et 40-tegns hex-streng (fx <code>3182816a...</code>), der unikt identificerer commit'et. Hashen er deterministisk – samme indhold giver samme hash – og den ændrer sig hvis <em>noget</em> i commit'et ændres (indhold, besked, forfatter, parent).</p>
+<p>Det betyder også at Gits historik er <strong>immutable</strong>: man kan ikke ændre en gammel commit uden at det skaber en ny hash (og dermed en ny commit-kæde).</p>
+<p>I praksis bruger man oftest de første 7 tegn (<code>3182816</code>), som er nok til entydigt at identificere et commit i de fleste projekter.</p>
+<h3>5.4 HEAD, branches og refs</h3>
+<ul>
+<li><strong>HEAD</strong> er en pointer til den commit, du <em>p.t. har tjekket ud</em>. Normalt peger HEAD på en branch, som så peger på en commit.</li>
+<li>En <strong>branch</strong> er teknisk set bare en pointer (et navn) der peger på en specifik commit. Når du committer, flytter branchen sig frem til det nye commit.</li>
+<li><strong>Tags</strong> er navngivne pegere der ikke flytter sig (fx <code>v1.0.0</code>).</li>
+</ul>
+<pre class="prettyprint source"><code>  main ─────► c3 ◄── HEAD
+              │
+              ▼
+              c2
+              │
+              ▼
+              c1
+</code></pre>
+<hr>
+<h2>6. Grundlæggende Git-kommandoer</h2>
+<h3>6.1 Initialisering og kloning</h3>
+<pre class="prettyprint source lang-sh"><code>git init                 # Opretter et nyt repo i den aktuelle mappe
+git clone &lt;url>          # Henter et eksisterende remote repo lokalt
+</code></pre>
+<p>I Milton-projektet kloner nye gruppemedlemmer ned med:</p>
+<pre class="prettyprint source lang-sh"><code>git clone https://github.com/Edisavdagic/Milton-Projekt.git
+</code></pre>
+<h3>6.2 Status og inspektion</h3>
+<pre class="prettyprint source lang-sh"><code>git status               # Hvilke filer er ændret, staged, untracked?
+git log                  # Vis commit-historikken
+git log --oneline        # Kort form, ét commit pr. linje
+git log --graph --all    # Visuelt branch-træ
+git diff                 # Vis ændringer i working directory (ikke staged)
+git diff --staged        # Vis ændringer der er staged til næste commit
+git show &lt;hash>          # Vis indholdet af et specifikt commit
+git blame &lt;fil>          # Hvem ændrede hvilken linje hvornår?
+</code></pre>
+<h3>6.3 Staging og commit</h3>
+<pre class="prettyprint source lang-sh"><code>git add &lt;fil>            # Stage en specifik fil
+git add .                # Stage alle ændringer i nuværende mappe
+git restore &lt;fil>        # Fortryd uændrede ændringer i working directory
+git restore --staged &lt;fil>  # Tag en fil ud af staging area igen
+git commit -m &quot;besked&quot;   # Lav commit med besked
+git commit               # Åbner editor til længere besked
+git commit --amend       # Ret seneste commit (fx tilføj glemt fil eller fix besked)
+</code></pre>
+<blockquote>
+<p><strong>NB:</strong> <code>--amend</code> ændrer commit-hashen og må <em>ikke</em> bruges på commits, der allerede er pushet til en delt branch.</p>
+</blockquote>
+<h3>6.4 Bevægelse i historikken</h3>
+<pre class="prettyprint source lang-sh"><code>git checkout &lt;hash>      # Skift HEAD til et specifikt commit (detached HEAD)
+git switch &lt;branch>      # Skift til en eksisterende branch (moderne kommando)
+git switch -c &lt;ny>       # Opret og skift til en ny branch
+</code></pre>
+<h3>6.5 Synkronisering med remote</h3>
+<pre class="prettyprint source lang-sh"><code>git push                 # Send lokale commits til remote
+git pull                 # Hent og merge remote-ændringer
+git fetch                # Hent remote-ændringer uden at merge
+</code></pre>
+<blockquote>
+<p><strong>Eksamenstip – &quot;bag kulisserne&quot;:</strong> Når du kører <code>git commit</code>, sker der følgende:</p>
+<ol>
+<li>Git tager indholdet fra staging area.</li>
+<li>Det skrives som et <code>tree</code>-objekt (mappestruktur) og en eller flere <code>blob</code>-objekter (filindhold), identificeret ved deres SHA-1.</li>
+<li>Der oprettes et <code>commit</code>-objekt, der peger på tree'et, parent-commit og indeholder forfatter + besked.</li>
+<li>Branchens pointer (fx <code>main</code>) flyttes frem til det nye commit-objekt.</li>
+</ol>
+</blockquote>
+<hr>
+<h2>7. Commit-beskeder – god praksis</h2>
+<p>En god commit-besked gør det muligt at forstå <em>hvorfor</em> en ændring blev lavet, selv flere måneder senere. Det er især vigtigt i en trunk-based model, hvor commits er den primære enhed af integration – ikke pull requests med lange beskrivelser.</p>
+<h3>7.1 Konvention</h3>
+<pre class="prettyprint source"><code>&lt;kort emnelinje – maks 50 tegn, imperativ, ingen punktum>
+
+&lt;valgfri længere brødtekst, wrap ved 72 tegn,
+forklarer hvorfor og hvilken kontekst>
+
+&lt;valgfri footer, fx &quot;Closes #42&quot;>
+</code></pre>
+<h3>7.2 Tommelfingerregler</h3>
+<ul>
+<li><strong>Imperativ form</strong>: &quot;Add login form&quot;, ikke &quot;Added login form&quot; eller &quot;Adds login form&quot;. Læseregel: &quot;Hvis dette commit anvendes, vil det ___.&quot;</li>
+<li><strong>Hvorfor frem for hvad</strong>: Diff'en viser allerede <em>hvad</em>. Brug beskeden til at forklare <em>hvorfor</em>.</li>
+<li><strong>Vær specifik</strong>: Undgå &quot;Fix bug&quot; eller &quot;Update files&quot;.</li>
+<li><strong>Adskil logiske ændringer</strong>: Hellere to små commits end ét uoverskueligt – især vigtigt når man committer direkte til main.</li>
+</ul>
+<h3>7.3 Eksempler</h3>
+<p><strong>God:</strong></p>
+<pre class="prettyprint source"><code>Add error handling for file uploads and display error messages
+</code></pre>
+<pre class="prettyprint source"><code>Refactor calendar into components and utils
+
+Pull date-rendering and actor-lookup helpers out of the monolithic
+CalendarView so the calendar grid, day cells and event chips can be
+tested in isolation.
+</code></pre>
+<p><strong>Dårlig:</strong></p>
+<pre class="prettyprint source"><code>fix
+update
+fixed bug
+asdf
+WIP
+final commit
+</code></pre>
+<h3>7.4 Hvorfor er det vigtigt?</h3>
+<ul>
+<li>Code review bliver hurtigere og mere fokuseret.</li>
+<li><code>git log</code> bliver til reel dokumentation.</li>
+<li><code>git bisect</code> (binær søgning efter en regression) er kun nyttig, hvis commits er små og selvbeskrivende.</li>
+<li>Onboarding af nye udviklere bliver lettere – historikken fortæller projektets udvikling.</li>
+</ul>
+<hr>
+<h2>8. Branching i Git</h2>
+<h3>8.1 Hvad er en branch?</h3>
+<p>En <strong>branch</strong> er en uafhængig udviklingslinje. Teknisk er den blot en navngivet pointer til en commit, men konceptuelt giver det dig en <em>parallel virkelighed</em> hvor du kan arbejde uden at påvirke <code>main</code>.</p>
+<p>Git er ekstremt billigt at branche i, fordi en branch kun er en lille tekstfil under <code>.git/refs/heads/</code>. Det er en af grundene til Gits succes sammenlignet med ældre systemer, hvor branching var en tung og dyr operation.</p>
+<h3>8.2 Hvorfor (og hvornår) branche?</h3>
+<p>Selvom Milton-projektet primært arbejder trunk-based mod <code>main</code>, bruges branches stadig i bestemte situationer:</p>
+<ul>
+<li><strong>Større refaktorering</strong> der ikke kan klares i én lille commit – fx kalender-refaktoreringen, der lå på <code>kalenderRef</code>, før den blev merged ind.</li>
+<li><strong>Risikable eksperimenter</strong> der kunne brække <code>main</code>.</li>
+<li><strong>Pull request-baseret code review</strong>, når gruppen ønsker et grundigt review før integration.</li>
+<li><strong>Deployment-branches</strong> som <code>gh-pages</code>, der bruges af GitHub Pages-deployment.</li>
+</ul>
+<p>For &quot;almindelige&quot; små ændringer (en bugfix, en lille feature, en CSS-justering) committer vi som regel direkte til <code>main</code> efter at have kørt lokale tests – det er kernen i trunk-based.</p>
+<h3>8.3 Branch-kommandoer</h3>
+<pre class="prettyprint source lang-sh"><code>git branch                       # List lokale branches
+git branch -a                    # List alle (lokale + remote)
+git switch -c kort-feature       # Opret og skift til ny branch
+git switch main                  # Skift tilbage til main
+git branch -d kort-feature       # Slet en merged branch
+git branch -D kort-feature       # Tvangssletning (ikke merged) – brug med omtanke
+git merge kort-feature           # Merge branchen ind i nuværende branch
+</code></pre>
+<h3>8.4 Merge vs. rebase</h3>
+<p>Når du vil samle to udviklingslinjer, har du to muligheder:</p>
+<p><strong>Merge</strong> bevarer historikken som den var og laver en <em>merge-commit</em>:</p>
+<pre class="prettyprint source"><code>A---B---C---M  (main)
+     \     /
+      D---E    (kort-feature)
+</code></pre>
+<p><strong>Rebase</strong> flytter dine commits til toppen af mål-branchen og giver lineær historik:</p>
+<pre class="prettyprint source"><code>A---B---C---D'---E'  (main efter rebase + fast-forward)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Merge</th>
+<th>Rebase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Historik</td>
+<td>Forgrenet, viser virkeligheden</td>
+<td>Lineær, ren</td>
+</tr>
+<tr>
+<td>Sikkerhed på delte branches</td>
+<td>Sikker</td>
+<td>Farlig – ændrer hashes</td>
+</tr>
+<tr>
+<td>Konflikter</td>
+<td>Løses én gang i merge-commit</td>
+<td>Kan opstå pr. flyttet commit</td>
+</tr>
+<tr>
+<td>Egnet til</td>
+<td>Færdige features → main</td>
+<td>Egen lokal branch, før push</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tommelfingerregel</strong>: Rebase egne lokale branches; merge ind i delte branches. I trunk-based er rebase ekstra værdifuldt, fordi det holder <code>main</code>s historik lineær og letlæselig.</p>
+<h3>8.5 Visualisering – et eksempel fra Milton</h3>
+<p>I commit-historikken kan man se et af de få tilfælde, hvor vi brød ud i en branch:</p>
+<pre class="prettyprint source"><code>*   Merge branch 'kalenderRef'
+|\
+| * refactor(calendar): rename components and update styles
+| * Refactor calendar into components and utils
+|/
+* refactor(ci): cleanup CI and update e2e test command
+* Add screenshots to Cypress e2e tests
+</code></pre>
+<p>Kalender-refaktoreringen var stor nok til at fortjene sin egen branch, men resten af historikken viser typiske trunk-based commits direkte på <code>main</code>.</p>
+<hr>
+<h2>9. Branch-strategier</h2>
+<p>Selvom Milton-projektet er trunk-based, er det vigtigt at kende de gængse strategier for at kunne diskutere fordele og ulemper.</p>
+<h3>9.1 Trunk-Based Development <em>(vores valg)</em></h3>
+<p>Alle udviklere committer (næsten) direkte til <code>main</code> flere gange om dagen. Branches lever kun timer – eller springes helt over for små ændringer. Ufærdige features kan skjules bag <strong>feature flags</strong>, indtil de er færdige.</p>
+<p><strong>Fordele:</strong></p>
+<ul>
+<li>Maksimal integration → minimal merge-smerte.</li>
+<li>Hurtigste feedback fra CI/CD og fra andre udviklere.</li>
+<li><code>main</code> er altid kilden til sandheden; ingen langtlevende branches der driver ud i ingenting.</li>
+<li>Tvinger små, fokuserede commits frem.</li>
+</ul>
+<p><strong>Ulemper / forudsætninger:</strong></p>
+<ul>
+<li>Kræver høj tillid mellem udviklere – man committer &quot;live&quot; til delt kode.</li>
+<li>Kræver stærk automatiseret test (lint, unit, e2e) som sikkerhedsnet.</li>
+<li>Risiko for at brække <code>main</code>, hvis disciplinen glipper.</li>
+</ul>
+<p><strong>Hvorfor det passer til Milton-projektet:</strong></p>
+<ul>
+<li>Lille gruppe → kort kommunikationsvej.</li>
+<li>Vi har GitHub Actions, der kører unit tests (Vitest) og e2e (Cypress) på hver push.</li>
+<li>Vi deployer kontinuerligt til Firebase Hosting fra <code>main</code> – det giver mening at <code>main</code> altid er release-bar.</li>
+<li>Korte projektperioder (eksamen) → ingen behov for tunge versionerede releases.</li>
+</ul>
+<h3>9.2 Feature Branching</h3>
+<p>For hver ny feature oprettes en branch fra <code>main</code>, der arbejdes og merges når featuren er færdig.</p>
+<p><strong>Fordele:</strong> Simpel, isolerede ændringer, fungerer godt med code review.
+<strong>Ulemper:</strong> Langtlevende feature-branches kan blive svære at merge (drift fra <code>main</code>), og man får senere feedback fra CI.</p>
+<h3>9.3 Git Flow</h3>
+<p>En struktureret model med flere typer langtlevende branches:</p>
+<ul>
+<li><code>main</code> – produktion.</li>
+<li><code>develop</code> – integration af færdige features.</li>
+<li><code>feature/*</code> – nye features (forgrenet fra <code>develop</code>).</li>
+<li><code>release/*</code> – forberedelse af release.</li>
+<li><code>hotfix/*</code> – akutte rettelser direkte fra <code>main</code>.</li>
+</ul>
+<p><strong>Fordele:</strong> Velegnet til projekter med versionerede releases (fx desktop-software, installerbare apps).
+<strong>Ulemper:</strong> Overkill for de fleste webprojekter med kontinuerlig deployment. Mange branches at vedligeholde.</p>
+<h3>9.4 GitHub Flow</h3>
+<p>En letvægtsmodel skabt til kontinuerlig deployment:</p>
+<ul>
+<li><code>main</code> er altid produktionsklar.</li>
+<li>Alt arbejde sker i kortvarige feature-branches.</li>
+<li>Pull request → review → merge → deploy.</li>
+</ul>
+<p><strong>Fordele:</strong> Simpel, hurtig, passer godt til CI/CD og SaaS.
+<strong>Ulemper:</strong> Kræver god testdækning, da <code>main</code> skal være altid-deployable. Branches kan stadig leve længere end nødvendigt.</p>
+<p>GitHub Flow ligger tæt på trunk-based – forskellen er primært, om man som standard arbejder <em>i en branch</em> eller <em>direkte på main</em>.</p>
+<h3>9.5 GitLab Flow</h3>
+<p>Som GitHub Flow, men med <strong>environment branches</strong> (<code>pre-production</code>, <code>production</code>) for at håndtere staging og produktion separat.</p>
+<h3>9.6 Sammenligning</h3>
+<table>
+<thead>
+<tr>
+<th>Strategi</th>
+<th>Branch-levetid</th>
+<th>Egnet til</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Trunk-Based</strong> <em>(vores)</em></td>
+<td>Minutter–timer</td>
+<td>Modne teams med stærk automatisering, kontinuerlig deployment</td>
+</tr>
+<tr>
+<td>Feature Branching</td>
+<td>Dage–uger</td>
+<td>Små teams, gradvis udvikling</td>
+</tr>
+<tr>
+<td>Git Flow</td>
+<td>Uger–måneder</td>
+<td>Versionerede produkter, planlagte releases</td>
+</tr>
+<tr>
+<td>GitHub Flow</td>
+<td>Timer–dage</td>
+<td>SaaS, CI/CD, web</td>
+</tr>
+<tr>
+<td>GitLab Flow</td>
+<td>Timer–dage</td>
+<td>SaaS med flere miljøer</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Eksamenstip:</strong> Vælg strategi ud fra <strong>release-kadence</strong> og <strong>teamets modenhed</strong>. Et ugentligt SaaS-release passer dårligt med Git Flow; en embedded device-firmware passer dårligt med Trunk-Based. I Milton-projektet matcher Trunk-Based projektets størrelse, vores CI/CD og hyppigheden af deployment.</p>
+</blockquote>
+<hr>
+<h2>10. Remote repositories</h2>
+<h3>10.1 Hvad er et remote?</h3>
+<p>Et <strong>remote</strong> er en version af projektet, der ligger et andet sted – typisk på en server som GitHub, GitLab eller Bitbucket. Det fungerer som:</p>
+<ul>
+<li><strong>Samarbejdspunkt</strong> – det &quot;neutrale sted&quot; alle synkroniserer mod.</li>
+<li><strong>Backup</strong> – fuld kopi af historikken uden for din maskine.</li>
+<li><strong>Trigger for automatisering</strong> – CI/CD lytter på events på remote.</li>
+</ul>
+<p>Et lokalt repo kan have flere remotes. Den primære hedder konventionelt <code>origin</code>.</p>
+<h3>10.2 Remote-kommandoer</h3>
+<pre class="prettyprint source lang-sh"><code>git remote                            # List remotes
+git remote -v                         # Vis remote URL'er
+git remote add origin &lt;url>           # Tilføj en remote
+git remote set-url origin &lt;url>       # Skift URL
+git remote remove origin              # Fjern
+</code></pre>
+<h3>10.3 Synkroniseringsoperationer</h3>
+<pre class="prettyprint source lang-sh"><code>git clone &lt;url>          # Hent repo + hele historikken første gang
+git fetch                # Hent remote-ændringer (men merge ikke)
+git pull                 # fetch + merge i ét trin
+git pull --rebase        # fetch + rebase (lineær historik – passer godt til trunk-based)
+git push                 # Send lokale commits til remote
+git push -u origin &lt;br>  # Sæt upstream-tracking ved første push
+git push --force-with-lease  # &quot;Sikker&quot; force push, fejler hvis remote er ændret
+</code></pre>
+<p><strong>Forskel på <code>fetch</code> og <code>pull</code>:</strong></p>
+<ul>
+<li><code>fetch</code> opdaterer kun dine <em>remote-tracking branches</em> (<code>origin/main</code>). Din lokale <code>main</code> ændres ikke.</li>
+<li><code>pull</code> er <code>fetch</code> + <code>merge</code> (eller rebase). Det ændrer din lokale branch.</li>
+</ul>
+<p>I trunk-based er det en god vane at køre <code>git pull --rebase</code> flere gange dagligt, så din lokale <code>main</code> altid afspejler den nyeste delte state, før du pusher.</p>
+<h3>10.4 Tracking branches</h3>
+<p>Når du laver <code>git push -u origin &lt;branch&gt;</code>, sætter du en <strong>upstream</strong>-relation. Bagefter kan du nøjes med <code>git pull</code> og <code>git push</code> uden flere argumenter, og <code>git status</code> vil fortælle dig om du er &quot;ahead&quot; eller &quot;behind&quot; remote.</p>
+<h3>10.5 Lokal vs. remote – hvad gør hvad?</h3>
+<table>
+<thead>
+<tr>
+<th>Handling</th>
+<th>Sker lokalt</th>
+<th>Sker på remote</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git add</code>, <code>git commit</code></td>
+<td>✓</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>git branch</code>, <code>git switch</code></td>
+<td>✓</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>✓</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>✓ (opdaterer refs)</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>✓</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>–</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p>Pointen: Næsten alt arbejde foregår lokalt. Først ved <code>push</code> deler du noget med andre – og det er det øjeblik, hvor CI/CD reagerer og de andre i gruppen kan se din kode.</p>
+<hr>
+<h2>11. Konflikthåndtering</h2>
+<p>En <strong>merge-konflikt</strong> opstår, når Git ikke automatisk kan kombinere to ændringer – fx hvis to udviklere har ændret samme linje i samme fil. I trunk-based ses konflikter typisk når man <code>git pull --rebase</code>'er før push.</p>
+<h3>11.1 Eksempel på konflikt-markører</h3>
+<p>Når Git støder på en konflikt, skriver den begge versioner ind i filen:</p>
+<pre class="prettyprint source lang-js"><code>function getStatus() {
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  return &quot;active&quot;;
+=======
+  return &quot;in_progress&quot;;
+>>>>>>> origin/main
+}
+</code></pre>
+<ul>
+<li>Mellem <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> og <code>=======</code> står <em>din</em> version.</li>
+<li>Mellem <code>=======</code> og <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</code> står <em>den indkommende</em> version.</li>
+</ul>
+<h3>11.2 Trin for at løse konflikten</h3>
+<ol>
+<li>Åbn filen i editoren.</li>
+<li>Vælg den korrekte version (eller en kombination).</li>
+<li>Slet konflikt-markørerne (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>).</li>
+<li><code>git add &lt;fil&gt;</code> for at markere konflikten som løst.</li>
+<li><code>git commit</code> (ved merge) eller <code>git rebase --continue</code> (ved rebase).</li>
+</ol>
+<p>Hvis konflikten viser sig at være for kompliceret, kan man altid afbryde:</p>
+<pre class="prettyprint source lang-sh"><code>git merge --abort        # Afbryd igangværende merge
+git rebase --abort       # Afbryd igangværende rebase
+</code></pre>
+<h3>11.3 Sådan undgår man konflikter</h3>
+<ul>
+<li><strong>Pull ofte</strong> så din lokale <code>main</code> ikke når at drive langt fra origin – især vigtigt i trunk-based.</li>
+<li><strong>Hold commits små</strong> – jo mindre overflade, jo mindre risiko for overlap.</li>
+<li><strong>Kommuniker</strong> med gruppen om hvem der arbejder hvor.</li>
+<li><strong>Modularisering</strong> – hvis hvert modul har sin egen fil, rammer to udviklere sjældent samme linje.</li>
+</ul>
+<hr>
+<h2>12. Praktisk Git-workflow i Milton-projektet</h2>
+<p>Et typisk arbejdsforløb i Milton-projektet ser sådan ud – trunk-based, med direkte arbejde på <code>main</code> for små ændringer.</p>
+<h3>12.1 Synkroniser før du starter</h3>
+<pre class="prettyprint source lang-sh"><code>git switch main
+git pull --rebase
+</code></pre>
+<p>Dette sikrer at din lokale <code>main</code> er identisk med origin, så du ikke arbejder oven på forældet kode.</p>
+<h3>12.2 Arbejd og commit i små trin</h3>
+<pre class="prettyprint source lang-sh"><code># Lav en lille fokuseret ændring i editoren
+git status
+git diff
+git add src/views/DocumentsView.vue
+git commit -m &quot;Add document upload form to DocumentsView&quot;
+
+# Næste lille ændring
+git add src/components/DocumentList.vue
+git commit -m &quot;Render uploaded documents in DocumentList&quot;
+</code></pre>
+<p>I trunk-based er disciplinen omkring <strong>små commits</strong> ekstra vigtig. Hver commit bør være:</p>
+<ul>
+<li>Lille (få filer, få linjer).</li>
+<li>Selvstændig (kunne stå alene logisk).</li>
+<li>Grøn (lokale tests og lint passerer).</li>
+</ul>
+<h3>12.3 Kør lokale checks før push</h3>
+<pre class="prettyprint source lang-sh"><code>npm run lint
+npm run test:unit
+</code></pre>
+<p>Det er din egen private &quot;CI&quot;, inden den rigtige CI tager over. I trunk-based skal du være ekstra sikker, fordi din commit lander direkte på den delte hovedlinje.</p>
+<h3>12.4 Sync igen og push</h3>
+<p>Lige før du pusher, synkroniser igen for at undgå at skubbe på forældet base:</p>
+<pre class="prettyprint source lang-sh"><code>git pull --rebase
+git push
+</code></pre>
+<h3>12.5 CI/CD reagerer automatisk</h3>
+<p>GitHub Actions (konfigureret i <code>.github/workflows/</code>) kører på hver push til <code>main</code>:</p>
+<ul>
+<li>Linting med ESLint.</li>
+<li>Unit tests med Vitest.</li>
+<li>E2E tests med Cypress.</li>
+<li>Bygger appen og deployer til Firebase Hosting hvis alt er grønt.</li>
+</ul>
+<p>Det er denne automatisering, der gør trunk-based forsvarligt. Uden en grundig CI ville direkte commits til <code>main</code> være for risikabelt.</p>
+<h3>12.6 Hvornår vi <em>alligevel</em> bruger en branch</h3>
+<p>Selvom udgangspunktet er trunk-based, opretter vi en kortvarig branch når:</p>
+<ul>
+<li>Ændringen er <strong>stor og risikabel</strong> (større refaktorering, ny modul-struktur).</li>
+<li>Vi vil have <strong>eksplicit code review</strong> før integration.</li>
+<li>En <strong>WIP</strong> strækker sig over flere dage og ikke kan skjules bag et feature flag.</li>
+</ul>
+<p>Eksempel fra historikken – kalender-refaktoreringen:</p>
+<pre class="prettyprint source lang-sh"><code>git switch -c kalenderRef
+# ... flere commits af refaktorering ...
+git push -u origin kalenderRef
+# Pull request, review, godkendt
+git switch main
+git pull --rebase
+git merge kalenderRef
+git push
+git branch -d kalenderRef
+git push origin --delete kalenderRef
+</code></pre>
+<h3>12.7 Hotfix-eksempel</h3>
+<p>I trunk-based er hotfixes næsten samme flow som almindelige commits, fordi <code>main</code> allerede er produktionsbranchen:</p>
+<pre class="prettyprint source lang-sh"><code>git switch main
+git pull --rebase
+# Ret fejlen direkte
+git commit -am &quot;fix e2e failed login test to contain corrected message&quot;
+git push
+# CI/CD bygger og deployer rettelsen
+</code></pre>
+<p>Den korte iterationstid er kun mulig, fordi <code>main</code> altid er deployable og CI/CD er på plads.</p>
+<hr>
+<h2>13. Eksamensoverblik</h2>
+<h3>13.1 Centrale begreber (kunne forklares mundtligt)</h3>
+<ul>
+<li><strong>VCS-typer</strong>: Local, Centralized, Distributed.</li>
+<li><strong>De tre faser</strong>: Working Directory → Staging → Repository.</li>
+<li><strong>Snapshot vs. diff</strong>: Git gemmer snapshots, ikke patches.</li>
+<li><strong>Hash</strong>: SHA-1 identifikator, gør historikken uforanderlig.</li>
+<li><strong>Branch</strong>: Bare en pointer; billig at oprette og slette.</li>
+<li><strong>Merge vs. rebase</strong>: Bevar historik vs. lineariser historik.</li>
+<li><strong>Konflikt</strong>: Når Git ikke kan auto-merge – løses manuelt.</li>
+<li><strong>Trunk-based</strong>: Kort levetid på branches, hyppig integration, CI/CD som sikkerhedsnet.</li>
+</ul>
+<h3>13.2 Kommandoer du bør kunne forklare</h3>
+<table>
+<thead>
+<tr>
+<th>Kommando</th>
+<th>Hvad gør den?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>Opretter et nyt repo</td>
+</tr>
+<tr>
+<td><code>git clone</code></td>
+<td>Henter et remote repo lokalt</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>Viser tilstanden af working dir og staging</td>
+</tr>
+<tr>
+<td><code>git add</code></td>
+<td>Flytter ændringer til staging</td>
+</tr>
+<tr>
+<td><code>git restore</code></td>
+<td>Fortryd ændringer / un-stage</td>
+</tr>
+<tr>
+<td><code>git commit</code></td>
+<td>Opretter et snapshot i repository</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>Viser historikken</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>Viser ændringer</td>
+</tr>
+<tr>
+<td><code>git branch</code> / <code>git switch</code></td>
+<td>Håndter branches</td>
+</tr>
+<tr>
+<td><code>git merge</code></td>
+<td>Slår to branches sammen</td>
+</tr>
+<tr>
+<td><code>git pull --rebase</code></td>
+<td>Hent og rebase – holder historik lineær</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>Send commits til remote</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>Hent uden at merge</td>
+</tr>
+</tbody>
+</table>
+<h3>13.3 Eksempel-spørgsmål og hvordan man kan svare</h3>
+<p><strong>&quot;Hvad sker der teknisk når du laver et commit?&quot;</strong>
+→ Forklar staging area, blob/tree/commit-objekter, SHA-1, og at branchens pointer flyttes frem.</p>
+<p><strong>&quot;Hvorfor er Git distribueret?&quot;</strong>
+→ Hver klient har en fuld kopi → offline-arbejde, robusthed, ingen single point of failure. Modsætningen er CVCS som SVN.</p>
+<p><strong>&quot;Hvilken branch-strategi bruger I, og hvorfor?&quot;</strong>
+→ Trunk-based development. Vi committer primært direkte til <code>main</code>, holder commits små og fokuserede, og lader GitHub Actions køre lint + unit + e2e som sikkerhedsnet. Større refaktoreringer (fx kalender-refaktoreringen på <code>kalenderRef</code>-branchen) får dog en kort branch for at muliggøre eksplicit code review. Strategien passer fordi gruppen er lille, deployment er kontinuerlig til Firebase Hosting, og vi har stærk testautomatisering.</p>
+<p><strong>&quot;Hvorfor er gode commit-beskeder vigtige?&quot;</strong>
+→ De er dokumentation for fremtidige udviklere, gør code review og <code>git bisect</code> brugbar, og hjælper med onboarding. I trunk-based er commit-beskeder ekstra vigtige, fordi commits er den primære integrationsenhed – ikke pull requests med lange beskrivelser.</p>
+<p><strong>&quot;Hvordan løser I konflikter?&quot;</strong>
+→ Konflikt-markører i filen → manuelt redigere → <code>git add</code> → <code>git commit</code> / <code>git rebase --continue</code>. Forebyggelse: <code>git pull --rebase</code> ofte, små commits, modulær kode.</p>
+<p><strong>&quot;Hvad er forskellen på merge og rebase?&quot;</strong>
+→ Merge bevarer historikken som en graf med en merge-commit. Rebase flytter commits og giver en lineær historik. Rebase må ikke bruges på commits, der allerede er delt med andre, fordi det ændrer hashes.</p>
+<h3>13.4 Tips til eksamensafholdelse</h3>
+<ul>
+<li><strong>Tegn modellen</strong> – HEAD, branches, commits som et træ er meget lettere at forklare visuelt end verbalt.</li>
+<li><strong>Brug konkrete eksempler</strong> – fx <code>kalenderRef</code>-branchen og de daglige direct-to-main commits fra Milton-projektet.</li>
+<li><strong>Vær ærlig om trade-offs</strong> – ingen branch-strategi er &quot;rigtig&quot;; det handler om kontekst. Forklar hvorfor trunk-based passer til <em>vores</em> situation, men ikke nødvendigvis til et stort enterprise-projekt.</li>
+<li><strong>Kobl Git til CI/CD</strong> – det viser at du forstår hvorfor versionsstyring er fundamentet for moderne udvikling, ikke en isoleret disciplin. Trunk-based er kun forsvarligt på grund af automatiseret test.</li>
+</ul>
+<hr>
+<p><em>Næste dokument i serien dækker kodekvalitet og refaktorering.</em></p>
+</article>
+
+</section>
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Mon May 11 2026 10:04:12 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
