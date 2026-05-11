@@ -1,23 +1,16 @@
 {
-    "plugins": ["./scripts/jsdoc-include-all.cjs"],
-    "source": {
-        "include": [
-            "src",
-            "cypress",
-            "cypress.config.js",
-            "eslint.config.js",
-            "vite.config.js",
-            "vitest.config.js"
-        ],
-        "includePattern": ".+\\.(js|vue)$"
-    },
-    "opts": {
-        "destination": "./docs",
-        "recurse": true,
-        "tutorials": "./tutorials",
-        "template": "./node_modules/docdash"
-    },
-    "docdash": {
-        "tutorialsLabel": "Documents"
-    }
+  "plugins": ["./scripts/jsdoc-include-all.cjs"],
+  "source": {
+    "include": ["src"],
+    "includePattern": ".+\\.(js|vue)$"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true,
+    "tutorials": "./tutorials",
+    "template": "./node_modules/docdash"
+  },
+  "docdash": {
+    "tutorialsLabel": "Documents"
+  }
 }
