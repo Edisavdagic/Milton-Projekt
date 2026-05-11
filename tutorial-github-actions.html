@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Tutorial: github-actions - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-architecture.html">Architecture</a></li><li><a href="tutorial-github-actions.html">github-actions</a></li><li><a href="tutorial-kodekvalitet-and-refactor.html">kodekvalitet-and-refactor</a></li><li><a href="tutorial-testing.html">testing</a></li><li><a href="tutorial-versionsstyring.html">versionsstyring</a></li></ul><h3>Global</h3><ul><li><a href="global.html#injectDateSeparators">injectDateSeparators</a></li><li><a href="global.html#useAuthStore">useAuthStore</a></li><li><a href="global.html#useChat">useChat</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: github-actions</h1>
+    
+
+    <section>
+
+<header>
+    
+
+    <h2>github-actions</h2>
+</header>
+
+<article>
+    <h1>GitHub Actions</h1>
+<h2>Hvad er GitHub Actions?</h2>
+<p>GitHub Actions er en <strong>built-in CI/CD-platform</strong> i GitHub, der gør det muligt at automatisere opgaver som en reaktion på hændelser i et repository. I stedet for at køre tests manuelt eller deploye ved hjælp af separate værktøjer, sker det hele automatisk — hver gang der pushes kode eller åbnes et pull request.</p>
+<h3>Hvorfor bruge det?</h3>
+<ul>
+<li>Automatiserer gentagende opgaver (tests, build, deploy)</li>
+<li>Sikrer kodekvalitet ved at kræve grønne tests før merge</li>
+<li>Strømliner deployments uden manuel indgriben</li>
+<li>Giver hurtig feedback til udviklere om fejl</li>
+</ul>
+<hr>
+<h2>Komponenter i GitHub Actions</h2>
+<p>Et workflow er sammensat af flere lag:</p>
+<table>
+<thead>
+<tr>
+<th>Komponent</th>
+<th>Beskrivelse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>En YAML-fil i <code>.github/workflows/</code> — definerer hele automatiseringsprocessen</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>Det der starter workflowet, f.eks. <code>push</code> eller <code>pull_request</code></td>
+</tr>
+<tr>
+<td><strong>Runner</strong></td>
+<td>En virtuel maskine (VM) der udfører jobs — typisk <code>ubuntu-latest</code></td>
+</tr>
+<tr>
+<td><strong>Job</strong></td>
+<td>En samling af steps der kører på samme runner</td>
+</tr>
+<tr>
+<td><strong>Step</strong></td>
+<td>En individuel opgave — enten en shell-kommando (<code>run</code>) eller en Action (<code>uses</code>)</td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td>En genanvendelig workflow-komponent fra GitHub Marketplace eller et repository</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Projektets workflows</h2>
+<p>Projektet har fire workflow-filer i <code>.github/workflows/</code>. Tilsammen udgør de en komplet CI/CD-pipeline:</p>
+<pre class="prettyprint source lang-text"><code>.github/workflows/
+├── ci.yml                            ← Kør tests ved push og PR
+├── docs.yml                          ← Publicer JSDoc-dokumentation
+├── firebase-hosting-merge.yml        ← Deploy til produktion efter tests
+└── firebase-hosting-pull-request.yml ← Deploy til preview-kanal ved PR
+</code></pre>
+<hr>
+<h2><code>ci.yml</code> — Tests</h2>
+<p>Dette er projektets centrale kvalitetsport. Den kører både unit tests og E2E tests automatisk ved hvert push til <code>main</code> og ved alle pull requests.</p>
+<pre class="prettyprint source lang-yaml"><code>name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: &quot;22&quot;
+          cache: &quot;npm&quot;
+
+      - run: npm ci
+
+      - run: npm run test:unit
+
+      - name: E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          build: npm run build
+          start: npm run preview
+          wait-on: &quot;http://localhost:4173&quot;
+          command: npx cypress run --e2e
+</code></pre>
+<h3>Gennemgang trin for trin</h3>
+<p><strong><code>on</code></strong> — hvornår workflowet kører:</p>
+<ul>
+<li><code>push</code> på <code>main</code>: hver gang kode pushes direkte til main-branchen</li>
+<li><code>pull_request</code> mod <code>main</code>: hver gang et PR åbnes eller opdateres</li>
+</ul>
+<p><strong><code>env</code></strong> — miljøvariabler til Firebase:</p>
+<p>Applikationen bruger Firebase, og Vite kræver disse variabler på build-tidspunktet. De gemmes som <strong>Secrets</strong> i GitHub (under Settings → Secrets and variables → Actions) og injiceres sikkert — de vises aldrig i loggen.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li><code>actions/checkout@v4</code> — henter koden fra repositoryet ned på runneren</li>
+<li><code>actions/setup-node@v4</code> — installerer Node.js 22 og aktiverer npm-cache for hurtigere builds</li>
+<li><code>npm ci</code> — installerer afhængigheder fra <code>package-lock.json</code> (deterministisk, ingen overraskelser)</li>
+<li><code>npm run test:unit</code> — kører Vitest unit tests for <code>src/utils/</code></li>
+<li><code>cypress-io/github-action@v6</code> — kører E2E tests: bygger appen, starter preview-serveren og venter på at den er klar, inden Cypress tager over</li>
+</ol>
+<hr>
+<h2><code>docs.yml</code> — Publicer dokumentation</h2>
+<p>Denne workflow bygger JSDoc-dokumentationen og publicerer den til GitHub Pages hver gang der merges til <code>main</code>.</p>
+<pre class="prettyprint source lang-yaml"><code>name: Publish Docs
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - run: npm run docs
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+</code></pre>
+<h3>Hvad sker der</h3>
+<ol>
+<li><code>npm run docs</code> — kører JSDoc og genererer HTML-dokumentation i <code>./docs/</code></li>
+<li><code>peaceiris/actions-gh-pages@v3</code> — pusher indholdet af <code>./docs/</code> til GitHub Pages-branchen</li>
+</ol>
+<p><code>GITHUB_TOKEN</code> er et automatisk genereret token som GitHub stiller til rådighed — der er ikke behov for at oprette det manuelt.</p>
+<hr>
+<h2><code>firebase-hosting-merge.yml</code> — Deploy til produktion</h2>
+<p>Denne workflow deployer applikationen til Firebase Hosting, men kun efter at <code>tests</code>-workflowet er gennemført med succes. Det sikrer at ødelagt kode aldrig når produktion.</p>
+<pre class="prettyprint source lang-yaml"><code>name: Deploy to Firebase Hosting on merge
+
+on:
+  workflow_run:
+    workflows: [&quot;tests&quot;]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MILTON_PROJEKT }}
+          channelId: live
+          projectId: milton-projekt
+</code></pre>
+<h3>Det vigtige her: afhængighed mellem workflows</h3>
+<p><code>workflow_run</code> — workflowet starter <strong>ikke</strong> ved et push direkte, men lytter i stedet på hvornår <code>tests</code>-workflowet afslutter. Linjen:</p>
+<pre class="prettyprint source lang-yaml"><code>if: ${{ github.event.workflow_run.conclusion == 'success' }}
+</code></pre>
+<p>...sikrer at deploy-jobbet kun kører hvis tests bestod. Fejler tests, sker der ingen deploy.</p>
+<p><code>channelId: live</code> specificerer at det er den levende produktionskanal der deployes til — ikke en preview.</p>
+<hr>
+<h2><code>firebase-hosting-pull-request.yml</code> — Preview ved pull request</h2>
+<p>Denne workflow deployer en midlertidig <strong>preview-version</strong> af applikationen direkte til et pull request. Det gør det muligt at se og teste ændringer i et rigtigt miljø, inden de merges.</p>
+<pre class="prettyprint source lang-yaml"><code>name: Deploy to Firebase Hosting on PR
+
+on: pull_request
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  build_and_preview:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MILTON_PROJEKT }}
+          projectId: milton-projekt
+</code></pre>
+<h3>Det vigtige her</h3>
+<p><code>permissions</code> — workflowet har brug for rettigheder til at skrive en kommentar i pull requestet med preview-linket:</p>
+<ul>
+<li><code>checks: write</code> — må oprette check-resultater</li>
+<li><code>pull-requests: write</code> — må kommentere på PR'et med preview-URL'en</li>
+</ul>
+<p><code>if</code>-betingelsen sikrer at workflowet kun kører for PRs fra selve repositoryet — ikke fra forks, da forks ikke har adgang til secrets.</p>
+<p>Da <code>channelId</code> ikke er sat (i modsætning til merge-workflowet), deployes der til en automatisk genereret preview-kanal i stedet for <code>live</code>.</p>
+<hr>
+<h2>Den samlede pipeline</h2>
+<p>Sammenhængen mellem de fire workflows ser sådan ud for et typisk pull request:</p>
+<pre class="prettyprint source lang-text"><code>PR åbnes
+    │
+    ├─► ci.yml kører tests (unit + E2E)
+    │
+    └─► firebase-hosting-pull-request.yml bygger preview
+            └─► GitHub kommenterer PR med preview-link
+
+PR merges til main
+    │
+    ├─► ci.yml kører tests igen
+    │       │
+    │       └─► firebase-hosting-merge.yml lytter på ci.yml
+    │               └─► Kun ved success: deploy til produktion
+    │
+    └─► docs.yml bygger og publicerer JSDoc
+</code></pre>
+<p>Tests er dermed en <strong>obligatorisk port</strong> foran produktion — det er ikke muligt at deploye uden at passere igennem dem.</p>
+<hr>
+<h2>Secrets</h2>
+<p>Projektet bruger GitHub Secrets til at håndtere følsomme nøgler. De defineres under repository-indstillinger og refereres i YAML med <code>${{ secrets.NAVN }}</code>. Secrets vises aldrig i logs og er krypteret.</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Bruges til</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VITE_FIREBASE_*</code></td>
+<td>Firebase-konfiguration til build og test</td>
+</tr>
+<tr>
+<td><code>FIREBASE_SERVICE_ACCOUNT_MILTON_PROJEKT</code></td>
+<td>Authenticering til Firebase Hosting deploy</td>
+</tr>
+<tr>
+<td><code>GITHUB_TOKEN</code></td>
+<td>Automatisk genereret — bruges til GitHub Pages og PR-kommentarer</td>
+</tr>
+</tbody>
+</table>
+</article>
+
+</section>
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Mon May 11 2026 20:40:59 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

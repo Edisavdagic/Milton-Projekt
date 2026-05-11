@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Tutorial: kodekvalitet-and-refactor - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-architecture.html">Architecture</a></li><li><a href="tutorial-github-actions.html">github-actions</a></li><li><a href="tutorial-kodekvalitet-and-refactor.html">kodekvalitet-and-refactor</a></li><li><a href="tutorial-testing.html">testing</a></li><li><a href="tutorial-versionsstyring.html">versionsstyring</a></li></ul><h3>Global</h3><ul><li><a href="global.html#injectDateSeparators">injectDateSeparators</a></li><li><a href="global.html#useAuthStore">useAuthStore</a></li><li><a href="global.html#useChat">useChat</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: kodekvalitet-and-refactor</h1>
+    
+
+    <section>
+
+<header>
+    
+
+    <h2>kodekvalitet-and-refactor</h2>
+</header>
+
+<article>
+    <h1>Kodekvalitet og Refaktorering</h1>
+<h2>Hvad er refaktorering?</h2>
+<p>Refaktorering er processen med at forbedre eksisterende kode <strong>uden at ændre dens eksterne adfærd</strong>. Tænk på det som at renovere et hus uden at ændre grundplanen — strukturen bliver bedre, men funktionaliteten forbliver den samme.</p>
+<h3>Hvorfor refaktorere?</h3>
+<ul>
+<li>Gør koden lettere at læse og forstå</li>
+<li>Nemmere at vedligeholde over tid</li>
+<li>Reducerer risikoen for fejl</li>
+<li>Gør koden mere fleksibel og genanvendelig</li>
+</ul>
+<hr>
+<h2>Code Smells</h2>
+<p>&quot;Code smells&quot; er tegn i koden på, at noget sandsynligvis bør refaktoreres. De er ikke fejl i sig selv, men indikatorer på dårligt design.</p>
+<h3>Duplikeret kode</h3>
+<p>Bryder <strong>DRY-princippet</strong> (Don't Repeat Yourself). Hvis den samme logik optræder flere steder, er det svært at vedligeholde — en ændring skal foretages alle steder.</p>
+<p>Et konkret eksempel fra projektet: funktionen til at normalisere en aktørliste fandtes tidligere både i <code>src/stores/milestones.js</code> og i <code>src/components/DashboardTaskList.vue</code>:</p>
+<pre class="prettyprint source lang-js"><code>// Fandtes i milestones.js som toActorList(value)...
+function toActorList(value) {
+  if (Array.isArray(value)) {
+    return value.map((actor) => String(actor).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value.split(',').map((actor) => actor.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+// ...og igen i DashboardTaskList.vue som actorList(task)
+const actorList = (task) => {
+  if (Array.isArray(task.actors)) {
+    return task.actors.map((actor) => String(actor).trim()).filter(Boolean);
+  }
+  if (typeof task.actors === 'string') {
+    return task.actors.split(',').map((actor) => actor.trim()).filter(Boolean);
+  }
+  return [];
+};
+</code></pre>
+<p>Løsningen var at udtrække logikken til ét sted — <code>src/utils/calendar.js</code> — og importere den begge steder:</p>
+<pre class="prettyprint source lang-js"><code>// src/utils/calendar.js
+export function actorList(value) {
+  if (Array.isArray(value)) {
+    return value.map((actor) => String(actor).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value.split(',').map((actor) => actor.trim()).filter(Boolean);
+  }
+  return [];
+}
+</code></pre>
+<p>Nu importeres <code>actorList</code> i stedet for at gentages — og en fremtidig ændring skal kun ske ét sted.</p>
+<h3>Lange funktioner og store klasser</h3>
+<p>En funktion eller klasse der gør for mange ting er svær at forstå og teste. Pinia stores i Options API-stilen havde tidligere <code>state</code>, <code>getters</code> og <code>actions</code> samlet i ét stort objekt. Refaktoreringen til Setup API opdeler det i mindre, selvstændige stykker:</p>
+<pre class="prettyprint source lang-js"><code>// Før — Options API med alt samlet
+export const useProjectsStore = defineStore('projects', {
+  state: () => ({
+    projects: [],
+    currentProject: null,
+    loading: false,
+  }),
+  getters: {
+    currentProjectId: (state) => state.currentProject?.id ?? null,
+  },
+  actions: {
+    async fetchProjects() {
+      this.loading = true;
+      // ...
+    },
+  },
+});
+
+// Efter — Setup API, samme mønster som composables
+export const useProjectsStore = defineStore('projects', () => {
+  const projects = ref([]);
+  const currentProject = ref(null);
+  const loading = ref(false);
+
+  const currentProjectId = computed(() => currentProject.value?.id ?? null);
+
+  async function fetchProjects() {
+    loading.value = true;
+    // ...
+  }
+
+  return { projects, currentProject, currentProjectId, loading, fetchProjects };
+});
+</code></pre>
+<hr>
+<h2>Refaktorering — Best Practices</h2>
+<h3>Boy Scout-reglen</h3>
+<blockquote>
+<p>&quot;Efterlad koden bedre end du fandt den.&quot;</p>
+</blockquote>
+<p>Hver gang du arbejder i en del af kodebasen, lav små forbedringer undervejs. Udtrækket af <code>actorList</code> til <code>utils/calendar.js</code> skete f.eks. i forbindelse med anden kalenderrelateret arbejde.</p>
+<h3>Tag små skridt</h3>
+<p>Refaktorer gradvist og <strong>test efter hver ændring</strong>. Udtrækket af hjælpefunktioner og omdannelsen af stores til Setup API skete i separate commits — ikke på én gang.</p>
+<h3>Brug IDE-værktøjer</h3>
+<p>Moderne IDE'er (VS Code) understøtter:</p>
+<ul>
+<li><strong>Rename symbol</strong> — omdøber en funktion eller variabel alle steder den bruges</li>
+<li><strong>Extract function</strong> — udtrækker markeret kode til en ny funktion</li>
+</ul>
+<p>Disse er mere pålidelige end manuel søg-og-erstat, fordi de forstår kodestrukturen.</p>
+<h3>Hav tests på plads</h3>
+<p>Tests er dit sikkerhedsnet under refaktorering. Da <code>actorList</code> og de andre kalenderhjælpere blev udtrukket til <code>src/utils/calendar.js</code>, dækker testene i <code>src/utils/__tests__/calendar.spec.js</code> at adfærden er uændret:</p>
+<pre class="prettyprint source lang-js"><code>it('normalizes actors from arrays and comma-separated strings', () => {
+  expect(actorList([' Anne ', '', 'Bo'])).toEqual(['Anne', 'Bo']);
+  expect(actorList('Anne, Bo,')).toEqual(['Anne', 'Bo']);
+  expect(actorList(null)).toEqual([]);
+});
+</code></pre>
+<p>Testen kørte grønt både før og efter refaktoreringen — det er beviset på at adfærden ikke ændrede sig.</p>
+<hr>
+<h2>Clean Code-principper</h2>
+<h3>SRP — Single Responsibility Principle</h3>
+<p>Én funktion skal have ét og kun ét ansvar. I projektet håndterer <code>src/utils/date.js</code> kun datoformatering, <code>src/utils/file.js</code> kun filtyper, og <code>src/utils/calendar.js</code> kun kalenderlogik. Ingen af dem blander ansvar.</p>
+<pre class="prettyprint source lang-js"><code>// src/utils/file.js — kun ansvarlig for filtype-logik
+export function getFileExtension(fileName) {
+  const segments = String(fileName ?? '').split('.');
+  if (segments.length &lt; 2) return '';
+  return segments.pop().toLowerCase();
+}
+
+export function getTypeDetails(fileName) {
+  const extension = getFileExtension(fileName);
+  if (extension === 'pdf') return { key: 'pdf', label: 'pdf' };
+  if (imageExtensions.has(extension)) return { key: 'image', label: extension };
+  return { key: 'file', label: extension || 'ukendt' };
+}
+</code></pre>
+<h3>DRY — Don't Repeat Yourself</h3>
+<p>Som vist ovenfor: <code>actorList</code> fandtes to steder og blev samlet til ét. Det samme gælder <code>statusLabel</code> og <code>toDateString</code> — logik der bruges flere steder bor ét sted.</p>
+<h3>KISS — Keep It Simple, Stupid</h3>
+<p>Hold løsningen så enkel som muligt. <code>formatDate</code> i <code>src/utils/date.js</code> gør præcist én ting og intet mere:</p>
+<pre class="prettyprint source lang-js"><code>export function formatDate(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Ukendt dato';
+
+  return new Intl.DateTimeFormat('da-DK', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+}
+</code></pre>
+<h3>YAGNI — You Aren't Gonna Need It</h3>
+<p>Byg kun det, du faktisk har brug for nu. <code>useProjectMilestones</code> i <code>src/composables/</code> løser kun det konkrete behov — at hente milestones når et projekt-id ændrer sig — og indeholder ingen spekulativ funktionalitet:</p>
+<pre class="prettyprint source lang-js"><code>export function useProjectMilestones(projectId) {
+  const milestoneStore = useMilestoneStore();
+
+  async function fetchProjectMilestones(id) {
+    if (!id) return;
+    if (milestoneStore.projectId !== id || milestoneStore.milestones.length === 0) {
+      await milestoneStore.fetchMilestones(id);
+    }
+  }
+
+  watch(projectId, fetchProjectMilestones, { immediate: true });
+
+  return { milestoneStore, fetchProjectMilestones };
+}
+</code></pre>
+<hr>
+<h2>Selvdokumenterende kode</h2>
+<p>God kode læses og forstås uden forklarende kommentarer. Det opnås ved velvalgte navne.</p>
+<h3>Klare konstanter i stedet for magiske tal</h3>
+<pre class="prettyprint source lang-js"><code>// src/utils/calendar.js
+const WORK_WEEK_DAY_COUNT = 5;
+const MIN_WEEK_ROW_COUNT = 8;
+</code></pre>
+<p>Et tal som <code>5</code> midt i koden fortæller intet. <code>WORK_WEEK_DAY_COUNT</code> fortæller præcis hvad det repræsenterer.</p>
+<h3>Eksplicitte funktionsnavne</h3>
+<p>Funktionerne i <code>src/utils/calendar.js</code> er navngivet så de beskriver hvad de returnerer:</p>
+<pre class="prettyprint source lang-js"><code>createTaskEvent(task)               // → ét kalender-event fra en opgave
+createTaskEvents(tasks)             // → sorteret liste af events
+createEventsByDate(events)          // → Map fra dato-streng til events
+createWeekDays(weekStart)           // → dage til uge-visning
+createWeekEvents(events, weekStart) // → events klippet til den synlige uge
+</code></pre>
+<h3>Forklarende variabler</h3>
+<p>I stedet for at putte kompleks logik direkte i et udtryk, bruges en mellemliggende variabel med et sigende navn:</p>
+<pre class="prettyprint source lang-js"><code>// src/utils/calendar.js — i createTaskEvent()
+const startsBeforeEnd = firstDate.isBefore(secondDate) || firstDate.isSame(secondDate, 'day');
+const start = startsBeforeEnd ? firstDate : secondDate;
+const end = startsBeforeEnd ? secondDate : firstDate;
+</code></pre>
+<h3>Hvornår skal man kommentere?</h3>
+<p>Kommentarer bør forklare <strong>hvorfor</strong>, ikke <strong>hvad</strong> — koden selv viser hvad der sker. Brug kommentarer til skjulte begrænsninger, workarounds eller ikke-åbenlyse algoritmiske valg.</p>
+<hr>
+<h2>Sammenhæng: Refaktorering og tests</h2>
+<p>Refaktorering uden tests er risikabelt — du ved ikke om du har brudt noget. I dette projekt er det præcist det mønster der bruges:</p>
+<ol>
+<li>Funktioner som <code>actorList</code>, <code>statusLabel</code> og <code>createTaskEvent</code> bor i <code>src/utils/</code></li>
+<li>Hver util-fil har en tilsvarende testfil i <code>src/utils/__tests__/</code></li>
+<li>Refaktoreringer bekræftes af testene — ikke af manuel inspektion</li>
+</ol>
+<p>Dette er kernen i <strong>Test-Driven Development (TDD)</strong>: Red → Green → Refactor. Tests giver friheden til at flytte og omstrukturere kode uden at frygte ukendte sideeffekter.</p>
+</article>
+
+</section>
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Mon May 11 2026 20:40:59 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
