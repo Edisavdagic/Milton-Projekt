@@ -48,6 +48,20 @@
 
 <article>
     <h1>GitHub Actions</h1>
+<h2>Indholdsfortegnelse</h2>
+<ol>
+<li><a href="#hvad-er-github-actions">Hvad er GitHub Actions?</a></li>
+<li><a href="#komponenter">Komponenter i GitHub Actions</a></li>
+<li><a href="#projektets-workflows">Projektets workflows</a></li>
+<li><a href="#ci-yml"><code>ci.yml</code> — Tests</a></li>
+<li><a href="#docs-yml"><code>docs.yml</code> — Publicer dokumentation</a></li>
+<li><a href="#merge-yml"><code>firebase-hosting-merge.yml</code> — Deploy til produktion</a></li>
+<li><a href="#pr-yml"><code>firebase-hosting-pull-request.yml</code> — Preview ved pull request</a></li>
+<li><a href="#den-samlede-pipeline">Den samlede pipeline</a></li>
+<li><a href="#secrets">Secrets</a></li>
+</ol>
+<hr>
+<p><a name="hvad-er-github-actions"></a></p>
 <h2>Hvad er GitHub Actions?</h2>
 <p>GitHub Actions er en <strong>built-in CI/CD-platform</strong> i GitHub, der gør det muligt at automatisere opgaver som en reaktion på hændelser i et repository. I stedet for at køre tests manuelt eller deploye ved hjælp af separate værktøjer, sker det hele automatisk — hver gang der pushes kode eller åbnes et pull request.</p>
 <h3>Hvorfor bruge det?</h3>
@@ -58,6 +72,7 @@
 <li>Giver hurtig feedback til udviklere om fejl</li>
 </ul>
 <hr>
+<p><a name="komponenter"></a></p>
 <h2>Komponenter i GitHub Actions</h2>
 <p>Et workflow er sammensat af flere lag:</p>
 <table>
@@ -95,6 +110,7 @@
 </tbody>
 </table>
 <hr>
+<p><a name="projektets-workflows"></a></p>
 <h2>Projektets workflows</h2>
 <p>Projektet har fire workflow-filer i <code>.github/workflows/</code>. Tilsammen udgør de en komplet CI/CD-pipeline:</p>
 <pre class="prettyprint source lang-text"><code>.github/workflows/
@@ -104,6 +120,7 @@
 └── firebase-hosting-pull-request.yml ← Deploy til preview-kanal ved PR
 </code></pre>
 <hr>
+<p><a name="ci-yml"></a></p>
 <h2><code>ci.yml</code> — Tests</h2>
 <p>Dette er projektets centrale kvalitetsport. Den kører både unit tests og E2E tests automatisk ved hvert push til <code>main</code> og ved alle pull requests.</p>
 <pre class="prettyprint source lang-yaml"><code>name: tests
@@ -162,6 +179,7 @@ jobs:
 <li><code>cypress-io/github-action@v6</code> — kører E2E tests: bygger appen, starter preview-serveren og venter på at den er klar, inden Cypress tager over</li>
 </ol>
 <hr>
+<p><a name="docs-yml"></a></p>
 <h2><code>docs.yml</code> — Publicer dokumentation</h2>
 <p>Denne workflow bygger JSDoc-dokumentationen og publicerer den til GitHub Pages hver gang der merges til <code>main</code>.</p>
 <pre class="prettyprint source lang-yaml"><code>name: Publish Docs
@@ -196,6 +214,7 @@ jobs:
 </ol>
 <p><code>GITHUB_TOKEN</code> er et automatisk genereret token som GitHub stiller til rådighed — der er ikke behov for at oprette det manuelt.</p>
 <hr>
+<p><a name="merge-yml"></a></p>
 <h2><code>firebase-hosting-merge.yml</code> — Deploy til produktion</h2>
 <p>Denne workflow deployer applikationen til Firebase Hosting, men kun efter at <code>tests</code>-workflowet er gennemført med succes. Det sikrer at ødelagt kode aldrig når produktion.</p>
 <pre class="prettyprint source lang-yaml"><code>name: Deploy to Firebase Hosting on merge
@@ -231,6 +250,7 @@ jobs:
 <p>...sikrer at deploy-jobbet kun kører hvis tests bestod. Fejler tests, sker der ingen deploy.</p>
 <p><code>channelId: live</code> specificerer at det er den levende produktionskanal der deployes til — ikke en preview.</p>
 <hr>
+<p><a name="pr-yml"></a></p>
 <h2><code>firebase-hosting-pull-request.yml</code> — Preview ved pull request</h2>
 <p>Denne workflow deployer en midlertidig <strong>preview-version</strong> af applikationen direkte til et pull request. Det gør det muligt at se og teste ændringer i et rigtigt miljø, inden de merges.</p>
 <pre class="prettyprint source lang-yaml"><code>name: Deploy to Firebase Hosting on PR
@@ -264,6 +284,7 @@ jobs:
 <p><code>if</code>-betingelsen sikrer at workflowet kun kører for PRs fra selve repositoryet — ikke fra forks, da forks ikke har adgang til secrets.</p>
 <p>Da <code>channelId</code> ikke er sat (i modsætning til merge-workflowet), deployes der til en automatisk genereret preview-kanal i stedet for <code>live</code>.</p>
 <hr>
+<p><a name="den-samlede-pipeline"></a></p>
 <h2>Den samlede pipeline</h2>
 <p>Sammenhængen mellem de fire workflows ser sådan ud for et typisk pull request:</p>
 <pre class="prettyprint source lang-text"><code>PR åbnes
@@ -284,6 +305,7 @@ PR merges til main
 </code></pre>
 <p>Tests er dermed en <strong>obligatorisk port</strong> foran produktion — det er ikke muligt at deploye uden at passere igennem dem.</p>
 <hr>
+<p><a name="secrets"></a></p>
 <h2>Secrets</h2>
 <p>Projektet bruger GitHub Secrets til at håndtere følsomme nøgler. De defineres under repository-indstillinger og refereres i YAML med <code>${{ secrets.NAVN }}</code>. Secrets vises aldrig i logs og er krypteret.</p>
 <table>
@@ -319,7 +341,7 @@ PR merges til main
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Mon May 11 2026 20:40:59 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Mon May 11 2026 21:42:50 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
